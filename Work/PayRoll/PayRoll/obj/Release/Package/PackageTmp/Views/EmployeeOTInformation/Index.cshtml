@@ -1,0 +1,290 @@
+﻿@{
+    ViewBag.Title = ":: Employee OT Information ::";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var permission = ViewData["Permission"] as PayRoll.Core.Utility.DBManager.Permission;
+}
+
+
+<script id="templateEmployeeOTModal" type="text/html">
+    <table class="table table-bordered table-striped table-hover datatable-sorting" id="EmployeeOTInfoDataTableModal">
+        <thead class="ruhee">
+        <th>Employee Id</th>
+        <th>Name</th>
+        <th>Attendance Date</th>
+        <th>In Time</th>
+        <th>Out Time</th>
+        <th>Deviation(Min)</th>
+        <th>Late</th>
+        <th>OT</th>
+        </thead>
+        <tbody>
+            {{#EmployeeOTInfoSearch}}
+
+            <tr>
+                <td> {{EmployeeId}}</td>
+                <td> {{Name}}</td>
+                <td> {{AttendanceDate}}</td>
+                <td> {{AttendanceInTime}}</td>
+                <td> {{AttendanceOutTime}}</td>
+                <td> 
+                
+                    <input type="text" value="{{ExtraOfficeTimeInMin}}" class="form-control" id="txtExtTime_{{EmployeeId}}_{{AttendanceDate}}" onkeypress="return decimal(event,this)" onchange="ChangeEtraWorksMin(value, id)" />
+                
+                </td>                
+                <td class="action-sm">
+                    {{#IsLate}}
+                    <input id="{{EmployeeId}}_{{AttendanceDate}}_Late" type="checkbox" class="specificLate" checked="checked" />
+                    {{/IsLate}}
+                    {{^IsLate}}
+                    <input id="{{EmployeeId}}_{{AttendanceDate}}_Late" type="checkbox" class="specificLate" />
+                    {{/IsLate}}                 
+                </td>
+
+                <td class="action-sm">
+                    {{#IsOtEligible}}
+                    <input id="{{EmployeeId}}_{{AttendanceDate}}_OT" type="checkbox" class="specificOT" checked="checked" />
+                    {{/IsOtEligible}}
+                    {{^IsOtEligible}}
+                    <input id="{{EmployeeId}}_{{AttendanceDate}}_OT" type="checkbox" class="specificOT" />
+                    {{/IsOtEligible}}
+                </td>
+
+            </tr>
+
+            {{/EmployeeOTInfoSearch}}
+        </tbody>
+    </table>
+</script>
+
+
+<div class="form-horizontal ">
+    <fieldset class="content-group">
+        <legend class="text-bold">User Create</legend>
+
+
+        <div class="form-group">
+            <label class="control-label col-lg-2">Attendance Year:</label>
+            <div class="col-lg-4">
+                <input type="text" id="txtAttYear" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-2">Attendance Month:</label>
+            <div class="col-lg-4">
+                <input type="text" id="txtAttMonth" class="form-control">
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="control-label col-lg-2"> </label>
+            <div class="col-lg-10">
+                @if (permission.CanSave == "1")
+                {
+                    <button class="btn btn-info" data-style="expand-left" id="btnShow" type="button" onclick="LoadEmployeeOTInfoGrid()"><i class="fa fa-save"></i>&nbsp; Show</button>
+                }               
+                <button class="btn btn-w-m btn-success btn-loading" type="button" id="btnReset" onclick="ResetForm()"><i class="glyphicon glyphicon-refresh"></i>&nbsp;Reset</button>
+            </div>
+        </div>
+
+
+    </fieldset>
+
+
+    <fieldset class="content-group">
+        <legend class="text-bold">OT and Late info</legend>
+        <div id="divInfo">
+
+            <div class="form-group">
+                <div class="table-responsive" id="div-userInfo">
+                </div>
+            </div>
+
+        </div>
+
+    </fieldset>
+
+    <div class="form-group">
+        <label class="control-label col-lg-2"> </label>
+        <div class="col-lg-10">
+            @if (permission.CanSave == "1")
+            {
+                <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Save</button>
+            }            
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+<style type="text/css">
+
+</style>
+
+
+@section scripts
+{
+    <script type="text/javascript">
+    _serverDate = null;
+    $(document).ready(function () {
+        EnableDisableControls("1");
+        var finalData = [];
+        $('#btnSave').hide();
+    });
+
+
+    function ChangeEtraWorksMin(value, id) {
+       
+        var employeeId = id.split('_')[1];
+        var attDate = id.split('_')[2];
+        alert(value)
+        for (var i = 0; i < finalData.length; i++) {
+            if (($.trim(employeeId) == $.trim(finalData[i].EmployeeId)) && $.trim(attDate) == $.trim(finalData[i].AttendanceDate)) {
+
+                if (value == '') {
+                    finalData[i].ExtraOfficeTimeInMin = null
+                }
+                else {
+                    finalData[i].ExtraOfficeTimeInMin = value
+                }
+                
+
+            }
+        };
+        
+    }
+
+    function LoadEmployeeOTInfoGrid() {
+        var url = '@Url.Action("GetEmployeeOTInfo", "EmployeeOTInformation")';
+
+        var AttYear = $('#txtAttYear').val();
+        var AttMonth = $('#txtAttMonth').val();
+
+        $.ajax({
+            url: url,
+            method: 'get',
+            data: { AttYear: AttYear, AttMonth: AttMonth },
+            success: function (res) {
+                var templateWithData = Mustache.to_html($("#templateEmployeeOTModal").html(), { EmployeeOTInfoSearch: res });
+                $("#div-userInfo").empty().html(templateWithData);
+                finalData = res;
+                MakePagination('EmployeeOTInfoDataTableModal');
+                if (res!=null) {
+                    $('#btnSave').show();
+                }
+
+            },
+            error: function () {
+
+            }
+        });
+
+
+    }
+
+
+
+    function ResetForm() {
+        $('#txtAttYear').val('');
+        $('#txtAttMonth').val('');
+      
+        EnableDisableControls("1");
+    }
+
+    function EnableDisableControls(status) {
+        //status = 1 for Save, 2 for Delete
+        if (status == "1") {
+            $('#btnSave').prop('disabled', false);
+            $('#btnUpdate').prop('disabled', true);
+            $('#btnDelete').prop('disabled', true);
+        }
+        else if (status == "2") {
+            $('#btnSave').prop('disabled', true);
+            $('#btnUpdate').prop('disabled', false);
+            $('#btnDelete').prop('disabled', false);
+        }
+
+        else {
+            $('#btnSave').prop('disabled', false);
+            $('#btnUpdate').prop('disabled', false);
+            $('#btnDelete').prop('disabled', false);
+        }
+    }
+
+
+
+    function Save() {
+                
+            $.ajax({
+                url: '@Url.Action("UpdateEmployeeOTInfo", "EmployeeOTInformation")',
+                    method: 'post',
+                    dataType: 'json',
+                    async: false,
+                    contentType: 'application/json',
+                    data: JSON.stringify(finalData),
+                    success: function (data) {
+                        var vmMsg = data;
+                        if (vmMsg.MessageType == 1) {
+                            ShowNotification(1, vmMsg.ReturnMessage);
+                            ResetForm();                           
+
+                        } else {
+                            ShowNotification(3, vmMsg.ReturnMessage);
+                            
+                        }
+                    },
+                    error: function () {
+                        
+                    }
+                });
+            
+        }
+
+
+        $(document).on('click', '.specificOT', function () {
+
+            var rowId = this.id;
+            var employeeId = this.id.split('_')[0];
+            var attDate = this.id.split('_')[1];
+            
+            var action = document.getElementById(rowId).checked;
+
+            for (var i = 0; i < finalData.length; i++) {
+                if (($.trim(employeeId) == $.trim(finalData[i].EmployeeId)) && $.trim(attDate) == $.trim(finalData[i].AttendanceDate)) {
+                    finalData[i].IsOtEligible =action
+
+                }
+            };
+
+        });
+
+
+        $(document).on('click', '.specificLate', function () {
+
+            var rowId = this.id;
+            var employeeId = this.id.split('_')[0];
+            var attDate = this.id.split('_')[1];
+            var action = document.getElementById(rowId).checked;
+
+            for (var i = 0; i < finalData.length; i++) {
+                if (($.trim(employeeId) == $.trim(finalData[i].EmployeeId)) && $.trim(attDate) == $.trim(finalData[i].AttendanceDate)) {
+                    finalData[i].IsLate = action
+
+                }
+            };
+
+        });
+
+
+    </script>
+
+
+
+
+}
+
+
+

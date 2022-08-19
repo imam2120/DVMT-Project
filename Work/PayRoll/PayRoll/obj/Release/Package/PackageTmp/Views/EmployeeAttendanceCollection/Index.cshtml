@@ -1,0 +1,180 @@
+﻿
+@using PayRoll.Core.Utility.DBManager
+@{
+    ViewBag.Title = ":: Employee Attendance Collection ::";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var permission = ViewData["Permission"] as PayRoll.Core.Utility.DBManager.Permission;
+    var session = Session["Session"] as AppSession;
+    var UserId = session.UserId;
+
+
+}
+
+
+
+<script id="templateEmployeeAttendanceCollModal" type="text/html">
+    <table class="table table-bordered table-striped table-hover datatable-sorting" id="EmployeeAttendanceCollDataTableModal">
+        <thead class="ruhee">
+        <th>EmployeeId</th>
+        <th>Employee Name</th>
+        <th>AttendanceDate</th>        
+        </thead>
+        <tbody>
+            {{#EmployeeAttendanceCollSearch}}
+
+            <tr>
+                <td>{{EmployeeId}}</td>
+                <td> {{Name}}</td>
+                <td> {{AttendanceDate}}</td>               
+            </tr>
+
+            {{/EmployeeAttendanceCollSearch}}
+        </tbody>
+    </table>
+</script>
+
+<div class="panel panel-flat">
+
+
+    <div class="panel-body">
+        <div class="row">
+            <fieldset>
+                <legend class="text-semibold"><i class="icon-reading position-left"></i> Employee Attendance Collection</legend>
+               
+
+                <div class="col-md-12">
+                    <fieldset class="content-group">
+                        <legend class="text-bold">Attendance Collection</legend>
+                        <div id="divInfo">
+
+                            <div class="form-group">
+                                <div class="table-responsive" id="div-employeeInfo">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </fieldset>
+
+
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-lg-2"> </label>
+                    <div class="col-lg-10">
+                        @if (permission.CanSave == "1")
+                        {
+                            <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Save</button>
+                        }
+
+                    </div>
+                </div>
+
+            </fieldset>
+
+        </div>
+
+
+
+    </div>
+</div>
+
+
+
+@section scripts
+{
+    <script type="text/javascript">
+        _serverDate = null;
+        $(document).ready(function () {            
+            LoadEmployeeAttendanceCollectionGrid();            
+            //ResetForm();
+        });
+
+        var finalData = [];
+        function LoadEmployeeAttendanceCollectionGrid() {
+
+            var dumyData = [{
+                "EmployeeId": 1,
+                "Name": "Razu Ahammed",
+                "AttendanceDate": "01-Sep-2017",
+                "UserId":1
+            },
+
+                    {
+                        "EmployeeId": 2,
+                        "Name": "Ruhee",
+                        "AttendanceDate": "01-Sep-2017",
+                        "UserId": 1
+                    },
+                    {
+                        "EmployeeId": 3,
+                        "Name": "Sajid",
+                        "AttendanceDate": "01-Sep-2017",
+                        "UserId": 1
+                    },
+
+            ]
+
+            var templateWithData = Mustache.to_html($("#templateEmployeeAttendanceCollModal").html(), { EmployeeAttendanceCollSearch: dumyData });
+            $("#div-employeeInfo").empty().html(templateWithData);
+            MakePagination('EmployeeAttendanceCollDataTableModal');
+
+            finalData = dumyData;
+        }
+
+
+        function Save()
+        {
+                  
+                $.ajax({
+                    url: '@Url.Action("Save", "EmployeeAttendanceCollection")',
+                    type: 'POST',
+                    async: false,
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(finalData),
+                    success: function (data) {
+                        var vmMsg = data;
+                        if (vmMsg.MessageType == 1) {
+                            ShowNotification(1, vmMsg.ReturnMessage);
+                           // ResetForm();
+                            
+
+                        } else {
+                            ShowNotification(3, vmMsg.ReturnMessage);
+
+                        }
+                    },
+                    error: function () {
+
+                    }
+                });
+            
+
+
+        }
+
+            
+
+
+            
+
+
+
+
+
+
+    </script>
+
+
+
+
+}
+
+
+
+
+
+
+
+

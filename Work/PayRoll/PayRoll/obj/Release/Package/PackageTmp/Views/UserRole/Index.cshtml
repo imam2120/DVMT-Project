@@ -1,0 +1,317 @@
+﻿@{
+    ViewBag.Title = ":: User Role ::";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var permission=ViewData["Permission"] as PayRoll.Core.Utility.DBManager.Permission;
+}
+
+
+
+<script id="templateUserRoleModal" type="text/html">
+    <table class="table table-bordered table-striped table-hover datatable-sorting" id="UserRoleDataTableModal">
+
+        <thead class="ruhee">
+        <th >Role ID</th>
+        <th>Role Name</th>
+        <th>Action</th>
+        </thead>
+        <tbody>
+            {{#UserRoleSearch}}
+
+            <tr>
+
+                <td> {{RoleId}}</td>
+                <td> {{RoleName}}</td>
+                <td>
+                    <a class="btn btn-default btn-rounded btn-sm" onclick="OnSelectUserRole('{{RoleId}}')"><i class="icon-select2"></i> Select</a>
+                </td>
+            </tr>
+
+            {{/UserRoleSearch}}
+        </tbody>
+    </table>
+</script>
+
+
+
+
+<div class="form-horizontal ">
+    <fieldset class="content-group">
+        <legend class="text-bold">User Roles</legend>
+
+        <div class="form-group">
+            <label class="control-label col-lg-2">Role ID:</label>
+            <div class="col-lg-10">
+                <input type="text" id="txtRoleId" readonly="readonly" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-2">Role Name:</label>
+            <div class="col-lg-10">
+                <input type="text" id="txtRoleName" class="form-control">
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <label class="control-label col-lg-2"> </label>            
+            <div class="col-lg-10">
+                @if (permission.CanSave=="1")
+                {
+                  <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Save</button>        
+                }
+                @if (permission.CanUpdate == "1")
+                {
+                    <button class="btn bg-teal" data-style="expand-left" id="btnUpdate" type="button" onclick="Update()"><i class="fa fa-save"></i>&nbsp; Update</button>
+                }
+                @if (permission.CanDelete == "1")
+                {
+                    <button class="btn btn-danger" data-style="expand-left" id="btnDelete" type="button" onclick="Delete()"><i class="icon-trash"></i>&nbsp; Delete</button>
+                }                                                
+                <button class="btn btn-w-m btn-success btn-loading" type="button" id="btnReset" onclick="ResetForm()"><i class="glyphicon glyphicon-refresh"></i>&nbsp;Reset</button>
+            </div>
+        </div>
+
+
+    </fieldset>
+
+
+    <fieldset class="content-group">
+        <legend class="text-bold">User Roles List</legend>
+        <div id="divInfo">
+
+            <div class="form-group">
+                <div class="table-responsive" id="div-userRoleInfo">
+                </div>
+            </div>
+
+        </div>
+
+    </fieldset>
+
+</div>
+
+    <style type="text/css">
+        
+    </style>
+
+
+@section scripts
+{
+        <script type="text/javascript">
+            _serverDate = null;
+            $(document).ready(function () {
+                GenerateRoleId();
+                LoadRolesGrid();
+                EnableDisableControls("1");
+            });
+
+
+            function GenerateRoleId() {
+                $.ajax({
+                    url: '@Url.Action("GenerateRoleId", "UserRole")',
+                    type: 'Get',
+                    async: false,
+                    success: function (responseData) {
+                        $("#txtRoleId").val(responseData);
+                    },
+                    error: function () { }
+                });
+            }
+
+            function LoadRolesGrid() {
+                var url = '@Url.Action("GetRoles", "UserRole")';
+
+                $.ajax({
+                    url: url,
+                    method: 'get',
+                    success: function (res) {
+                        var templateWithData = Mustache.to_html($("#templateUserRoleModal").html(), { UserRoleSearch: res });
+                        $("#div-userRoleInfo").empty().html(templateWithData);                       
+                        MakePagination('UserRoleDataTableModal');
+                    },
+                    error: function () {
+
+                    }
+                });
+
+
+            }
+
+
+            function FormDataAsObject() {
+                var object = new Object();
+                object.RoleId = $('#txtRoleId').val();
+                object.RoleName = $('#txtRoleName').val();
+                return object;
+            }
+
+            function ResetForm() {
+                $('#txtRoleName').val('');
+                EnableDisableControls("1");
+                GenerateRoleId();
+            }
+
+            function EnableDisableControls(status) {
+                //status = 1 for Save, 2 for Delete
+                if (status == "1") {
+                    $('#btnSave').prop('disabled', false);
+                    $('#btnUpdate').prop('disabled', true);
+                    $('#btnDelete').prop('disabled', true);
+                }
+                else if (status == "2") {
+                    $('#btnSave').prop('disabled', true);
+                    $('#btnUpdate').prop('disabled', false);
+                    $('#btnDelete').prop('disabled', false);
+                }
+
+                else {
+                    $('#btnSave').prop('disabled', false);
+                    $('#btnUpdate').prop('disabled', false);
+                    $('#btnDelete').prop('disabled', false);
+                }
+            }
+
+
+
+            function OnSelectUserRole(roleId) {
+
+                $.ajax({
+                    url: '@Url.Action("GetARole", "UserRole")',
+                    type: 'get',
+                    dataType: 'json',
+                    async: false,
+                    data: {
+                        roleId: roleId
+                    },
+                    success: function (data) {
+                        ResetForm();
+                        $('#txtRoleId').val(data.RoleId);
+                        $('#txtRoleName').val(data.RoleName);
+                        EnableDisableControls("2");
+                        LoadRolesGrid();
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+
+
+            function Save() {
+                var formObject = FormDataAsObject();
+
+                if (UserRoleInfoValidation(formObject)) {
+
+                    $.ajax({
+                        url: '@Url.Action("CreateOrUpdate", "UserRole")',
+                        method: 'post',
+                        dataType: 'json',
+                        async: false,
+                        data: {
+                            RoleId: formObject.RoleId,
+                            RoleName: formObject.RoleName,
+                            create: 1,
+                        },
+                        success: function (data) {
+                            var vmMsg = data;
+                            if (vmMsg.MessageType == 1) {
+                                ShowNotification(1, vmMsg.ReturnMessage);
+                                ResetForm();
+                                LoadRolesGrid();
+                                GenerateRoleId();
+
+                            } else {
+                                ShowNotification(3, vmMsg.ReturnMessage);                                
+                            }
+                        },
+                        error: function () {                            
+                        }
+                    });
+                }
+
+            }
+
+            function Update() {
+                var formObject = FormDataAsObject();
+
+                if (UserRoleInfoValidation(formObject)) {
+                    $.ajax({
+                        url: '@Url.Action("CreateOrUpdate", "UserRole")',
+                        method: 'post',
+                        dataType: 'json',
+                        async: false,
+                        data: {
+                            RoleId: formObject.RoleId,
+                            RoleName: formObject.RoleName,
+                            create: 2,
+                        },
+                        success: function (data) {
+                            var vmMsg = data;
+                            if (vmMsg.MessageType == 1) {
+                                ShowNotification(1, vmMsg.ReturnMessage);
+                                ResetForm();
+                                LoadRolesGrid();
+                                GenerateRoleId();
+
+                            } else {
+                                ShowNotification(3, vmMsg.ReturnMessage);                                
+                            }
+                        },
+                        error: function () {                            
+                        }
+                    });
+                }
+
+
+            }
+
+            function Delete() {
+                var formObject = FormDataAsObject();
+
+                $.ajax({
+                    url: '@Url.Action("Delete", "UserRole")',
+                    method: 'post',
+                    dataType: 'json',
+                    async: false,
+                    data: {
+                        RoleId: formObject.RoleId,
+                        RoleName: formObject.RoleName,
+                    },
+                    success: function (data) {
+                        var vmMsg = data;
+                        if (vmMsg.MessageType == 1) {
+                            ShowNotification(1, vmMsg.ReturnMessage);
+                            ResetForm();
+                            LoadRolesGrid();
+                            GenerateRoleId();                                                        
+                        } else {
+                            ShowNotification(3, vmMsg.ReturnMessage);                            
+                        }
+                    },
+                    error: function () {                        
+                    }
+                });
+
+            }
+
+
+            function UserRoleInfoValidation(formObject) {
+
+                if (!formObject.RoleName) {
+                    $('#txtRoleName').focus();
+                    ShowNotification('2', 'Role Name Can not be empty.');
+                    return false;
+                }
+
+                return true;
+
+            }
+        </script>
+    }
+
+
+
+
+

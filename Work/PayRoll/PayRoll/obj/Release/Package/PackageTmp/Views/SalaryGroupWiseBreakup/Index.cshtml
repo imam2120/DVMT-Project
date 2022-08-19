@@ -1,0 +1,333 @@
+﻿@{
+    ViewBag.Title = ":: Salary Group Wise Breakup Information ::";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var permission = ViewData["Permission"] as PayRoll.Core.Utility.DBManager.Permission;
+}
+
+
+<script id="templateSalaryGroupWiseBKModal" type="text/html">
+    <table class="table table-bordered table-striped table-hover datatable-sorting" id="SalaryGroupWiseBKDataTableModal">
+        <thead class="ruhee">
+        
+        <th class="collapse">BkId</th> 
+        <th>Salary Breakup Name</th>
+        <th>Percentage</th>
+        <th>Action</th>
+        
+        </thead>
+        <tbody>
+            {{#SalaryGroupWiseBKInfoSearch}}
+
+            <tr>
+                <td class="collapse"> {{BreakUpId}}</td>
+                <td> {{BreakUpName}}</td>                
+                <td>
+
+                    <input type="text" value="{{Percentage}}" class="form-control" id="{{BreakUpId}}" onkeypress="return decimal(event,this)" onchange="ChangeBkPercentage(value, id)" />
+
+                </td>
+                <td class="action-sm">
+                    <a class="btn btn-default btn-rounded btn-sm" onclick="OnSelectRemoveBreakUp('{{BreakUpId}}')"> Remove</a>
+                </td>
+            </tr>
+
+            {{/SalaryGroupWiseBKInfoSearch}}
+        </tbody>
+    </table>
+</script>
+
+
+<div class="form-horizontal ">
+    <fieldset class="content-group">
+        <legend class="text-bold">Salary Group Wise Breakup Amount</legend>
+
+
+        <div class="form-group">
+            <label class="control-label col-lg-2">Salary Group:</label>
+            <div class="col-lg-4">
+                <select class="form-control " id="ddlSalaryGroup" name="ddlSalaryGroup"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-2">Breakup Name:</label>
+            <div class="col-lg-4">
+                <select class="form-control " id="ddlBreakup" name="ddlBreakup"></select>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="control-label col-lg-2"> </label>
+            <div class="col-lg-10">                
+                <button class="btn btn-info" data-style="expand-left" id="btnShow" type="button" onclick="AddIntoGrid()"><i class="fa fa-save"></i>&nbsp; Add</button>                
+                <button class="btn btn-w-m btn-success btn-loading" type="button" id="btnReset" onclick="ResetForm()"><i class="glyphicon glyphicon-refresh"></i>&nbsp;Reset</button>
+            </div>
+        </div>
+
+
+    </fieldset>
+
+
+    <fieldset class="content-group">
+        <legend class="text-bold">Breakup List</legend>
+        <div id="divInfo">
+
+            <div class="form-group">
+                <div class="table-responsive" id="div-userInfo">
+                </div>
+            </div>
+
+        </div>
+
+    </fieldset>
+
+    <div class="form-group">
+        <label class="control-label col-lg-2"> </label>
+        <div class="col-lg-10">
+            @if (permission.CanSave == "1")
+            {
+                <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Save</button>
+            }
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+<style type="text/css">
+
+</style>
+
+
+@section scripts
+{
+    <script type="text/javascript">
+    _serverDate = null;
+    $(document).ready(function () {
+        EnableDisableControls("1");
+        
+        $('#btnSave').hide();
+        LoadCombos();
+    });
+
+    var finalData = [];
+    function ChangeBkPercentage(value, id) {
+       
+        for (var i = 0; i < finalData.length; i++) {
+            if ($.trim(id) == $.trim(finalData[i].BreakUpId)) {
+
+                if (value == '') {
+                    finalData[i].Percentage = 0
+                }
+                else {
+                    finalData[i].Percentage = parseInt(value)
+                }
+
+
+            }
+        };
+
+    }
+
+    function LoadSalaryGroupWiseBKInfoGrid() {
+        var url = '@Url.Action("GetSalaryGroupWiseBkInfo", "SalaryGroupWiseBreakup")';
+
+        var groupId = $('#ddlSalaryGroup').val();        
+
+        $.ajax({
+            url: url,
+            method: 'get',
+            data: { salaryGroupId: groupId },
+            success: function (res) {
+
+                if (res!=null && res.length>0) {
+                    var templateWithData = Mustache.to_html($("#templateSalaryGroupWiseBKModal").html(), { SalaryGroupWiseBKInfoSearch: res });
+                    $("#div-userInfo").empty().html(templateWithData);
+                    MakePagination('SalaryGroupWiseBKDataTableModal');
+                    finalData = res;
+                    $('#btnSave').show();
+                }
+            else {
+                var templateWithData = Mustache.to_html($("#templateSalaryGroupWiseBKModal").html(), { SalaryGroupWiseBKInfoSearch: [] });
+                $("#div-userInfo").empty().html(templateWithData);
+                MakePagination('SalaryGroupWiseBKDataTableModal');
+                $('#btnSave').hide();
+            }
+
+            },
+            error: function () {
+
+            }
+        });
+
+
+    }
+
+
+        function LoadSalaryBKInfoGrid(finalData) {
+               
+            var templateWithData = Mustache.to_html($("#templateSalaryGroupWiseBKModal").html(), { SalaryGroupWiseBKInfoSearch: finalData });
+            $("#div-userInfo").empty().html(templateWithData);            
+            MakePagination('SalaryGroupWiseBKDataTableModal');
+            $('#btnSave').show();
+        }
+
+    function LoadCombos() {
+        LoadSalaryGroupCombo("ddlSalaryGroup", true);
+        LoadBreakupCombo("ddlBreakup", true)
+    }
+
+    $("#ddlSalaryGroup").change(function () {       
+        LoadSalaryGroupWiseBKInfoGrid();        
+        $('#ddlSalaryGroup').prop('disabled', true);
+    });
+
+    function ResetForm() {
+        $('#ddlSalaryGroup').val('');
+        $('#ddlBreakup').val('');
+        $('#ddlSalaryGroup').prop('disabled', false);
+        EnableDisableControls("1");
+        $('#btnSave').hide();
+        finalData = [];
+        LoadSalaryBKInfoGrid(finalData);
+    }
+
+    function EnableDisableControls(status) {
+        //status = 1 for Save, 2 for Delete
+        if (status == "1") {
+            $('#btnSave').prop('disabled', false);
+            $('#btnUpdate').prop('disabled', true);
+            $('#btnDelete').prop('disabled', true);
+        }
+        else if (status == "2") {
+            $('#btnSave').prop('disabled', true);
+            $('#btnUpdate').prop('disabled', false);
+            $('#btnDelete').prop('disabled', false);
+        }
+
+        else {
+            $('#btnSave').prop('disabled', false);
+            $('#btnUpdate').prop('disabled', false);
+            $('#btnDelete').prop('disabled', false);
+        }
+    }
+
+
+
+    function Save() {
+
+        if (!$("#ddlSalaryGroup").val()) {
+            ShowNotification(2, "Please select salary group.");
+            return false;
+        }
+        if (isBreakupPercentageCorrect()) {
+            $.ajax({
+                url: '@Url.Action("UpdateSalaryGroupWiseBkInfo", "SalaryGroupWiseBreakup")',
+                method: 'post',
+                dataType: 'json',
+                async: false,
+                contentType: 'application/json',
+                data: JSON.stringify(finalData),
+                success: function (data) {
+                    var vmMsg = data;
+                    if (vmMsg.MessageType == 1) {
+                        ShowNotification(1, vmMsg.ReturnMessage);
+                        ResetForm();
+
+                    } else {
+                        ShowNotification(3, vmMsg.ReturnMessage);
+
+                    }
+                },
+                error: function () {
+
+                }
+            });
+        } else {
+            ShowNotification(2, "Total percentage can not be more than 100.");
+        }
+        
+
+    }
+
+
+        function AddIntoGrid() {
+            if (!$("#ddlBreakup").val()) {
+                ShowNotification(2, "Please select Breakup.");
+                return false;
+            }
+            var BreakUpId = $('#ddlBreakup').val();            
+            var object = new Object;
+            object.SalaryGroupId = $("#ddlSalaryGroup option:selected").val();
+            object.BreakUpId = BreakUpId;
+            object.BreakUpName =$("#ddlBreakup option:selected").text();           
+            object.Percentage = 0;
+            
+            if (isBreakupIdAlreadyExist(BreakUpId)) {               
+                ShowNotification(2, "This Breakup Already Exist.");
+            }
+            else {               
+                finalData.push(object);               
+                LoadSalaryBKInfoGrid(finalData);
+            }
+
+        }
+
+        
+        function OnSelectRemoveBreakUp(BreakUpId) {
+
+            if (finalData.length > 0) {
+                for (var i = 0; i < finalData.length; i++) {
+                    if ($.trim(BreakUpId) == $.trim(finalData[i].BreakUpId)) {
+                        finalData.splice(i, 1);
+
+                    }
+                };
+            }
+            LoadSalaryBKInfoGrid(finalData);
+        }
+
+
+        function isBreakupIdAlreadyExist(BreakUpId) {
+
+            if (finalData.length > 0) {
+                for (var i = 0; i < finalData.length; i++) {
+                    if ($.trim(BreakUpId) == $.trim(finalData[i].BreakUpId)) {
+                        return true;
+
+                    }
+                };
+            }
+            return false;
+        }
+
+        function isBreakupPercentageCorrect() {
+            var totalPer=0;
+            if (finalData.length > 0) {
+                for (var i = 0; i < finalData.length; i++) {
+                    totalPer = totalPer + parseInt( finalData[i].Percentage);
+                };
+                if (totalPer != 100) {
+                    alert(totalPer);
+                    return false;
+                }
+            }
+            
+            
+            return true;
+
+        }
+
+
+    </script>
+
+
+
+
+}
+
+
+

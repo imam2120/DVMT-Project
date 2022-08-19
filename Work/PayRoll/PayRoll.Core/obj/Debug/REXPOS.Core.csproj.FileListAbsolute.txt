@@ -1,0 +1,4 @@
+D:\Practice\REXPOS\REXPOS\REXPOS.Core\bin\Debug\REXPOS.Core.dll
+D:\Practice\REXPOS\REXPOS\REXPOS.Core\bin\Debug\REXPOS.Core.pdb
+D:\Practice\REXPOS\REXPOS\REXPOS.Core\obj\Debug\REXPOS.Core.dll
+D:\Practice\REXPOS\REXPOS\REXPOS.Core\obj\Debug\REXPOS.Core.pdb

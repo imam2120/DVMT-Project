@@ -1,0 +1,491 @@
+﻿@{
+    ViewBag.Title = ":: Employee Salary Generation ::";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var permission = ViewData["Permission"] as PayRoll.Core.Utility.DBManager.Permission;
+}
+
+
+<script id="templateSalaryGenerationModal" type="text/html">
+    <table class="table table-bordered table-striped table-hover datatable-sorting" id="SalaryGenerationDataTableModal">
+
+        <thead class="ruhee">
+        <th>Employee Name</th>
+        <th>Original Amount</th>
+        <th>Adjustment Amount</th>
+        <th>Total Salary</th>
+        </thead>
+
+        <tbody>
+            {{#SalaryGenerationInfoSearch}}
+
+            <tr>
+                <td> {{EmployeeName}}</td>
+                <td onclick="ShowEmployeeSalaryStructure('{{EmployeeId}}')">
+                    <label>{{TotalSalaryBkAmount}}</label>
+                </td>
+                <td onclick="ShowAdditionalAdjustment('{{EmployeeId}}')">
+                    <label>{{AdjustedAmount}}</label>
+                </td>
+                <td> {{TotalSalaryAmount}}</td>
+            </tr>
+
+            {{/SalaryGenerationInfoSearch}}
+        </tbody>
+    </table>
+</script>
+
+<script id="templateAdditionalAdjustmentModal" type="text/html">
+    <table class="table table-bordered table-striped table-hover datatable-sorting" id="AdditionalAdjustmentDataTableModal">
+
+        <thead class="ruhee">
+        <th>Adjustment Name</th>
+        <th>Adjustment Amount</th>        
+        <th>Action</th>        </thead>
+
+        <tbody>
+            {{#model}}
+
+            <tr>
+                <td> {{AdjustmentName}}</td>                
+                <td> {{AdjustmentAmount}}</td>
+                <td>
+                    <a class="btn btn-primary" id="BtnDeletePurpose" onclick="DeleteSalaryAdjustment('{{AdjustmentId}}')">Delete</a>
+                </td>
+            </tr>
+
+            {{/model}}
+        </tbody>
+    </table>
+</script>
+
+<script id="templateSalaryStractureModal" type="text/html">
+    <table class="table table-bordered table-striped table-hover datatable-sorting" id="SalaryStructureDataTableModal">
+
+        <thead class="ruhee">
+        <th class="collapse">BkId</th>
+        <th>Salary Breakup Name</th>
+        <th>Amount</th>
+        </thead>
+
+        <tbody>
+            {{#SalaryStructureInfoSearch}}
+
+            <tr>
+                <td class="collapse"> {{BreakUpId}}</td>
+                <td> {{BreakupName}}</td>
+                <td>
+                    {{Amount}}
+                </td>
+            </tr>
+
+            {{/SalaryStructureInfoSearch}}
+        </tbody>
+    </table>
+</script>
+
+<div class="form-horizontal ">
+    <div class="row">
+
+
+        <div class="col-lg-6">
+            <fieldset class="content-group">
+                <legend class="text-bold">Employee Salary Stracture</legend>
+
+                <div class="form-group">
+                    <label class="control-label col-lg-2">Salary Year:</label>
+                    <div class="col-lg-4">
+                        <input type="text" id="txtSalaryYear" class="form-control ">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-lg-2">Salary Month:</label>
+                    <div class="col-lg-4">
+                        <select class="form-control " id="ddlSalaryMonth" name="ddlSalaryMonth"></select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-lg-2">Department:</label>
+                    <div class="col-lg-4">
+                        <select class="form-control " id="ddlDept" name="ddlDept"></select>
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label class="control-label col-lg-2"> </label>
+                    <div class="col-lg-10">
+                        @if (permission.CanSave == "1")
+                        {
+                            <button class="btn btn-info" data-style="expand-left" id="btnShow" type="button" onclick="LoadEmployeeMonthlySalaryInfoGrid()"><i class="fa fa-save"></i>&nbsp; Show</button>
+                        }
+                        <button class="btn btn-w-m btn-success btn-loading" type="button" id="btnReset" onclick="ResetForm()"><i class="glyphicon glyphicon-refresh"></i>&nbsp;Reset</button>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+
+
+
+
+        <div class="col-lg-6">
+            <fieldset class="content-group">
+                <legend class="text-bold">Staff List for Salary Generation</legend>
+                <div id="divInfo">
+
+                    <div class="form-group">
+                        <div class="table-responsive" id="div-userInfo">
+                        </div>
+                    </div>
+
+                </div>
+
+            </fieldset>
+        </div>
+
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-lg-6"></div>
+            <div class="col-lg-6">
+                <div class="col-lg-6">
+                    @if (permission.CanSave == "1")
+                    {
+                        <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Save</button>
+                    }
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div id="modal_backdrop_AdditionalAdjustment" class="modal fade" data-backdrop="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" id="btnModalClose" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title">Salary Additional Adjustment Information</h5>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="StaffName_SS">
+                                Adjustment Type
+                            </label>
+                            <div class="col-lg-6">
+                                <select class="form-control " id="ddlAddType" name="ddlAddType"></select>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="StaffName_SS">
+                                Amount
+                            </label>
+                            <div class="col-lg-6">
+                                <input type="text" id="txtAddAmount" class="form-control ">
+                                <input type="text" id="txtEmployeeId" class="form-control hidden">
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4 control-label">
+                                Adjustment Type
+                            </div>
+                            <div class="col-md-3">
+                                <input type="radio" name="AdjustmentType" id="AdjustmentType_Add" value="1" checked="checked" /> Add With Salary
+                            </div>
+                            <div class="col-md-3">
+                                <input type="radio" name="AdjustmentType" id="AdjustmentType_Deduct" value="2" /> Deduct From Salary
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <div class="col-md-offset-4 col-md-9">
+                                <button class="btn btn-dark btn-sm ladda-button " data-style="expand-left" id="BtnAdd" type="button"><i class="fa fa-search"></i>&nbsp; Add</button>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <div class="row">
+                        <fieldset class="content-group">
+                            <legend class="text-bold">Adjustment Information</legend>
+                            <div id="divInfo">
+
+                                <div class="form-group">
+                                    <div class="table-responsive" id="div-adjustmentInfo">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </fieldset>
+
+                    </div>
+
+
+                </div>
+
+                @*<div class="modal-footer">
+                        <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                    </div>*@
+            </div>
+        </div>
+    </div> 
+
+    <div id="modal_backdrop_EmpSalaryStructure" class="modal fade" data-backdrop="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title">Salary Structure</h5>
+                </div>
+
+                <div class="modal-body">                    
+                    <div class="row">                      
+                            <div id="divInfo">
+                                <div class="form-group">
+                                    <div class="table-responsive" id="div-SalaryStructureInfo">
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                        <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                    </div>
+            </div>
+        </div>
+    </div> 
+
+</div>
+
+
+
+<style type="text/css">
+
+</style>
+
+
+@section scripts
+{
+    <script type="text/javascript">
+    _serverDate = null;
+    $(document).ready(function () {
+        $('#btnSave').hide();
+        var finalData = [];
+        var finalAdjustmentdata = [];
+        LoadAllMonth("ddlSalaryMonth", true);
+        LoadDepartmentCombo("ddlDept", true);
+
+    });
+
+    $('#btnModalClose').click(function () {
+
+        var employeeId = $('#txtEmployeeId').val();
+        for (var i = 0; i < finalData.length; i++) {
+            if ($.trim(employeeId) == $.trim(finalData[i].EmployeeId)) {
+                finalData[i].EmployeeId.SalaryAdditionalAdjustment = finalAdjustmentdata;                
+                finalData[i].AdjustedAmount = GetTotalAdjustment();               
+                finalData[i].TotalSalaryAmount = finalData[i].TotalSalaryBkAmount + GetTotalAdjustment();
+            }
+        };        
+        var templateWithData = Mustache.to_html($("#templateSalaryGenerationModal").html(), { SalaryGenerationInfoSearch: finalData });
+        $("#div-userInfo").empty().html(templateWithData);
+
+    });
+
+
+    function GetTotalAdjustment()
+    {
+
+        var sum = 0;
+        for (var i = 0; i < finalAdjustmentdata.length; i++) {
+            console.log(finalAdjustmentdata[i].AdjustAddWithSalary)
+            if (finalAdjustmentdata[i].AdjustAddWithSalary) {              
+                sum = sum + parseInt(finalAdjustmentdata[i].AdjustmentAmount);
+            } else {             
+                sum = sum - parseInt(finalAdjustmentdata[i].AdjustmentAmount);
+            }
+        }
+        return sum;
+
+    }
+    
+
+    $('#BtnAdd').click(function () {
+
+        var employeeId = $('#txtEmployeeId').val();
+        var addObj = new Object();
+        addObj.AdjustmentId = $('#ddlAddType').val();
+        addObj.AdjustmentName = $('#ddlAddType option:selected').text();
+        addObj.AdjustmentAmount = $('#txtAddAmount').val();
+        addObj.AdjustAddWithSalary = document.getElementById("AdjustmentType_Add").checked;        
+        addObj.Remarks = null;
+        if (AdjustmetExistsInGrid(addObj)) {
+            ShowNotification(2, "This Adjustment Already exist.Please check ")
+            return false;
+        } ;
+        finalAdjustmentdata.push(addObj);
+        loadAdjustmentInfoInGrid(finalAdjustmentdata);
+        
+    });
+
+    function AdjustmetExistsInGrid(addObj) {
+        var ext = false;
+        for (var i = 0; i < finalAdjustmentdata.length; i++) {
+            if ($.trim(addObj.AdjustmentId) == $.trim(finalAdjustmentdata[i].AdjustmentId)) {
+                ext= true;              
+            }
+        };
+        return ext;
+    }
+    function ShowAdditionalAdjustment(EmployeeId) {
+        $('#modal_backdrop_AdditionalAdjustment').modal('toggle');
+        LoadAdjustmentType("ddlAddType", true);
+        LoadStaffMonthlyAdditionalAdjustment(EmployeeId);
+        $("#txtEmployeeId").val(EmployeeId);
+    };
+    function ShowEmployeeSalaryStructure(EmployeeId) {       
+        var salaryStructure;       
+        for (var i = 0; i < finalData.length; i++) {
+            if ($.trim(finalData[i].EmployeeId) == $.trim(EmployeeId)) {
+                salaryStructure = finalData[i].SalaryBreakup;                
+            }
+        };
+        $('#modal_backdrop_EmpSalaryStructure').modal('toggle');
+        var templateWithData = Mustache.to_html($("#templateSalaryStractureModal").html(), { SalaryStructureInfoSearch: salaryStructure });
+        $("#div-SalaryStructureInfo").empty().html(templateWithData);
+
+    }
+
+    function LoadEmployeeMonthlySalaryInfoGrid() {
+
+        if (!$("#txtSalaryYear").val()) {
+            ShowNotification(2, "Please enter salary year.");
+            return false;
+        }
+        if (!$("#ddlSalaryMonth").val()) {
+            ShowNotification(2, "Please enter salary month.");
+            return false;
+        }
+    
+        LoadStaffSalaryInfoGrid();
+    }
+
+    function LoadStaffMonthlyAdditionalAdjustment(EmployeeId) {
+
+        for (var i = 0; i < finalData.length; i++) {
+            if ($.trim(finalData[i].EmployeeId)==$.trim( EmployeeId)) {
+                finalAdjustmentdata = finalData[i].SalaryAdditionalAdjustment;
+                }
+        };
+        loadAdjustmentInfoInGrid(finalAdjustmentdata);
+        $("#txtEmployeeId").val(finalAdjustmentdata.EmployeeId);
+
+    }
+
+    function LoadStaffSalaryInfoGrid() {
+        var url = '@Url.Action("GetAllEmployeeSalary", "MonthlySalaryGeneration")';
+        var deptId = $('#ddlDept').val();
+        var salaryYear = $('#txtSalaryYear').val();
+        var salaryMonth = $('#ddlSalaryMonth').val();
+        if (!deptId) {
+            deptId = 0;
+        }
+
+        $.ajax({
+            url: url,
+            method: 'get',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: { deptId: deptId, salaryYear: salaryYear, salaryMonth: salaryMonth },
+            success: function (res) {
+                var templateWithData = Mustache.to_html($("#templateSalaryGenerationModal").html(), { SalaryGenerationInfoSearch: res });
+                
+                $("#div-userInfo").empty().html(templateWithData);
+                finalData = res;
+                MakePagination('SalaryGenerationDataTableModal');
+                if (res != null) {
+                    $('#btnSave').show();
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+
+        function DeleteSalaryAdjustment(AdjustmentId) {
+
+            for (var i = 0; i < finalAdjustmentdata.length; i++) {
+                if ($.trim(AdjustmentId) == $.trim(finalAdjustmentdata[i].AdjustmentId)) {
+                    finalAdjustmentdata.splice(i,1);
+                }
+            };
+            loadAdjustmentInfoInGrid(finalAdjustmentdata);
+        }
+
+        function loadAdjustmentInfoInGrid(finalAdjustmentdata) {
+            var templateWithData = Mustache.to_html($("#templateAdditionalAdjustmentModal").html(), { model: finalAdjustmentdata });
+            $("#div-adjustmentInfo").empty().html(templateWithData);
+        }
+
+    function ResetForm() {
+        //$('#txtEmpId').val('');
+        //$('#txtEmpName').val('');
+        $('#txtTotalAmt').val('');
+        $('#ddlSalaryGroup').val('');
+        $('#btnShow').prop('disabled', false);
+        $("#div-userInfo").empty().html('');
+        $("#btnSave").hide();
+
+    }
+
+    function Save() {
+        console.log(finalData)
+            $.ajax({
+                url: '@Url.Action("EmployeeMonthlySalaryEntry", "MonthlySalaryGeneration")',
+                    method: 'post',
+                    dataType: 'json',
+                    async: false,
+                    contentType: 'application/json',
+                    data: JSON.stringify(finalData),
+                    success: function (data) {
+                        var vmMsg = data;
+                        if (vmMsg.MessageType == 1) {
+                            ShowNotification(1, vmMsg.ReturnMessage);
+                            ResetForm();
+
+                        } else {
+                            ShowNotification(3, vmMsg.ReturnMessage);
+
+                        }
+                    },
+                    error: function () {
+
+                    }
+                });
+
+        }
+
+
+
+    </script>
+
+
+
+
+}
+
+
+

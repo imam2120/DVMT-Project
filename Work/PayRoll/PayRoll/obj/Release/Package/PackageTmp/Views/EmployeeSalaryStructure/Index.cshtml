@@ -1,0 +1,448 @@
+﻿@{
+    ViewBag.Title = ":: Employee Salary Structure ::";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var permission = ViewData["Permission"] as PayRoll.Core.Utility.DBManager.Permission;
+}
+
+
+<script id="templateSalaryStractureModal" type="text/html">
+    <table class="table table-bordered table-striped table-hover datatable-sorting" id="SalaryStructureDataTableModal">
+
+        <thead class="ruhee">
+            <th class="collapse">BkId</th>
+            <th>Salary Breakup Name</th>
+            <th>Amount</th> 
+        </thead>  
+       
+        <tbody>
+            {{#SalaryStructureInfoSearch}}
+
+            <tr>
+                <td class="collapse"> {{BreakUpId}}</td>
+                <td> {{BreakupName}}</td>
+                <td>
+                    <input type="text" value="{{Amount}}" class="form-control" id="{{BreakUpId}}" onkeypress="return decimal(event,this)" onchange="ChangeBkAmount(value, id)" />
+                </td>
+            </tr>
+
+            {{/SalaryStructureInfoSearch}}
+        </tbody>
+    </table>
+</script>
+
+<script id="templateEmployeeSearch" type="text/html">
+    <table class="table table-bordered table-striped table-hover" id="employeeSearchDataTable">
+        <thead>
+        <th>Employee Id</th>
+        <th>Employee Name</th>       
+        <th>Action</th>
+        </thead>
+        <tbody>
+            {{#EmployeeSearchList}}
+            <tr>
+                <td> {{EmployeeId}}</td>                
+                <td> {{EmployeeName}}</td>
+                <td class="action-sm"><button class="btn btn-orange btn-xs" onclick="SetEmployeeInfo('{{EmployeeId}}')"><i class="fa fa-edit" />Select</button></td>
+            </tr>
+            {{/EmployeeSearchList}}
+        </tbody>
+    </table>
+</script>
+
+
+<div class="form-horizontal ">
+    <div class="row">
+
+
+        <div class="col-lg-6">
+            <fieldset class="content-group">
+                <legend class="text-bold">Employee Salary Stracture</legend>
+
+
+                <div class="form-group">
+                    <label class="control-label col-lg-2">Employee Id:</label>
+                    <div class="col-lg-4 input-group">
+                        <input type="text" id="txtEmpId" class="form-control">
+                        <span class="input-group-addon bg-slate-700"><i class="glyphicon glyphicon-search" onclick=" ModalToggle()"></i></span>                  
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-lg-2">Employee Name:</label>
+                    <div class="col-lg-4">
+                        <input type="text" id="txtEmpName" class="form-control " readonly="readonly">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-lg-2">Salary Group:</label>
+                    <div class="col-lg-4">
+                        <select class="form-control " id="ddlSalaryGroup" name="ddlSalaryGroup"></select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-lg-2">Total Salary Amount:</label>
+                    <div class="col-lg-4">
+                        <input type="text" id="txtTotalAmt" class="form-control ">
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label class="control-label col-lg-2"> </label>
+                    <div class="col-lg-10">
+                        @if (permission.CanSave == "1")
+                        {
+                            <button class="btn btn-info" data-style="expand-left" id="btnShow" type="button" onclick="LoadEmployeeNewSalaryStructureInfoGrid()"><i class="fa fa-save"></i>&nbsp; Show</button>
+                        }
+                        <button class="btn btn-w-m btn-success btn-loading" type="button" id="btnReset" onclick="ResetForm()"><i class="glyphicon glyphicon-refresh"></i>&nbsp;Reset</button>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+
+
+
+
+        <div class="col-lg-6">
+            <fieldset class="content-group">
+                <legend class="text-bold">Salary Breakup</legend>
+                <div id="divInfo">
+
+                    <div class="form-group">
+                        <div class="table-responsive" id="div-userInfo">
+                        </div>
+                    </div>
+
+                </div>
+
+            </fieldset>
+        </div>
+
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-lg-6"></div>
+            <div class="col-lg-6">
+                <div class="col-lg-6">
+                    @if (permission.CanSave == "1")
+                    {
+                        <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Save</button>
+                    }
+                </div>
+            </div>
+        </div>
+     
+        
+    </div>
+
+    <div id="modal_backdrop" class="modal fade" data-backdrop="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title">Search Employee Information</h5>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="StaffName_SS">
+                                Employee Name
+                            </label>
+                            <div class="col-lg-6">
+                                <input type="text" id="txtEmployeeName" class="form-control ">
+                            </div>
+                            
+                        </div>
+                        <div class="form-actions">
+                            <div class="col-md-offset-4 col-md-9">
+                                <button class="btn btn-dark btn-sm ladda-button " data-style="expand-left" id="BtnSearchModal" type="button"><i class="fa fa-search"></i>&nbsp; Search</button>
+                            </div>
+                        </div>
+                        
+
+
+                    </div>
+                    <div class="row">
+                        <fieldset class="content-group">
+                            <legend class="text-bold">Emplyee Information</legend>
+                            <div id="divInfo">
+
+                                <div class="form-group">
+                                    <div class="table-responsive" id="div-employeeInfo">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </fieldset>
+
+                    </div>
+                    
+
+                </div>
+
+                @*<div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>                                         
+                </div>*@
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<style type="text/css">
+
+</style>
+
+
+@section scripts
+{
+    <script type="text/javascript">
+    _serverDate = null;
+    $(document).ready(function () {
+        $('#btnSave').hide();
+        var finalData = [];
+        LoadSalaryGroupCombo("ddlSalaryGroup", true);
+        
+    });
+
+
+    function ChangeBkAmount(value, id) {
+
+ 
+        for (var i = 0; i < finalData.length; i++) {
+            if ($.trim(id) == $.trim(finalData[i].BreakUpId)) {
+
+                if (value == '') {
+                    finalData[i].Amount = 0
+                }
+                else {
+                    finalData[i].Amount = parseInt(value)
+                }
+
+
+            }
+        };
+
+    }
+
+    $('#BtnSearchModal').click(function () {
+
+        var employeeName = $('#txtEmployeeName').val();
+    
+            $.ajax({
+                url: '/Common/EmployeeInformation',
+                method: 'get',
+                data: {
+                    EmployeeName: employeeName,
+                },
+                success: function (res) {
+                    var templateWithData = Mustache.to_html($("#templateEmployeeSearch").html(), { EmployeeSearchList: res });
+                    $("#div-employeeInfo").empty().html(templateWithData);
+                    MakePagination('employeeSearchDataTable');
+
+                },
+                error: function () {
+
+                }
+            });
+       
+    });
+
+
+    function ModalToggle() {
+        $('#modal_backdrop').modal('toggle');
+    };
+    function SetEmployeeInfo(EmployeeId) {
+        $('#txtEmpId').val(EmployeeId);
+        ModalToggle();
+        $('#txtEmpId').blur();
+    }
+
+    $(function () {
+        $('#txtEmpId').blur(function () {
+                       
+            LoadEmployeeSalaryStructureInfoGrid();
+            
+        });
+    });
+
+    function LoadEmployeeNewSalaryStructureInfoGrid() {
+
+        if (!$("#txtEmpId").val()) {
+            ShowNotification(2, "Please enter employee Id.");
+            return false;
+        }
+
+        if (!$("#ddlSalaryGroup").val()) {
+            ShowNotification(2, "Please select salary group.");
+            return false;
+        }
+
+        if (!$("#txtTotalAmt").val()) {
+            ShowNotification(2, "Please enter total Salary.");
+            return false;
+        }
+                
+        LoadNewSalaryStructureInfoGrid();
+        
+
+    }
+
+    function LoadNewSalaryStructureInfoGrid() {
+
+        var url = '@Url.Action("GetNewSalaryStructure", "EmployeeSalaryStructure")';
+
+        var amount = $('#txtTotalAmt').val();
+        var salaryGroupId = $('#ddlSalaryGroup').val();
+
+        $.ajax({
+            url: url,
+            method: 'get',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: { salaryGroupId: salaryGroupId, totalAmt: amount },
+            success: function (res) {
+                var templateWithData = Mustache.to_html($("#templateSalaryStractureModal").html(), { SalaryStructureInfoSearch: res });
+                console.log(res);
+                
+                $("#div-userInfo").empty().html(templateWithData);
+                finalData = res;
+                MakePagination('SalaryStructureDataTableModal');
+                if (res != null) {
+                    $('#btnSave').show();
+                }
+
+            },
+            error: function () {
+
+            }
+        });
+    }
+
+
+
+    function LoadEmployeeSalaryStructureInfoGrid() {
+        var url = '@Url.Action("GetEmployeeCurrentSalaryStructure", "EmployeeSalaryStructure")';
+
+        var empId = $('#txtEmpId').val();
+        
+        $.ajax({
+            url: url,
+            method: 'get',
+            async: false,
+            contentType: 'application/json',
+            dataType: 'json',
+            data: { employeeId: empId },
+            success: function (dt) {
+                console.log(dt);
+                if (dt.length>0) {
+                    if (dt[0].SalaryBreakupList.length < 1) {
+                        $('#btnSave').hide();
+                        $('#btnShow').prop('disabled', false);
+                        $("#div-userInfo").empty().html('');
+                        $('#txtTotalAmt').val('');
+                    }
+                    else {
+                        var sum = 0;
+                        $('#btnSave').hide();
+                        $('#btnShow').prop('disabled', true);
+                        for (var i = 0; i < dt[0].SalaryBreakupList.length; i++) {
+                            sum = dt[0].SalaryBreakupList[i].Amount + sum;
+                        }
+                        $('#txtTotalAmt').val(sum);
+                        var templateWithData = Mustache.to_html($("#templateSalaryStractureModal").html(), { SalaryStructureInfoSearch: dt[0].SalaryBreakupList });
+                        $("#div-userInfo").empty().html(templateWithData);
+                    }
+
+                    $('#txtEmpName').val(dt[0].Name);
+                    $('#ddlSalaryGroup').val(dt[0].SalaryGroupId);
+
+                } else {                    
+                   
+                    $('#txtEmpId').val('');
+                    $('#txtEmpName').val('');
+                    $('#txtTotalAmt').val('');
+                    $('#ddlSalaryGroup').val('');
+                    $('#btnShow').prop('disabled', false);
+                    $("#div-userInfo").empty().html('');
+                    ShowNotification(3, "Invalid Employee.Please check");
+                }                                          
+
+            },
+            error: function () {
+
+            }
+        });
+
+
+    }
+
+
+
+    function ResetForm() {
+        //$('#txtEmpId').val('');
+        //$('#txtEmpName').val('');
+        $('#txtTotalAmt').val('');
+        $('#ddlSalaryGroup').val('');
+        $('#btnShow').prop('disabled', false);
+        $("#div-userInfo").empty().html('');
+        
+    }
+    function ShowModal() {
+
+        alert("Ok");
+    }
+
+
+    function Save() {
+        var empId = $('#txtEmpId').val();
+        var SalaryGroupId = $('#ddlSalaryGroup').val();
+        var salaryData = {
+            SalaryBreakupList: finalData,
+            EmployeeId: empId,
+            SalaryGroupId:SalaryGroupId
+
+        }
+            $.ajax({
+                url: '@Url.Action("EmployeeSalaryStructureEntry", "EmployeeSalaryStructure")',
+                    method: 'post',
+                    dataType: 'json',
+                    async: false,
+                    contentType: 'application/json',
+                    data: JSON.stringify(salaryData),
+                    success: function (data) {
+                        var vmMsg = data;
+                        if (vmMsg.MessageType == 1) {
+                            ShowNotification(1, vmMsg.ReturnMessage);
+                            ResetForm();
+
+                        } else {
+                            ShowNotification(3, vmMsg.ReturnMessage);
+
+                        }
+                    },
+                    error: function () {
+
+                    }
+                });
+
+        }
+
+
+
+    </script>
+
+
+
+
+}
+
+
+

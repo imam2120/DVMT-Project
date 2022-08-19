@@ -1,0 +1,86 @@
+﻿@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-lg-4">
+
+
+
+            @*<div class="panel panel-flat">*@
+
+
+            <div class="panel-body">
+                <div class="chart-container text-center">
+                    <div class="chart svg-center" id="d3-pie-basic">
+                        <svg width="240" height="240">
+                            <g transform="translate(120,120)">
+                                <g class="d3-arc">
+                                    <path d="M7.34788079488412e-15,-120A120,120 0 0,1 80.54402633451436,-88.95313272631302L0,0Z" style="stroke: rgb(255, 255, 255); fill: rgb(31, 119, 180);"></path>
+                                    <text transform="translate(21.58015312979278,-55.98479249666551)" dy=".35em" style="fill: rgb(255, 255, 255); text-anchor: middle;">&lt;5</text>
+                                </g>
+                                <g class="d3-arc">
+                                    <path d="M80.54402633451436,-88.95313272631302A120,120 0 0,1 118.96915260920665,-15.695245377097498L0,0Z" style="stroke: rgb(255, 255, 255); fill: rgb(174, 199, 232);"></path>
+                                    <text transform="translate(53.13439718716798,-27.86998090340709)" dy=".35em" style="fill: rgb(255, 255, 255); text-anchor: middle;">5-13</text>
+                                </g>
+                                <g class="d3-arc">
+                                    <path d="M118.96915260920665,-15.695245377097498A120,120 0 0,1 107.69061717188725,52.94082520265452L0,0Z" style="stroke: rgb(255, 255, 255); fill: rgb(255, 127, 14);"></path>
+                                    <text transform="translate(59.20597595568753,9.72894707224531)" dy=".35em" style="fill: rgb(255, 255, 255); text-anchor: middle;">14-17</text>
+                                </g>
+                                <g class="d3-arc">
+                                    <path d="M107.69061717188725,52.94082520265452A120,120 0 0,1 5.030321751241002,119.8945197374717L0,0Z" style="stroke: rgb(255, 255, 255); fill: rgb(255, 187, 120);"></path>
+                                    <text transform="translate(32.776522927597526,50.25633835424814)" dy=".35em" style="fill: rgb(255, 255, 255); text-anchor: middle;">18-24</text>
+                                </g>
+                                <g class="d3-arc">
+                                    <path d="M5.030321751241002,119.8945197374717A120,120 0 0,1 -107.86028348945554,52.59428909657669L0,0Z" style="stroke: rgb(255, 255, 255); fill: rgb(44, 160, 44);"></path>
+                                    <text transform="translate(-30.723893466039122,51.53680597677236)" dy=".35em" style="fill: rgb(255, 255, 255); text-anchor: middle;">25-44</text>
+                                </g>
+                                <g class="d3-arc">
+                                    <path d="M-107.86028348945554,52.59428909657669A120,120 0 0,1 -72.15416534177825,-95.88418234428099L0,0Z" style="stroke: rgb(255, 255, 255); fill: rgb(152, 223, 138);"></path>
+                                    <text transform="translate(-58.33687634626279,-14.028858049066024)" dy=".35em" style="fill: rgb(255, 255, 255); text-anchor: middle;">45-64</text>
+                                </g>
+                                <g class="d3-arc">
+                                    <path d="M-72.15416534177825,-95.88418234428099A120,120 0 0,1 -2.2043642384652355e-14,-120L0,0Z" style="stroke: rgb(255, 255, 255); fill: rgb(214, 39, 40);"></path>
+                                    <text transform="translate(-19.01939181035467,-56.90573552080857)" dy=".35em" style="fill: rgb(255, 255, 255); text-anchor: middle;">≥65</text>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            @*</div>*@
+        </div>
+
+        <div class="col-lg-4">
+
+
+        </div>
+
+        <div class="col-lg-4">
+            <div class="panel bg-teal-400">
+                <div class="panel-body">
+                    <div class="heading-elements">
+                        <span class="heading-text badge bg-teal-800">+53,6%</span>
+                    </div>
+
+                    <h3 class="no-margin">3,450</h3>
+                    Members online
+                    <div class="text-muted text-size-small">489 avg</div>
+                </div>
+
+                <div class="container-fluid">
+                    <div id="members-online"><svg width="253.3333282470703" height="50"><g width="253.3333282470703"><rect class="d3-random-bars" width="7.297667891890914" x="3.127571953667535" style="fill: rgba(255, 255, 255, 0.5);" height="41.17647058823529" y="8.82352941176471"></rect><rect class="d3-random-bars" width="7.297667891890914" x="13.552811799225985" style="fill: rgba(255, 255, 255, 0.5);" height="44.11764705882353" y="5.882352941176471"></rect><rect class="d3-random-bars" width="7.297667891890914" x="23.978051644784433" style="fill: rgba(255, 255, 255, 0.5);" height="47.05882352941176" y="2.941176470588239"></rect><rect class="d3-random-bars" width="7.297667891890914" x="34.40329149034288" style="fill: rgba(255, 255, 255, 0.5);" height="41.17647058823529" y="8.82352941176471"></rect><rect class="d3-random-bars" width="7.297667891890914" x="44.82853133590133" style="fill: rgba(255, 255, 255, 0.5);" height="32.35294117647059" y="17.647058823529413"></rect><rect class="d3-random-bars" width="7.297667891890914" x="55.25377118145978" style="fill: rgba(255, 255, 255, 0.5);" height="29.411764705882355" y="20.588235294117645"></rect><rect class="d3-random-bars" width="7.297667891890914" x="65.67901102701823" style="fill: rgba(255, 255, 255, 0.5);" height="29.411764705882355" y="20.588235294117645"></rect><rect class="d3-random-bars" width="7.297667891890914" x="76.10425087257669" style="fill: rgba(255, 255, 255, 0.5);" height="35.294117647058826" y="14.705882352941174"></rect><rect class="d3-random-bars" width="7.297667891890914" x="86.52949071813514" style="fill: rgba(255, 255, 255, 0.5);" height="44.11764705882353" y="5.882352941176471"></rect><rect class="d3-random-bars" width="7.297667891890914" x="96.95473056369359" style="fill: rgba(255, 255, 255, 0.5);" height="35.294117647058826" y="14.705882352941174"></rect><rect class="d3-random-bars" width="7.297667891890914" x="107.37997040925204" style="fill: rgba(255, 255, 255, 0.5);" height="47.05882352941176" y="2.941176470588239"></rect><rect class="d3-random-bars" width="7.297667891890914" x="117.80521025481049" style="fill: rgba(255, 255, 255, 0.5);" height="32.35294117647059" y="17.647058823529413"></rect><rect class="d3-random-bars" width="7.297667891890914" x="128.23045010036893" style="fill: rgba(255, 255, 255, 0.5);" height="47.05882352941176" y="2.941176470588239"></rect><rect class="d3-random-bars" width="7.297667891890914" x="138.65568994592738" style="fill: rgba(255, 255, 255, 0.5);" height="35.294117647058826" y="14.705882352941174"></rect><rect class="d3-random-bars" width="7.297667891890914" x="149.08092979148583" style="fill: rgba(255, 255, 255, 0.5);" height="32.35294117647059" y="17.647058823529413"></rect><rect class="d3-random-bars" width="7.297667891890914" x="159.50616963704428" style="fill: rgba(255, 255, 255, 0.5);" height="35.294117647058826" y="14.705882352941174"></rect><rect class="d3-random-bars" width="7.297667891890914" x="169.93140948260273" style="fill: rgba(255, 255, 255, 0.5);" height="50" y="0"></rect><rect class="d3-random-bars" width="7.297667891890914" x="180.35664932816118" style="fill: rgba(255, 255, 255, 0.5);" height="44.11764705882353" y="5.882352941176471"></rect><rect class="d3-random-bars" width="7.297667891890914" x="190.78188917371963" style="fill: rgba(255, 255, 255, 0.5);" height="47.05882352941176" y="2.941176470588239"></rect><rect class="d3-random-bars" width="7.297667891890914" x="201.20712901927809" style="fill: rgba(255, 255, 255, 0.5);" height="47.05882352941176" y="2.941176470588239"></rect><rect class="d3-random-bars" width="7.297667891890914" x="211.63236886483654" style="fill: rgba(255, 255, 255, 0.5);" height="29.411764705882355" y="20.588235294117645"></rect><rect class="d3-random-bars" width="7.297667891890914" x="222.057608710395" style="fill: rgba(255, 255, 255, 0.5);" height="47.05882352941176" y="2.941176470588239"></rect><rect class="d3-random-bars" width="7.297667891890914" x="232.48284855595344" style="fill: rgba(255, 255, 255, 0.5);" height="32.35294117647059" y="17.647058823529413"></rect><rect class="d3-random-bars" width="7.297667891890914" x="242.9080884015119" style="fill: rgba(255, 255, 255, 0.5);" height="50" y="0"></rect></g></svg></div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+

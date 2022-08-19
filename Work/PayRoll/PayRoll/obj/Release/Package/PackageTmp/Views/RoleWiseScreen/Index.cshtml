@@ -1,0 +1,229 @@
+﻿
+@using PayRoll.Core.Model
+@using PayRoll.Core.Utility.DBManager
+
+
+@model RoleWiseScreenPermission
+
+@{
+    ViewBag.Title = "Role Wise Screen Permission";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var session = Session["Session"] as AppSession;
+}
+
+
+
+<script id="template" type="text/html">
+    <table class="table table-bordered table-striped table-hover datatable-sorting" id="ScreenlistDataTable">
+        <thead class="ruhee">
+        <th>Select</th>
+        <th>Screen ID</th>
+        <th>Screen Name</th>
+        <th>Save Update Delete</th>
+        </thead>
+        <tbody>
+            {{#ScreenList}}
+            <tr>
+                <td>
+                    {{#IsChecked}}
+                    <input id="create_{{ScreenId}}" type="checkbox" class="screenPermission" checked="checked" />
+                    {{/IsChecked}}
+                    {{^IsChecked}}
+                    <input id="create_{{ScreenId}}" type="checkbox" class="screenPermission" />
+                    {{/IsChecked}}
+                </td>
+
+                <td> {{ScreenId}}</td>
+                <td> {{ScreenName}}</td>
+                <td> 
+                    {{#IsSave}}
+                    <input id="{{ScreenId}}_Save" type="checkbox" class="specificPer"  checked="checked" />
+                    {{/IsSave}}
+                    {{^IsSave}}
+                    <input id="{{ScreenId}}_Save" type="checkbox" class="specificPer" />
+                    {{/IsSave}}
+
+
+                    {{#IsUpdate}}
+                    <input id="{{ScreenId}}_Update" type="checkbox" class="specificPer" checked="checked" />
+                    {{/IsUpdate}}
+                    {{^IsUpdate}}
+                    <input id="{{ScreenId}}_Update" type="checkbox" class="specificPer" />
+                    {{/IsUpdate}}
+
+                    {{#IsDelete}}
+                    <input id="{{ScreenId}}_Delete" type="checkbox" class="specificPer" checked="checked" />
+                    {{/IsDelete}}
+                    {{^IsDelete}}
+                    <input id="{{ScreenId}}_Delete" type="checkbox" class="specificPer" />
+                    {{/IsDelete}}
+                
+                </td>
+            </tr>
+            {{/ScreenList}}
+        </tbody>
+    </table>
+</script>
+
+
+
+<form name="roleWiseScreen" id="roleWiseScreen" action="javascript:;">
+    <div class="form-horizontal ">
+        <fieldset class="content-group">
+            <legend class="text-bold">Role Wise screen Permission</legend>
+
+            <div class="form-group">
+                <label class="control-label col-lg-2">Role Name:</label>
+                <div class="col-lg-10">
+                    @Html.DropDownListFor(m => m.RoleId, (IEnumerable<SelectListItem>)ViewData["UserRoleList"], "--Select--", new { id = "UserRoleDDL", onchange = "UserRoleChange()", @class = "form-control" })
+                </div>
+            </div>
+
+        </fieldset>
+
+
+        <fieldset class="content-group">
+            <legend class="text-bold">User Roles List</legend>
+            <div id="divInfo">
+
+                <div class="form-group">
+                    <div class="table-responsive" id="divDataGrid">
+                    </div>
+                </div>
+
+            </div>
+
+        </fieldset>
+
+    </div>
+    </form>
+
+    @section Scripts
+{
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+            });
+
+            function UserRoleChange() {
+                LoadScreenList();
+            }
+
+            $(document).on('click', '.screenPermission', function () {
+                var actionButton = "";
+                var roleId = $("#UserRoleDDL").val();
+                var screenId = this.id;
+                var ScreenCode = this.id.split('_')[1];
+                
+                var action = document.getElementById(screenId).checked;
+                if (action) {
+                    actionButton = "Save"
+                }
+                else {
+                    actionButton = "Delete"
+                }
+
+                if (actionButton === "Save") {
+                    //action = "Save";
+                    $.ajax({
+                        url: '@Url.Action("Create", "RoleWiseScreen")',
+                        type: 'post',
+                        data: {
+                            roleId: roleId,
+                            screenId: ScreenCode,
+
+                        },
+                        success: function (msg) {
+                            var tempMsg = msg;
+                            ShowNotification(tempMsg.MessageType, tempMsg.ReturnMessage);
+                            LoadScreenList()
+                        },
+                        error: function () { }
+                    });
+                }
+                else if (actionButton === "Delete") {
+                    //action = "Delete";
+                    $.ajax({
+                        url: '@Url.Action("Delete", "RoleWiseScreen")',
+                        type: 'post',
+                        data: {
+                            roleId: roleId,
+                            screenId: ScreenCode,
+
+                        },
+                        success: function (msg) {
+                            var tempMsg = msg;
+                            ShowNotification(tempMsg.MessageType, tempMsg.ReturnMessage);
+                            LoadScreenList()
+                        },
+                        error: function () { }
+                    });
+                }
+
+
+
+            });
+
+            $(document).on('click', '.specificPer', function () {
+                var action = "";
+                var roleId = $("#UserRoleDDL").val();
+                var screenId = this.id;
+                var ScreenCode = this.id.split('_')[0];
+                var operationType = this.id.split('_')[1];
+                var type = document.getElementById(screenId).checked;
+                var readPermissionId = "create_" + ScreenCode;              
+                if (!document.getElementById(readPermissionId).checked) {
+                    ShowNotification(2, "Please select read permission first.");
+                    return false;
+                }
+                if (type) {
+                    action = "Save";
+                } else {
+                    action = "Delete";
+                }
+
+                $.ajax({
+                    url: '@Url.Action("UpdateSpecificPermission", "RoleWiseScreen")',
+                    type: 'post',
+                    data: {
+                        roleId: roleId,
+                        screenId: ScreenCode,
+                        action: action,
+                        operationType: operationType
+
+                    },
+                    success: function (msg) {
+                        var tempMsg = msg;
+                        ShowNotification(tempMsg.MessageType, tempMsg.ReturnMessage);                        
+                    },
+                    error: function () { }
+                });
+
+
+
+
+            });
+
+            function LoadScreenList() {
+                var roleId = $("#UserRoleDDL").val();
+                $.ajax({
+                    url: '@Url.Action("GetScreens", "RoleWiseScreen")',
+                    type: 'get',
+                    async: false,
+                    data: {
+                        roleId: roleId
+                    },
+                    success: function (res) {
+                        var templateWithData = Mustache.to_html($("#template").html(), { ScreenList: res });
+                        $("#divDataGrid").empty().html(templateWithData);
+                        MakePagination('ScreenlistDataTable');
+
+                    },
+                    error: function () {
+                    }
+                });
+            }
+
+        </script>
+    }
+

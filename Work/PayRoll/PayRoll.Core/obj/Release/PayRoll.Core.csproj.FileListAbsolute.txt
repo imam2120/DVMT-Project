@@ -1,0 +1,12 @@
+D:\Professional\PayRoll\PayRoll\PayRoll.Core\bin\Release\REXPOS.Core.dll
+D:\Professional\PayRoll\PayRoll\PayRoll.Core\bin\Release\REXPOS.Core.pdb
+D:\Professional\PayRoll\PayRoll\PayRoll.Core\obj\Release\PayRoll.Core.csprojResolveAssemblyReference.cache
+D:\Professional\PayRoll\PayRoll\PayRoll.Core\obj\Release\REXPOS.Core.dll
+D:\Professional\PayRoll\PayRoll\PayRoll.Core\obj\Release\REXPOS.Core.pdb
+D:\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\bin\Release\REXPOS.Core.dll
+D:\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\bin\Release\REXPOS.Core.pdb
+D:\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\bin\Release\System.Web.Mvc.dll
+D:\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\bin\Release\System.Web.Mvc.xml
+D:\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\obj\Release\PayRoll.Core.csprojResolveAssemblyReference.cache
+D:\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\obj\Release\REXPOS.Core.dll
+D:\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\obj\Release\REXPOS.Core.pdb

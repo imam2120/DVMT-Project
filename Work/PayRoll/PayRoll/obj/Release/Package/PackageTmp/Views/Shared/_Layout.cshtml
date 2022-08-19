@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title</title>
+    @*<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">*@
+    
+    @*@Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/assets")*@
+
+    @Scripts.Render(@Url.Content("~/Content/css"))
+    @Scripts.Render(@Url.Content("~/bundles/jquery"))
+    @Scripts.Render(@Url.Content("~/bundles/assets"))
+    
+
+    <script src="~/Scripts/CommonComboLoader.js"></script>
+</head>
+@using PayRoll.Core.Model
+@using PayRoll.Core.Utility.DBManager
+@{
+    var appSession = CurrentSession.GetCurrentSession();
+    var screens = Session["Module"] as IEnumerable<RoleWiseScreenPermission>;
+    var SubModules = Session["SubModules"] != null ? Session["SubModules"] as IEnumerable<RoleWiseScreenPermission> : null;
+
+
+}
+
+<body class="pace-done">
+    <div class="navbar navbar-inverse bg-teal navbar-component" style="position: relative; z-index: 30;">
+        <div class="navbar-header">
+            <a class="navbar-brand"><img src="~/Scripts/assets/images/logo_light.png" alt=""></a>
+
+            <ul class="nav navbar-nav visible-xs-block">
+                <li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
+                <li><a class="sidebar-mobile-main-toggle"><i class="icon-paragraph-justify3"></i></a></li>
+            </ul>
+
+
+
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-mobile">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown dropdown-user">
+                    <a class="dropdown-toggle" data-toggle="dropdown">
+                        <img src="assets/images/placeholder.jpg" alt="">
+                        <span>@appSession.UserName</span>
+                        <i class="caret"></i>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        @*<li><a href="#"><i class="icon-user-plus"></i> My profile</a></li>
+                            <li><a href="#"><i class="icon-coins"></i> My balance</a></li>
+                            <li><a href="#"><i class="icon-comment-discussion"></i> Messages <span class="badge badge-warning pull-right">94</span></a></li>
+                            <li class="divider"></li>
+                            <li><a href="#"><i class="icon-cog5"></i> Account settings</a></li>*@
+                        <li><a href='@Url.Action("Logout","Login")'><i class="icon-switch2"></i> Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="navbar navbar-default" id="navbar-second">
+        <div class="navbar-boxed">
+            <ul class="nav navbar-nav no-border visible-xs-block">
+                <li><a class="text-center collapsed" data-toggle="collapse" data-target="#navbar-second-toggle"><i class="icon-menu7"></i></a></li>
+            </ul>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-second-toggle">
+            <ul class="nav navbar-nav">
+
+                <li id="0000">
+                    <a class="dropdown" href="@Url.Action("Index", "Dashboard")" id="0000">
+                        <i class="icon-home2"></i> Dashboard
+                    </a>
+                </li>
+                @foreach (var v in screens.GroupBy(o => new { o.ScreenId, o.ScreenName, o.IconName }).Select(o => new { Text = o.Key.ScreenName, Value = o.Key.ScreenId, Icon = o.Key.IconName }))
+                {
+                    <li class="dropdown" id="@v.Value">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="@v.Value">
+
+                            <i class="icon-cog52"></i>    @v.Text
+
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-right">
+
+                            @{
+                    var subModule = (SubModules.Where(o => o.ParentScreenId == v.Value));
+                            }
+
+                            @if (subModule != null)
+                            {
+                                foreach (var s in subModule)
+                                {
+                                    <li id="@s.ScreenId">
+                                        <a href="~/@string.Format("{0}", s.URL)" id="@s.ScreenId">
+
+                                            <span>@s.ScreenName</span>
+                                        </a>
+                                    </li>
+                                }
+
+                            }
+                        </ul>
+                    </li>
+                }
+            </ul>
+
+
+
+
+
+        </div>
+
+    </div>
+    
+
+
+
+    <div class="page-container">
+        @RenderBody()
+    </div>
+
+    @RenderSection("scripts", required: false)
+    <div class="footer text-muted">
+        &copy; 2017. <a href="#">PayRoll Software</a> by <a href="http://scube.com" target="_blank">Scube Ltd</a>
+    </div>
+</body>
+
+</html>
+
+
+
+<style>
+    .ruhee {
+        background-color: #517277CC;
+    }
+
+    /*table tr {
+        height: 45px;
+    }*/
+
+</style>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+    });
+ 
+
+    function setDefaultMonth(controlId) {
+        var d = new Date(),
+
+        n = d.getMonth(),
+
+        y = d.getFullYear();
+
+        $('#' + controlId + ' option:eq(' + n + ')').prop('selected', true);
+    }
+
+    function setDefaulYear(controlId) {
+        var d = new Date(),
+
+        n = d.getMonth(),
+
+        y = d.getFullYear();
+
+        $('#' + controlId + '').val(y);
+    }
+
+    function GetServerDate() {
+        var date = "";
+        var url = '/Common/GetServerDate';
+        $.ajax({
+            url: url,
+            method: 'get',
+            dataType: 'json',
+            async: false,
+            data: {
+            },
+            success: function (data) {
+                date = data;
+            },
+            error: function () {
+            }
+        });
+        return date;
+    }
+
+    // for search in dropdown
+    $(function () {
+        $('.chosen-select').chosen();
+        $('.chosen-select-deselect').chosen({ allow_single_deselect: true });
+    });
+
+    $('.datetimepicker-disable-time').prop("readonly", true);
+    $('.datetimepicker-disable-time').datepicker({
+        changeMonth: true,
+        changeYear:true,
+        pickTime: false,
+        format: 'dd-M-yyyy',        
+        autoclose: true,
+    });
+
+</script>

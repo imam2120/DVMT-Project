@@ -1,0 +1,54 @@
+D:\Professional\PayRoll\PayRoll\REXPOS.Core\bin\Debug\REXPOS.Core.dll
+D:\Professional\PayRoll\PayRoll\REXPOS.Core\bin\Debug\REXPOS.Core.pdb
+D:\Professional\PayRoll\PayRoll\REXPOS.Core\obj\Debug\PayRoll.Core.csprojResolveAssemblyReference.cache
+D:\Professional\PayRoll\PayRoll\REXPOS.Core\obj\Debug\REXPOS.Core.dll
+D:\Professional\PayRoll\PayRoll\REXPOS.Core\obj\Debug\REXPOS.Core.pdb
+D:\Professional\PayRoll\PayRoll\PayRoll.Core\bin\Debug\REXPOS.Core.dll
+D:\Professional\PayRoll\PayRoll\PayRoll.Core\bin\Debug\REXPOS.Core.pdb
+D:\Professional\PayRoll\PayRoll\PayRoll.Core\obj\Debug\REXPOS.Core.dll
+D:\Professional\PayRoll\PayRoll\PayRoll.Core\obj\Debug\REXPOS.Core.pdb
+D:\Professional\PayRoll\PayRoll\PayRoll.Core\obj\Debug\PayRoll.Core.csproj.CoreCompileInputs.cache
+D:\Professional\PayRoll\PayRoll\PayRoll.Core\bin\Debug\System.Web.Mvc.dll
+D:\Professional\PayRoll\PayRoll\PayRoll.Core\bin\Debug\System.Web.Mvc.xml
+D:\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\bin\Debug\REXPOS.Core.dll
+D:\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\bin\Debug\REXPOS.Core.pdb
+D:\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\bin\Debug\System.Web.Mvc.dll
+D:\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\bin\Debug\System.Web.Mvc.xml
+D:\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\obj\Debug\REXPOS.Core.dll
+D:\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\obj\Debug\REXPOS.Core.pdb
+D:\RazuAhammed\Local Disk\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\bin\Debug\REXPOS.Core.dll
+D:\RazuAhammed\Local Disk\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\bin\Debug\REXPOS.Core.pdb
+D:\RazuAhammed\Local Disk\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\bin\Debug\System.Web.Mvc.dll
+D:\RazuAhammed\Local Disk\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\bin\Debug\System.Web.Mvc.xml
+D:\RazuAhammed\Local Disk\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\obj\Debug\PayRoll.Core.csprojResolveAssemblyReference.cache
+D:\RazuAhammed\Local Disk\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\obj\Debug\REXPOS.Core.dll
+D:\RazuAhammed\Local Disk\Professional\PayRoll_VS2015\PayRoll\PayRoll\PayRoll.Core\obj\Debug\REXPOS.Core.pdb
+F:\Tutorials\Jubayer Shafkat\PayRoll\PayRoll\PayRoll.Core\bin\Debug\REXPOS.Core.dll
+F:\Tutorials\Jubayer Shafkat\PayRoll\PayRoll\PayRoll.Core\bin\Debug\REXPOS.Core.pdb
+F:\Tutorials\Jubayer Shafkat\PayRoll\PayRoll\PayRoll.Core\bin\Debug\System.Web.Mvc.dll
+F:\Tutorials\Jubayer Shafkat\PayRoll\PayRoll\PayRoll.Core\bin\Debug\System.Web.Mvc.xml
+F:\Tutorials\Jubayer Shafkat\PayRoll\PayRoll\PayRoll.Core\obj\Debug\PayRoll.Core.csprojAssemblyReference.cache
+F:\Tutorials\Jubayer Shafkat\PayRoll\PayRoll\PayRoll.Core\obj\Debug\PayRoll.Core.csproj.CoreCompileInputs.cache
+F:\Tutorials\Jubayer Shafkat\PayRoll\PayRoll\PayRoll.Core\obj\Debug\PayRoll.Core.csproj.CopyComplete
+F:\Tutorials\Jubayer Shafkat\PayRoll\PayRoll\PayRoll.Core\obj\Debug\REXPOS.Core.dll
+F:\Tutorials\Jubayer Shafkat\PayRoll\PayRoll\PayRoll.Core\obj\Debug\REXPOS.Core.pdb
+D:\Professional\PayRoll\PayRoll\PayRoll.Core\obj\Debug\PayRoll.Core.csproj.CopyComplete
+F:\Professional\PayRoll\PayRoll\PayRoll.Core\bin\Debug\REXPOS.Core.dll
+F:\Professional\PayRoll\PayRoll\PayRoll.Core\bin\Debug\REXPOS.Core.pdb
+F:\Professional\PayRoll\PayRoll\PayRoll.Core\bin\Debug\System.Web.Mvc.dll
+F:\Professional\PayRoll\PayRoll\PayRoll.Core\bin\Debug\System.Web.Mvc.xml
+F:\Professional\PayRoll\PayRoll\PayRoll.Core\obj\Debug\PayRoll.Core.csproj.CoreCompileInputs.cache
+F:\Professional\PayRoll\PayRoll\PayRoll.Core\obj\Debug\PayRoll.Core.csproj.CopyComplete
+F:\Professional\PayRoll\PayRoll\PayRoll.Core\obj\Debug\REXPOS.Core.dll
+F:\Professional\PayRoll\PayRoll\PayRoll.Core\obj\Debug\REXPOS.Core.pdb
+F:\Professional\PayRoll\PayRoll\PayRoll.Core\obj\Debug\PayRoll.Core.csprojAssemblyReference.cache
+G:\Abdul Malek Project\New folder\Professional\PayRoll\PayRoll\PayRoll.Core\bin\Debug\REXPOS.Core.dll
+G:\Abdul Malek Project\New folder\Professional\PayRoll\PayRoll\PayRoll.Core\bin\Debug\REXPOS.Core.pdb
+G:\Abdul Malek Project\New folder\Professional\PayRoll\PayRoll\PayRoll.Core\bin\Debug\System.Web.Mvc.dll
+G:\Abdul Malek Project\New folder\Professional\PayRoll\PayRoll\PayRoll.Core\bin\Debug\Microsoft.Web.Infrastructure.dll
+G:\Abdul Malek Project\New folder\Professional\PayRoll\PayRoll\PayRoll.Core\bin\Debug\System.Web.Mvc.xml
+G:\Abdul Malek Project\New folder\Professional\PayRoll\PayRoll\PayRoll.Core\obj\Debug\PayRoll.Core.csproj.AssemblyReference.cache
+G:\Abdul Malek Project\New folder\Professional\PayRoll\PayRoll\PayRoll.Core\obj\Debug\PayRoll.Core.csproj.CoreCompileInputs.cache
+G:\Abdul Malek Project\New folder\Professional\PayRoll\PayRoll\PayRoll.Core\obj\Debug\PayRoll.Core.csproj.CopyComplete
+G:\Abdul Malek Project\New folder\Professional\PayRoll\PayRoll\PayRoll.Core\obj\Debug\REXPOS.Core.dll
+G:\Abdul Malek Project\New folder\Professional\PayRoll\PayRoll\PayRoll.Core\obj\Debug\REXPOS.Core.pdb

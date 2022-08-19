@@ -1,0 +1,456 @@
+﻿
+@{
+    ViewBag.Title = ":: User Creation ::";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var permission = ViewData["Permission"] as PayRoll.Core.Utility.DBManager.Permission;
+}
+
+
+<script id="templateUserIndoModal" type="text/html">
+    <table class="table table-bordered table-striped table-hover datatable-sorting" id="UserInfoDataTableModal">
+        <thead class="ruhee">
+        <th>User Full Name</th> 
+        <th>User Name</th>
+        <th>User Role</th>
+        <th>User Status</th>
+        <th>Action</th>
+        </thead>
+        <tbody>
+            {{#UserInfoSearch}}
+
+            <tr>
+                <td> {{UserFullName}}</td>
+                <td> {{UserName}}</td>
+                <td> {{UserRole.RoleName}}</td>
+                <td> {{UserStatus.StatusName}}</td>
+                <td class="action-sm">
+                    <a class="btn btn-default btn-rounded btn-sm" onclick="OnSelectUser('{{UserName}}')"><i class="icon-select2"></i> Select</a>
+                </td>
+            </tr>
+
+            {{/UserInfoSearch}}
+        </tbody>
+    </table>
+</script>
+
+
+<div class="form-horizontal ">
+    <fieldset class="content-group">
+        <legend class="text-bold">User Create</legend>
+
+
+        <div class="form-group">
+            <label class="control-label col-lg-2">User Full name:</label>
+            <div class="col-lg-10">
+                <input type="text" id="txtUserFullName" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-2">Username:</label>
+            <div class="col-lg-10">
+                <input type="text" id="txtUserName" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-2">User Password:</label>
+            <div class="col-lg-10">
+                <input type="text" id="txtUserPassword" class="form-control">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-lg-2">User Role:</label>
+            <div class="col-lg-10">
+                <select class="form-control" id="ddlUserRole" name="ddlUserRole"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-2">User Status:</label>
+            <div class="col-lg-10">
+                <select class="form-control" id="ddlUserStatus" name="ddlUserStatus"></select>
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <label class="control-label col-lg-2"> </label>
+            <div class="col-lg-10">                
+                @if (permission.CanSave == "1")
+                {
+                    <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Save</button>
+                }
+                @if (permission.CanUpdate == "1")
+                {
+                    <button class="btn bg-teal" data-style="expand-left" id="btnUpdate" type="button" onclick="Update()"><i class="fa fa-save"></i>&nbsp; Update</button>
+                }
+                @if (permission.CanDelete == "1")
+                {
+                    <button class="btn btn-danger" data-style="expand-left" id="btnDelete" type="button" onclick="Delete()"><i class="icon-trash"></i>&nbsp; Delete</button>
+                }
+                   <button class="btn btn-w-m btn-success btn-loading" type="button" id="btnReset" onclick="ResetForm()"><i class="glyphicon glyphicon-refresh"></i>&nbsp;Reset</button>
+            </div>
+        </div>
+
+
+    </fieldset>
+
+
+    <fieldset class="content-group">
+        <legend class="text-bold">User List</legend>
+        <div id="divInfo">
+
+            <div class="form-group">
+                <div class="table-responsive" id="div-userInfo">
+                </div>
+            </div>
+
+        </div>
+
+    </fieldset>
+
+</div>
+
+
+
+<style type="text/css">
+    
+</style>
+
+
+@section scripts
+{
+    <script type="text/javascript">
+        _serverDate = null;
+        $(document).ready(function () {
+            LoadCombos();
+            LoadUserInfoGrid();
+            EnableDisableControls("1");
+        });
+
+
+
+
+        function LoadUserInfoGrid() {
+            var url = '@Url.Action("GetUsers", "UserInfo")';
+
+            $.ajax({
+                url: url,
+                method: 'get',
+                success: function (res) {
+                    var templateWithData = Mustache.to_html($("#templateUserIndoModal").html(), { UserInfoSearch: res });
+                    $("#div-userInfo").empty().html(templateWithData);
+                    MakePagination('UserInfoDataTableModal');
+
+                },
+                error: function () {
+
+                }
+            });
+
+
+        }
+
+
+    function FormDataAsObject() {
+        var object = new Object();
+        object.UserName = $('#txtUserName').val();
+        object.UserFullName = $('#txtUserFullName').val();
+        object.UserPassword = $('#txtUserPassword').val();
+        object.UserRoleId = $('#ddlUserRole').val();
+        object.UserStatus = $('#ddlUserStatus').val();
+        return object;
+    }
+
+    function ResetForm() {
+        $('#txtUserName').val('');
+        $('#txtUserFullName').val('');
+        $('#txtUserPassword').val('');
+        $('#ddlUserRole').val('');
+        $('#ddlUserStatus').val('');
+        EnableDisableControls("1");
+    }
+
+    function EnableDisableControls(status) {
+        //status = 1 for Save, 2 for Delete
+        if (status == "1") {
+            $('#btnSave').prop('disabled', false);
+            $('#btnUpdate').prop('disabled', true);
+            $('#btnDelete').prop('disabled', true);
+        }
+        else if (status == "2") {
+            $('#btnSave').prop('disabled', true);
+            $('#btnUpdate').prop('disabled', false);
+            $('#btnDelete').prop('disabled', false);
+        }
+
+        else {
+            $('#btnSave').prop('disabled', false);
+            $('#btnUpdate').prop('disabled', false);
+            $('#btnDelete').prop('disabled', false);
+        }
+    }
+
+
+
+    function OnSelectUser(userName) {
+
+        $.ajax({
+            url: '@Url.Action("GetAUser", "UserInfo")',
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            data: {
+                userName: userName
+            },
+            success: function (data) {
+                ResetForm();
+                $('#txtUserName').val(data.UserName);
+                $('#txtUserFullName').val(data.UserFullName);
+                $('#txtUserPassword').val(data.UserPassword);
+                $('#ddlUserRole').val(data.UserRoleId);
+                $('#ddlUserStatus').val(data.UserStatusId);
+                EnableDisableControls("2");
+                LoadUserInfoGrid();
+
+            },
+            error: function () {
+
+            }
+        });
+    }
+
+
+        function Save()
+        {
+            var formObject = FormDataAsObject();
+
+            if (UserInfoValidation(formObject)) {
+
+                $.ajax({
+                    url: '@Url.Action("Create", "UserInfo")',
+                    method: 'post',
+                    dataType: 'json',
+                    async: false,
+                    data: {
+                        UserName: formObject.UserName,
+                        UserFullName: formObject.UserFullName,
+                        UserPassword: formObject.UserPassword,
+                        UserRoleId: formObject.UserRoleId,
+                        UserStatusId: formObject.UserStatus,
+                    },
+                    success: function (data) {
+                        var vmMsg = data;
+                        if (vmMsg.MessageType == 1) {
+                            ShowNotification(1, vmMsg.ReturnMessage);
+                            ResetForm();
+                            LoadUserInfoGrid();
+
+                        } else {
+                            ShowNotification(3, vmMsg.ReturnMessage);
+                            // HideLoader();
+                        }
+                    },
+                    error: function () {
+                        //HideLoader();
+                    }
+                });
+            }
+
+           
+        }
+
+        function Update()
+        {
+            var formObject = FormDataAsObject();
+
+            if (UserInfoValidation(formObject)) {
+
+                $.ajax({
+                    url: '@Url.Action("Update", "UserInfo")',
+                    method: 'post',
+                    dataType: 'json',
+                    async: false,
+                    data: {
+                        UserName: formObject.UserName,
+                        UserFullName: formObject.UserFullName,
+                        UserPassword: formObject.UserPassword,
+                        UserRoleId: formObject.UserRoleId,
+                        UserStatusId: formObject.UserStatus,
+                    },
+                    success: function (data) {
+                        var vmMsg = data;
+                        if (vmMsg.MessageType == 1) {
+                            ShowNotification(1, vmMsg.ReturnMessage);
+                            ResetForm();
+                            LoadUserInfoGrid();
+
+                        } else {
+                            ShowNotification(3, vmMsg.ReturnMessage);
+                            // HideLoader();
+                        }
+                    },
+                    error: function () {
+                        //HideLoader();
+                    }
+                });
+
+            }
+            
+        }
+
+        function Delete()
+        {
+            var formObject = FormDataAsObject();
+
+            $.ajax({
+                url: '@Url.Action("Delete", "UserInfo")',
+                method: 'post',
+                dataType: 'json',
+                async: false,
+                data: {
+                    userName: formObject.UserName,
+                },
+                success: function (data) {
+                    var vmMsg = data;
+                    if (vmMsg.MessageType == 1) {
+                        ShowNotification(1, vmMsg.ReturnMessage);
+                        ResetForm();
+                        LoadUserInfoGrid();
+                        //$('#BtnSave').prop('disabled', true);
+                        //HideLoader();
+                    } else {
+                        ShowNotification(3, vmMsg.ReturnMessage);
+                        // HideLoader();
+                    }
+                },
+                error: function () {
+                    //HideLoader();
+                }
+            });
+
+        }
+
+        function LoadCombos()
+        {
+            LoadUserRoleCombo();
+            LoadUserStatusCombo();
+        }
+
+        function LoadUserRoleCombo() {
+            //ShowLoader();
+            $.ajax({
+                url: '@Url.Action("GetAllRoles", "UserRole")',
+                type: 'Get',
+                async: false,
+                success: function (responseData) {
+                    $('#ddlUserRole').empty();
+                    $('#ddlUserRole').get(0).options.length = 0;
+
+                    if (responseData != null) {
+                        $("#ddlUserRole").get(0).options[0] = new Option("--Select--", "");
+                        $.each(responseData, function (index, item) {
+                            $('#ddlUserRole').get(0).options[$('#ddlUserRole').get(0).options.length] = new Option(item.Text, item.Value);
+                        });
+                    }
+                    //HideLoader();
+                },
+                error: function () {
+                    //HideLoader();
+                }
+            });
+        }
+
+
+        function LoadUserStatusCombo() {
+            //ShowLoader();
+            $.ajax({
+                url: '@Url.Action("GetAllUserStatuses", "UserInfo")',
+                type: 'Get',
+                async: false,
+                success: function (responseData) {
+                    $('#ddlUserStatus').empty();
+                    $('#ddlUserStatus').get(0).options.length = 0;
+
+                    if (responseData != null) {
+                        $("#ddlUserStatus").get(0).options[0] = new Option("--Select--", "");
+                        $.each(responseData, function (index, item) {
+                            $('#ddlUserStatus').get(0).options[$('#ddlUserStatus').get(0).options.length] = new Option(item.Text, item.Value);
+                        });
+                    }
+                    //HideLoader();
+                },
+                error: function () {
+                    //HideLoader();
+                }
+            });
+        }
+
+        function UserInfoValidation(formObject) {
+
+            if (!formObject.UserName) {
+                $('#txtUserName').focus();
+                ShowNotification('2', 'User Name Can not be empty.');
+                return false;
+            }
+
+            if (!formObject.UserFullName) {
+                $('#txtUserFullName').focus();
+                ShowNotification('2', 'User Full Name Can not be empty.');
+                return false;
+            }
+
+            if (!formObject.UserPassword) {
+                $('#txtUserPassword').focus();
+                ShowNotification('2', 'User password Can not be empty.');
+                return false;
+            }
+            if (!formObject.UserRoleId) {
+                $('#ddlUserRole').focus();
+                ShowNotification('2', 'User role Can not be empty.');
+                return false;
+            }
+            if (!formObject.UserStatus) {
+                $('#ddlUserStatus').focus();
+                ShowNotification('2', 'User status Can not be empty.');
+                return false;
+            }
+
+            if (isUserExist(formObject.UserName) == true) {
+                $('#txtUserName').focus();
+                ShowNotification('2', 'User Name already exist.');
+                return false;
+            }
+
+
+            return true;
+
+        }
+        function isUserExist(userName)
+        {
+            var exist = true;
+            $.ajax({
+                url: '@Url.Action("IsUserExist", "UserInfo")',
+                type: 'Get',
+                async: false,
+                data:{userName:userName},
+                success: function (responseData) {
+                    if (responseData.MessageType == 3) { exist = true } else { exist = false }
+                },
+                error: function () {                    
+                }
+            });
+           
+            return exist;
+
+        }
+
+    </script>
+
+
+
+
+}
+
+
+

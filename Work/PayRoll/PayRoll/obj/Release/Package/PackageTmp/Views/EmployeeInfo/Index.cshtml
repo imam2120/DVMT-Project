@@ -1,0 +1,923 @@
+﻿
+@{
+    ViewBag.Title = ":: Employee Setup ::";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var permission = ViewData["Permission"] as PayRoll.Core.Utility.DBManager.Permission;
+
+    
+}
+
+
+
+<script id="templateEmployeeInfoModal" type="text/html">
+    <table class="table table-bordered table-striped table-hover datatable-sorting" id="EmployeeInfoDataTableModal">
+        <thead class="ruhee">
+         <th class="collapse">EmployeeId</th>
+        <th>Employee Name</th>        
+        <th>Department</th>
+        <th>Designation</th>
+        <th>Contract Number</th>
+        <th>Action</th>
+        </thead>
+        <tbody>
+            {{#EmployeeInfoSearch}}
+
+            <tr>
+                <td class="collapse">{{EmployeeId}}</td>
+                <td> {{Name}}-ID({{EmployeeId}})</td>
+                <td> {{Department.DepartmentName}}</td>
+                <td> {{Designation.DesignationName}}</td>
+                <td> {{ContractNumber}}</td>
+                <td class="action-sm">
+                    <a class="btn btn-default btn-rounded btn-sm"  onclick="OnSelectEmployee('{{EmployeeId}}')"><i class="icon-select2"></i> Select</a>
+                </td>
+            </tr>
+
+            {{/EmployeeInfoSearch}}
+        </tbody>
+    </table>
+</script>
+
+
+
+
+
+
+
+    <div class="panel panel-flat">
+
+
+        <div class="panel-body">
+            <div class="row">
+                <fieldset>
+                    <legend class="text-semibold"><i class="icon-reading position-left"></i> Employee details</legend>
+                    <div class="col-md-6">
+
+
+                        <div class="row">
+                            <fieldset>
+
+                                <div class="col-md-2">
+
+                                </div>
+
+                                <div class="col-md-10">
+                                    <img alt="" height="150" width="135" id="img_staffImage" />
+
+                                    <div class="panel panel-yellow" style="border: 0 !important">
+                                        <input type="file" name="ImageData" id="ImageData" onchange="ValidateUpload(this.value)" />
+                                    </div>
+                                </div>
+
+
+                            </fieldset>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Employee name:</label>
+                            <input type="text" id="txtEmpName" class="form-control" >
+                            <input type="text" id="txtEmpId" class="form-control collapse ">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Father Name:</label>
+                            <input type="text" id="txtEmpFaName" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Mother Name:</label>
+                            <input type="text" id="txtEmpMaName" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Present Address:</label>
+                            <textarea rows="1" cols="1" id="txtEmpPreAdd" class="form-control" ></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Permanent Address:</label>
+                            <textarea rows="1" cols="1" id="txtEmpPermaAdd"  class="form-control" ></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>DOB:</label>
+                                    <input type="text" id="EmpDOB" class="form-control datetimepicker-disable-time">
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Joining Date:</label>
+                                    <input type="text" id="EmpJoinDate" class="form-control datetimepicker-disable-time">
+                                </div>
+                            </div>
+                        </div> 
+
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Contract Number:</label>
+                                    <input type="text" id="EmpContNumber" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Emergency Number:</label>
+                                    <input type="text" id="EmpEmerCont" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Blood Group:</label>                                   
+                                    <select class="form-control " id="EmpBloodGroup" name="EmpBloodGroup"></select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>NID Number:</label>
+                                    <input type="text" id="EmpNID" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+
+                                    <label>Marital Status:</label>
+                                    <select class="form-control " id="EmpMaritalSta" name="EmpMaritalSta"></select>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+
+                                    <label>Department:</label>
+                                    <select class="form-control " id="ddlEmpDept" name="ddlEmpDept"></select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Gender:</label>
+                                    <select class="form-control " id="EmpGender" name="EmpGender"></select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Designation:</label>
+                                    <select class="form-control " id="ddlEmpDesig" name="ddlEmpDesig"></select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Status:</label>
+                                    <select class="form-control " id="EmpStatus" name="EmpStatus"></select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Joining Type:</label>
+                                    <select class="form-control " id="EmpJoiningType" name="EmpJoiningType"></select>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <fieldset class="content-group">
+                            <legend class="text-bold">Employee List</legend>
+                            <div id="divInfo">
+
+                                <div class="form-group">
+                                    <div class="table-responsive" id="div-employeeInfo">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </fieldset>
+
+                        
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-2"> </label>
+                        <div class="col-lg-10">
+                            @if (permission.CanSave == "1")
+                            {
+                                <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Save</button>
+                            }
+                           
+                            @if (permission.CanDelete == "1")
+                            {
+                                <button class="btn btn-danger" data-style="expand-left" id="btnDelete" type="button" onclick="Delete()"><i class="icon-trash"></i>&nbsp; Delete</button>
+                            }
+                            <button class="btn btn-w-m btn-success btn-loading" type="button" id="btnReset" onclick="ResetForm()"><i class="glyphicon glyphicon-refresh"></i>&nbsp;Reset</button>
+                        </div>
+                    </div>
+
+                </fieldset>
+
+
+                @*<fieldset class="content-group">
+                    <legend class="text-bold">Employee List</legend>
+                    <div id="divInfo">
+
+                        <div class="form-group">
+                            <div class="table-responsive" id="div-employeeInfo">
+                            </div>
+                        </div>
+
+                    </div>
+
+                </fieldset>*@
+
+            </div>
+            
+
+            
+        </div>
+    </div>
+
+
+<div id="modal_backdrop" class="modal fade" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title">Update Employee Information</h5>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row">
+
+                            <div class="row">
+                                <fieldset>
+
+                                    <div class="col-md-2">
+
+                                    </div>
+
+                                    <div class="col-md-10">
+                                        <img alt="" height="150" width="135" id="mimg_staffImage" />
+
+                                        <div class="panel panel-yellow" style="border: 0 !important">
+                                            <input type="file" name="mImageData" id="mImageData" onchange="ValidateUploadForModal(this.value)" />
+                                        </div>
+                                    </div>
+
+
+                                </fieldset>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Employee name:</label>
+                                <input type="text" id="mtxtEmpName" class="form-control">
+                                <input type="text" id="mtxtEmpId" class="form-control collapse ">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Father Name:</label>
+                                <input type="text" id="mtxtEmpFaName" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Mother Name:</label>
+                                <input type="text" id="mtxtEmpMaName" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Present Address:</label>
+                                <textarea rows="1" cols="1" id="mtxtEmpPreAdd" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Permanent Address:</label>
+                                <textarea rows="1" cols="1" id="mtxtEmpPermaAdd" class="form-control"></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>DOB:</label>
+                                        <input type="text" id="mEmpDOB" class="form-control datetimepicker-disable-time">
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Joining Date:</label>
+                                        <input type="text" id="mEmpJoinDate" class="form-control datetimepicker-disable-time">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Contract Number:</label>
+                                        <input type="text" id="mEmpContNumber" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Emergency Number:</label>
+                                        <input type="text" id="mEmpEmerCont" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Blood Group:</label>
+                                        @*<input type="text" id="mEmpBloodGroup" class="form-control">*@
+                                        <select class="form-control " id="mEmpBloodGroup" name="EmpGender"></select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>NID Number:</label>
+                                        <input type="text" id="mEmpNID" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+
+                                        <label>Marital Status:</label>
+                                        <select class="form-control " id="mEmpMaritalSta" name="EmpMaritalSta"></select>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+
+                                        <label>Department:</label>
+                                        <select class="form-control " id="mddlEmpDept" name="ddlEmpDept"></select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Gender:</label>
+                                        <select class="form-control " id="mEmpGender" name="EmpGender"></select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Designation:</label>
+                                        <select class="form-control " id="mddlEmpDesig" name="ddlEmpDesig"></select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Status:</label>
+                                        <select class="form-control " id="mEmpStatus" name="EmpStatus"></select>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Joining Type:</label>
+                                        <select class="form-control " id="mEmpJoiningType" name="EmpJoiningType"></select>
+                                    </div>
+                                </div>
+                            </div>
+                   
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                    @if (permission.CanUpdate == "1")
+                    {
+                        <button type="button" id="btnUpdate" class="btn btn-primary" onclick="Update()" >Save changes</button>
+                                        
+                    }
+                    
+                </div>
+            </div>
+    </div>
+</div>
+
+
+
+@section scripts
+{
+    <script type="text/javascript">
+        _serverDate = null;
+        $(document).ready(function () {
+            LoadCombos();
+            LoadEmployeeInfoGrid();
+            EnableDisableControls("1");
+            ResetForm();
+           
+        });
+
+
+
+
+        function LoadEmployeeInfoGrid() {
+            var url = '@Url.Action("GetAllEmployee", "EmployeeInfo")';
+
+            $.ajax({
+                url: url,
+                method: 'get',
+                success: function (res) {
+                    var templateWithData = Mustache.to_html($("#templateEmployeeInfoModal").html(), { EmployeeInfoSearch: res });
+                    $("#div-employeeInfo").empty().html(templateWithData);
+                    MakePagination('EmployeeInfoDataTableModal');
+
+                },
+                error: function () {
+
+                }
+            });
+
+
+        }
+
+
+    function FormDataAsObject() {
+        var object = new Object();
+        object.EmployeeId = $('#txtEmpId').val();
+        object.Name = $('#txtEmpName').val();
+        object.Name = $('#txtEmpName').val();
+        object.FatherName = $('#txtEmpFaName').val();
+        object.MotherName = $('#txtEmpMaName').val();
+        object.PresentAddress = $('#txtEmpPreAdd').val();
+        object.PermanentAddress = $('#txtEmpPermaAdd').val();
+        object.GenderId = $('#EmpGender').val();
+        object.DOB = $('#EmpDOB').val();
+        object.ContractNumber = $('#EmpContNumber').val();
+        object.EmergencyNumber = $('#EmpEmerCont').val();
+        object.BloodGroup = $('#EmpBloodGroup').val();
+        object.NID = $('#EmpNID').val();
+        object.MaritalStatus = $('#EmpMaritalSta').val();
+        object.DepartmentId = $('#ddlEmpDept').val();
+        object.DesignationId = $('#ddlEmpDesig').val();
+        object.JoiningDate = $('#EmpJoinDate').val();
+        object.JoiningType = $('#EmpJoiningType').val();
+        object.StatusId = $('#EmpStatus').val();
+        return object;
+    }
+
+    function FormDataAsObjectForModal() {
+        var object = new Object();
+        object.EmployeeId = $('#mtxtEmpId').val();
+        object.Name = $('#mtxtEmpName').val();
+        object.Name = $('#mtxtEmpName').val();
+        object.FatherName = $('#mtxtEmpFaName').val();
+        object.MotherName = $('#mtxtEmpMaName').val();
+        object.PresentAddress = $('#mtxtEmpPreAdd').val();
+        object.PermanentAddress = $('#mtxtEmpPermaAdd').val();
+        object.GenderId = $('#mEmpGender').val();
+        object.DOB = $('#mEmpDOB').val();
+       
+        object.ContractNumber = $('#mEmpContNumber').val();
+        object.EmergencyNumber = $('#mEmpEmerCont').val();
+        object.BloodGroup = $('#mEmpBloodGroup').val();
+        object.NID = $('#mEmpNID').val();
+        object.MaritalStatus = $('#mEmpMaritalSta').val();
+        object.DepartmentId = $('#mddlEmpDept').val();
+        object.DesignationId = $('#mddlEmpDesig').val();
+        object.JoiningDate = $('#mEmpJoinDate').val();
+        object.JoiningType = $('#mEmpJoiningType').val();
+        object.StatusId = $('#mEmpStatus').val();
+        return object;
+    }
+
+    function ResetForm() {
+        $('#txtEmpId').val('');
+        $('#txtEmpName').val('');
+        $('#txtEmpFaName').val('');
+        $('#txtEmpMaName').val('');
+        $('#txtEmpPreAdd').val('');
+        $('#txtEmpPermaAdd').val('');
+        $('#EmpGender').val('');
+        $('#EmpDOB').val('');
+        $('#EmpContNumber').val('');
+        $('#EmpEmerCont').val('');
+        $('#EmpBloodGroup').val('');
+        $('#EmpNID').val('');
+        $('#EmpMaritalSta').val('');
+        $('#ddlEmpDept').val('');
+        $('#ddlEmpDesig').val('');
+        $('#EmpJoinDate').val('');
+        $('#EmpJoiningType').val('');
+        $('#EmpStatus').val('');
+
+        $("#img_staffImage").attr('src', "data:image/jpg;base64," + "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");
+
+        EnableDisableControls("1");
+    }
+
+    function EnableDisableControls(status) {
+        //status = 1 for Save, 2 for Delete
+        if (status == "1") {
+            $('#btnSave').prop('disabled', false);
+            $('#btnUpdate').prop('disabled', true);
+            $('#btnDelete').prop('disabled', true);
+        }
+        else if (status == "2") {
+            $('#btnSave').prop('disabled', true);
+            $('#btnUpdate').prop('disabled', false);
+            $('#btnDelete').prop('disabled', false);
+        }
+
+        else {
+            $('#btnSave').prop('disabled', false);
+            $('#btnUpdate').prop('disabled', false);
+            $('#btnDelete').prop('disabled', false);
+        }
+    }
+
+   function ModalToggle () {
+        $('#modal_backdrop').modal('toggle');
+    };
+
+    function OnSelectEmployee(EmployeeId) {
+        $("#mimg_staffImage").attr('src', "data:image/jpg;base64," + "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");
+        ModalToggle();        
+        mLoadCombos();
+        $.ajax({
+            url: '@Url.Action("GetAEmployee", "EmployeeInfo")',
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            data: {
+                empId: EmployeeId
+            },
+            success: function (data) {
+                ResetForm();
+                                
+                $('#mtxtEmpId').val(data.EmployeeId);
+                $('#mtxtEmpName').val(data.Name);
+                $('#mtxtEmpFaName').val(data.FatherName);
+                $('#mtxtEmpMaName').val(data.MotherName);
+                $('#mtxtEmpPreAdd').val(data.PresentAddress);
+                $('#mtxtEmpPermaAdd').val(data.PermanentAddress);
+                $('#mEmpGender').val(data.GenderId);
+                   
+               $('#mEmpDOB').val(data.DOB.split(' ')[0]);
+               
+                
+                $('#mEmpContNumber').val(data.ContractNumber);
+                $('#mEmpEmerCont').val(data.EmergencyNumber);
+                $('#mEmpBloodGroup').val(data.BloodGroup);
+                $('#mEmpNID').val(data.NID);
+                $('#mEmpMaritalSta').val(data.MaritalStatus);
+                $('#mddlEmpDept').val(data.Department.DepartmentId);
+                $('#mddlEmpDesig').val(data.Designation.DesignationId);
+                $('#mEmpJoinDate').val(data.JoiningDate.split(' ')[0]);
+                $('#mEmpJoiningType').val(data.JoiningType);
+                $('#mEmpStatus').val(data.StatusId);
+                var img = arrayBufferToBase64(data.Image);
+                $("#mimg_staffImage").attr('src', "data:image/jpg;base64," + img);
+                EnableDisableControls("2");
+                LoadEmployeeInfoGrid();
+
+            },
+            error: function () {
+
+            }
+        });
+    }
+        function arrayBufferToBase64(buffer) {
+            var binary = '';
+            var bytes = new Uint8Array(buffer);
+            var len = bytes.byteLength;
+            for (var i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return window.btoa(binary);
+        }
+
+
+        function Save()
+        {
+            var formObject = FormDataAsObject();
+
+            if (EmployeeInfoValidation(formObject)) {
+
+                var formData = new FormData();
+                var totalFiles = document.getElementById("ImageData").files.length;
+                var browsedFile = document.getElementById("ImageData").files[0];
+                if (totalFiles != 0) {
+
+                    if (browsedFile.type.match('image.*')) {
+                        formData.append("fileUpload", browsedFile);
+                    }
+                }
+                formData.append("EmployeeId", formObject.EmployeeId);
+                formData.append("Name", formObject.Name);
+                formData.append("FatherName", formObject.FatherName);
+                formData.append("MotherName", formObject.MotherName);
+                formData.append("PresentAddress", formObject.PresentAddress);
+                formData.append("PermanentAddress", formObject.PermanentAddress);
+                formData.append("GenderId", formObject.GenderId);
+                formData.append("DOB", formObject.DOB);
+                formData.append("ContractNumber", formObject.ContractNumber);
+                formData.append("EmergencyNumber", formObject.EmergencyNumber);
+                formData.append("BloodGroup", formObject.BloodGroup);
+                formData.append("NID", formObject.NID);
+                formData.append("MaritalStatus", formObject.MaritalStatus);
+                formData.append("DepartmentId", formObject.DepartmentId);
+                formData.append("DesignationId", formObject.DesignationId);
+                formData.append("JoiningDate", formObject.JoiningDate);
+                formData.append("JoiningType", formObject.JoiningType);
+                formData.append("StatusId", formObject.StatusId);
+                formData.append("Action", 1);
+
+                $.ajax({
+                    url: '@Url.Action("CreateOrUpdateUserInfo", "EmployeeInfo")',
+                    method: 'post',                    
+                    async: false,                   
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        var vmMsg = data;
+                        if (vmMsg.MessageType == 1) {
+                            ShowNotification(1, vmMsg.ReturnMessage);
+                            ResetForm();
+                            LoadEmployeeInfoGrid();
+
+                        } else {
+                            ShowNotification(3, vmMsg.ReturnMessage);
+                           
+                        }
+                    },
+                    error: function () {
+                        
+                    }
+                });
+            }
+
+
+        }
+
+        function Update() {
+            var formObject = FormDataAsObjectForModal();
+
+            if (EmployeeInfoValidation(formObject)) {
+
+                var formData = new FormData();
+                var totalFiles = document.getElementById("mImageData").files.length;
+                var browsedFile = document.getElementById("mImageData").files[0];
+                if (totalFiles != 0) {
+
+                    if (browsedFile.type.match('image.*')) {
+                        formData.append("fileUpload", browsedFile);
+                    }
+                }
+                formData.append("EmployeeId", formObject.EmployeeId);
+                formData.append("Name", formObject.Name);
+                formData.append("FatherName", formObject.FatherName);
+                formData.append("MotherName", formObject.MotherName);
+                formData.append("PresentAddress", formObject.PresentAddress);
+                formData.append("PermanentAddress", formObject.PermanentAddress);
+                formData.append("GenderId", formObject.GenderId);
+                formData.append("DOB", formObject.DOB);
+                formData.append("ContractNumber", formObject.ContractNumber);
+                formData.append("EmergencyNumber", formObject.EmergencyNumber);
+                formData.append("BloodGroup", formObject.BloodGroup);
+                formData.append("NID", formObject.NID);
+                formData.append("MaritalStatus", formObject.MaritalStatus);
+                formData.append("DepartmentId", formObject.DepartmentId);
+                formData.append("DesignationId", formObject.DesignationId);
+                formData.append("JoiningDate", formObject.JoiningDate);
+                formData.append("JoiningType", formObject.JoiningType);
+                formData.append("StatusId", formObject.StatusId);
+                formData.append("Action", 2);
+
+
+                if (EmployeeInfoValidation(formObject)) {
+
+                    $.ajax({
+                        url: '@Url.Action("CreateOrUpdateUserInfo", "EmployeeInfo")',
+                        method: 'post',
+                        async: false,                        
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            var vmMsg = data;
+                            if (vmMsg.MessageType == 1) {
+                                ShowNotification(1, vmMsg.ReturnMessage);
+                                ResetForm();
+                                LoadEmployeeInfoGrid();                                
+                                ModalToggle();
+
+                            } else {
+                                ShowNotification(3, vmMsg.ReturnMessage);
+
+                            }
+                        },
+                        error: function () {
+
+                        }
+                    });
+
+                }
+
+            }
+        }
+
+            function Delete() {
+                @*var formObject = FormDataAsObject();
+
+                $.ajax({
+                    url: '@Url.Action("Delete", "UserInfo")',
+                    method: 'post',
+                    dataType: 'json',
+                    async: false,
+                    data: {
+                        EmployeeId: formObject.EmployeeId,
+                    },
+                    success: function (data) {
+                        var vmMsg = data;
+                        if (vmMsg.MessageType == 1) {
+                            ShowNotification(1, vmMsg.ReturnMessage);
+                            ResetForm();
+                            LoadUserInfoGrid();
+                            //$('#BtnSave').prop('disabled', true);
+                            //HideLoader();
+                        } else {
+                            ShowNotification(3, vmMsg.ReturnMessage);
+                            // HideLoader();
+                        }
+                    },
+                    error: function () {
+                        //HideLoader();
+                    }
+                });*@
+                ShowNotification(3, "later....");
+            }
+
+            function LoadCombos() {
+                LoadDepartmentCombo("ddlEmpDept",true);
+                LoadDesignationCombo("ddlEmpDesig",true)
+                
+                LoadMaritalStatus("EmpMaritalSta",true);
+                LoadGenderData("EmpGender",true);
+                LoadStatus("EmpStatus",true);
+                LoadJoiningType("EmpJoiningType", true);
+                LoadBloodGroup("EmpBloodGroup", true);
+
+            }
+
+
+            function mLoadCombos() {
+                LoadDepartmentCombo("mddlEmpDept", true);
+                LoadDesignationCombo("mddlEmpDesig", true)
+
+                LoadMaritalStatus("mEmpMaritalSta", true);
+                LoadGenderData("mEmpGender", true);
+                LoadStatus("mEmpStatus", true);
+                LoadJoiningType("mEmpJoiningType", true);
+                LoadBloodGroup("mEmpBloodGroup", true);
+
+            }
+
+
+            function EmployeeInfoValidation(formObject) {
+
+                if (!formObject.Name) {
+                    $('#txtEmpName').focus();
+                    ShowNotification('2', 'Employee Name Can not be empty.');
+                    return false;
+                }
+
+
+
+                return true;
+
+            }
+
+
+
+            function ValidateUpload(uploadfileName) {
+
+                var extension = uploadfileName.split('.').pop().toUpperCase();
+                if (extension != "PNG" && extension != "JPG" && extension != "GIF" && extension != "JPEG") {
+                    ShowNotification('2', "Please browse a image file. eg.(JPG,JPEG,PNG,GIF)");
+                    $("#ImageData").val('');
+                } else {
+
+                    var url = '@Url.Action("UploadedStaffImage", "EmployeeInfo")';
+                    var formData = new FormData();
+                    var totalFiles = document.getElementById("ImageData").files.length;
+                    var browsedFile = document.getElementById("ImageData").files[0];
+                    if (totalFiles != 0) {
+
+                        if (browsedFile.type.match('image.*')) {
+                            formData.append("fileUpload", browsedFile);
+                        }
+                    }
+                    $.ajax({
+                        url: url,
+                        method: 'post',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            if (data != null) {
+                                $("#img_staffImage").attr('src', "data:image/jpg;base64," + data);
+                            }
+                        },
+                        error: function () {
+
+                        }
+                    });
+
+                }
+            }
+
+
+        function ValidateUploadForModal(uploadfileName) {
+
+            var extension = uploadfileName.split('.').pop().toUpperCase();
+            if (extension != "PNG" && extension != "JPG" && extension != "GIF" && extension != "JPEG") {
+                ShowNotification('2', "Please browse a image file. eg.(JPG,JPEG,PNG,GIF)");
+                $("#mImageData").val('');
+            } else {
+
+                var url = '@Url.Action("UploadedStaffImage", "EmployeeInfo")';
+                var formData = new FormData();
+                var totalFiles = document.getElementById("mImageData").files.length;
+                var browsedFile = document.getElementById("mImageData").files[0];
+                if (totalFiles != 0) {
+
+                    if (browsedFile.type.match('image.*')) {
+                        formData.append("fileUpload", browsedFile);
+                    }
+                }
+                $.ajax({
+                    url: url,
+                    method: 'post',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data != null) {
+                            $("#mimg_staffImage").attr('src', "data:image/jpg;base64," + data);
+                        }
+                    },
+                    error: function () {
+
+                    }
+                });
+
+            }
+        }
+
+
+       
+    </script>
+
+
+
+
+}
+
+
+
+
+
+
