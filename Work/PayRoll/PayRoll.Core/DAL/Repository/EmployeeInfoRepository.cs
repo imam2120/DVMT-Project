@@ -27,6 +27,7 @@ namespace PayRoll.Core.DAL.Repository
             String query = String.Empty;
             if (create == 1)
             {
+                CurrentSession.GetCurrentSession();
                 query = @"INSERT INTO Tbl_Employee (EmployeeId,Name,FatherName,MotherName,PresentAddress ,PermanentAddress,GenderId,DOB,ContractNumber,EmergencyNumber,BloodGroup,NID ,MaritalStatus,DeptId,DesignationId,JoiningDate,JoiningType,StatusId,Image,CreatedBy ,CreatedDate,ModifyBy,ModifyDate)
                           VALUES('" + employee.EmployeeId + "','" + employee.Name + "','" + employee.FatherName + "','" + employee.MotherName + "','" + employee.PresentAddress + "','" + employee.PermanentAddress + "','" + employee.GenderId + "','" + employee.DOB + "','" + employee.ContractNumber + "'" +
                           ",'" + employee.EmergencyNumber + "','" + employee.BloodGroup + "','" + employee.NID + "','" + employee.MaritalStatus + "','" + employee.DeptId + "','" + employee.DesignationId + "','" + employee.JoiningDate + "','" + employee.JoiningType + "','" + employee.StatusId + "',null,null,GETDATE(),null,null)";

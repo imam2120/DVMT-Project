@@ -19,12 +19,19 @@
             <div class="col-lg-12">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label class="control-label col-lg-3">Employee Name:</label>
-                        <div class="col-lg-9">
-                            <input type="text" id="txtEmployeeName" class="form-control">
+                        <div class="col-lg-10">
+                            <label class="control-label col-lg-3">Employee Name:</label>
+                            <div class="col-lg-9">
+                                <input type="text" id="txtEmployeeName" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <button type="button" id="btnSearch" class="btn btn-primary"><i class="fa fa-search"></i> </button>
+                            </div>
+
+                            
                         </div>
                     </div>
-                </div>
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label class="control-label col-lg-3">Contract Number:</label>
@@ -107,11 +114,11 @@
                     <div class="form-group">
                         <label class="control-label col-lg-3">Department:</label>
                         <div class="col-lg-9">
-                            <select class="selectpicker form-control" id="ddlDepartment" name="ddlDepartment" data-live-search='true' >
+                            <select class="selectpicker form-control" id="ddlDepartment" name="ddlDepartment" data-live-search='true'>
                                 @*<option>--Select--</option>
-                                <option value="1">IT</option>
-                                <option value="2">HR</option>
-                                <option value="3">Finance</option>*@
+                                    <option value="1">IT</option>
+                                    <option value="2">HR</option>
+                                    <option value="3">Finance</option>*@
                             </select>
                         </div>
                     </div>
@@ -134,9 +141,9 @@
                         <div class="col-lg-9">
                             <select class="form-control selectpicker" id="ddlDesignation" name="ddlDesignation" data-live-search='true'>
                                 @*<option>--Select--</option>
-                                <option value="1">Executive</option>
-                                <option value="2">Manager</option>
-                                <option value="3">Suppervisor</option>*@
+                                    <option value="1">Executive</option>
+                                    <option value="2">Manager</option>
+                                    <option value="3">Suppervisor</option>*@
                             </select>
                         </div>
                     </div>
@@ -193,12 +200,45 @@
         </div>
     </fieldset>
 
-    <fieldset class="content-group">
+    <!-- Button to Open the Modal -->
+    @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+        Open modal
+    </button>*@
+
+    <!-- The Modal -->
+    <div class="modal" id="myModal" >
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Employee List</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div id="example">
+                        <div id="grid"></div>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    @*<fieldset class="content-group">
             <legend class="text-bold">Employee List</legend>
             <div id="example">
                 <div id="grid"></div>
             </div>
-        </fieldset>
+        </fieldset>*@
 
 </div>
 

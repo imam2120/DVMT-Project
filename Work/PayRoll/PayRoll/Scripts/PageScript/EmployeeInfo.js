@@ -3,7 +3,11 @@
 
 $(document).ready(function () {
             LoadDepartment();
-            LoadDesignation();
+    LoadDesignation();
+
+    $('#btnSearch').on('click', function () {
+        $("#myModal").modal('toggle');
+    });
             /* alert('test 1');*/
             $("#grid").kendoGrid().empty();
             // debugger;
@@ -40,7 +44,9 @@ $(document).ready(function () {
             serverPaging: true,
             serverFiltering: true,
         },
+        scrollable: true,
         //height: 550,
+        width:850,
         // toolbar: ["create"],
         selectable: true,
         toolbar: ["search"],

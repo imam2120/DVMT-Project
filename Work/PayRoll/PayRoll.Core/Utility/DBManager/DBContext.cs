@@ -145,7 +145,7 @@ namespace PayRoll.Core.Utility.DBManager
                 {
                     dAd.Parameters.AddWithValue(inputParameters[i].ParameterName, inputParameters[i].ParameterValue);
                 }
-
+                //imam
                 //dAd.Parameters.AddWithValue("@QryOption", 2);
 
                 sda.Fill(dSet);
