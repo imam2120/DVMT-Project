@@ -24,12 +24,12 @@ namespace PayRoll.Controllers
         }
         public ActionResult CreateOrUpdate(EmployeeInfo employeeInfo)
         {
-            
+
             var data = _iEmployeeManager.CreateOrUpdate(employeeInfo, 1);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
         public ActionResult GetEmployee()
-        {          
+        {
             var data = _iEmployeeManager.GetEmployee();
             return Json(data, JsonRequestBehavior.AllowGet);
         }
@@ -45,14 +45,14 @@ namespace PayRoll.Controllers
             dic.Add("@QryOption", "1");
             try
             {
-                ddlDepartment = commonManager.GetDDlist(new DDLSourceModel
+                ddlDepartment = commonManager.GetLoadCombo(new DDLSourceModel
                 {
-                    SPName = @"USP_Depatment",
+                    SPName = @"USP_GetEmployeeCombo",
                     Params = dic,
                 });
                 return Json(ddlDepartment, JsonRequestBehavior.AllowGet);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
                 return Json(ddlDepartment, JsonRequestBehavior.AllowGet);
             }
@@ -67,18 +67,86 @@ namespace PayRoll.Controllers
             dic.Add("@QryOption", "2");
             try
             {
-                ddlDesignation = commonManager.GetDDlist(new DDLSourceModel
+                ddlDesignation = commonManager.GetLoadCombo(new DDLSourceModel
                 {
-                    SPName = @"USP_Depatment",
+                    SPName = @"USP_GetEmployeeCombo",
                     Params = dic,
                 });
                 return Json(ddlDesignation, JsonRequestBehavior.AllowGet);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
                 return Json(ddlDesignation, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [HttpGet]
+        public JsonResult LoadGender()
+        {
+            //CommonItem item = new CommonItem();
+            IEnumerable<DDLSourceModel> ddlGender = new List<DDLSourceModel>();
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            dic.Add("@QryOption", "3");
+            try
+            {
+                ddlGender = commonManager.GetLoadCombo(new DDLSourceModel
+                {
+                    SPName = @"USP_GetEmployeeCombo",
+                    Params = dic,
+                });
+                return Json(ddlGender, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(ddlGender, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult LoadMaritalStatus()
+        {
+            //CommonItem item = new CommonItem();
+            IEnumerable<DDLSourceModel> ddlMaritalStatus = new List<DDLSourceModel>();
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            dic.Add("@QryOption", "4");
+            try
+            {
+                ddlMaritalStatus = commonManager.GetLoadCombo(new DDLSourceModel
+                {
+                    SPName = @"USP_GetEmployeeCombo",
+                    Params = dic,
+                });
+                return Json(ddlMaritalStatus, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(ddlMaritalStatus, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult LoadBloodGroup()
+        {
+            //CommonItem item = new CommonItem();
+            IEnumerable<DDLSourceModel> ddlBloodGroup = new List<DDLSourceModel>();
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            dic.Add("@QryOption", "5");
+            try
+            {
+                ddlBloodGroup = commonManager.GetLoadCombo(new DDLSourceModel
+                {
+                    SPName = @"USP_GetEmployeeCombo",
+                    Params = dic,
+                });
+                return Json(ddlBloodGroup, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(ddlBloodGroup, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
         #endregion
 
     }

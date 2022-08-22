@@ -49,9 +49,9 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <div class="col-lg-12">
-                        <label class="control-label col-lg-7">Blood Group:</label>
-                        <div class="col-lg-5">
-                            <input type="text" id="txtBloodGroup" class="form-control">
+                        <label class="control-label col-lg-4">B.Group:</label>
+                        <div class="col-lg-8">
+                            <select class="form-control" id="ddlBloodGroup" name="ddlBloodGroup"></select>
                         </div>
                     </div>
                 </div>
@@ -375,19 +375,13 @@
             LoadDesignation();
             LoadGender();
             LoadMaritalStatus();
-            /* alert('test 1');*/
-            $("#grid").kendoGrid().empty();
-           // debugger;
+            LoadBloodGroup();
+            $("#grid").kendoGrid().empty();           
             var result = CallAjax_POST('GetEmployee/EmployeeInfo', '', false, false)
-            if (result.length > 0) {
-                //    $("#dvExport").css('display', 'block');
-                //else
-                //    $("#dvExport").css('display', 'none');
-                //alert("Test");
+            if (result.length > 0) {                
                 PopulateGridView(result);
             } else {
-                alert("Error! Please Contact..");
-                //        $("#dvExport").css('display', 'none');
+                alert("Error! Please Contact..");                
             }
 
             function PopulateGridView(result) {
@@ -452,7 +446,7 @@
         object.DesignationId = $('#ddlDesignation').val();
         object.PermanentAddress = $('#txtPermanentAddress').val();
         object.DateOfBirth = $('#txtDateOfBirth').val();
-        object.BloodGroup = $('#txtBloodGroup').val();
+        object.BloodGroup = $('#ddlBloodGroup').val();
         //object.UserId = $('#txtUserId').val();
 
         return object;
@@ -472,7 +466,7 @@
         $('#ddlDesignation').val('');
         $('#txtPermanentAddress').val('');
         $('#txtDateOfBirth').val('');
-        $('#txtBloodGroup').val('');
+        $('#ddlBloodGroup').val('');
         $('#txtDateOfBirth').val('');
 
         EnableDisableControls("1");
@@ -732,6 +726,27 @@
             });
             //$("#ddlDesignation").selectpicker('refresh');
         }
+
+        function LoadBloodGroup() {
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "/EmployeeInfo/LoadBloodGroup",
+                data: {},
+                async: false,
+                dataType: "json",
+                success: function (data) {
+                    $("#ddlBloodGroup").empty();
+                    $("#ddlBloodGroup").append($("<option></option>").val("-1").html("--Select--"));
+                    $.each(data, function (i, item) {
+                        //console.log(item);
+                        $("#ddlBloodGroup").append($("<option></option>").val(item.Key).html(item.Value));
+                    });
+                }
+            });
+            //$("#ddlDesignation").selectpicker('refresh');
+        }
+
 
     </script>
 
