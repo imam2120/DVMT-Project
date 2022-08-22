@@ -11,7 +11,6 @@ namespace PayRoll.Core.DAL.Interface
 {
     public interface ICommonRepository
     {
-              
         UserStatus GetAStatus(string statusId);
         string GetServerDate();
         IEnumerable<UserStatus> GetUserStatuses();
@@ -19,8 +18,8 @@ namespace PayRoll.Core.DAL.Interface
         IEnumerable<RoleWiseScreenPermission> GetSubModules(string roleId, string parentScreenId);
         Permission GetScreenWisePermission(string screenCode);
         DataTable GetEmployeeBasicInfo(string EmployeeId);
-        DataTable GetDDlist(DDLSourceModel sourceModel);
-
+        DataTable GetDepartment(DDLSourceModel sourceModel);
+        DataTable GetLoadCombo(DDLSourceModel sourceModel);
 
     }
 }

@@ -19,29 +19,25 @@ namespace PayRoll.Core.DAL.Repository
             _dbContext = dbContext;
             session = CurrentSession.GetCurrentSession();
         }
-
         public IEnumerable<UserStatus> GetUserStatuses()
         {
             string query = "select * from UserStatus";
             var data = _dbContext.GetDataTable(query);
             return from DataRow row in data.Rows select UserStatus.ConvertToModel(row);
         }
-       
         public DataTable GetEmployeeBasicInfo(string EmployeeId)
         {
-            string query = "";            
-            query = "select * from Tbl_Employee a where a.EmployeeId='"+EmployeeId+"' ";                        
+            string query = "";
+            query = "select * from Tbl_Employee a where a.EmployeeId='" + EmployeeId + "' ";
             var data = _dbContext.GetDataTable(query);
             return data;
         }
-
         public UserStatus GetAStatus(string statusId)
         {
             string query = "select * from UserStatus where StatusId = " + statusId + "";
             var data = _dbContext.GetDataTable(query);
             return (from DataRow row in data.Rows select UserStatus.ConvertToModel(row)).FirstOrDefault();
         }
-
         public IEnumerable<RoleWiseScreenPermission> GetModules(string roleId)
         {
 
@@ -53,12 +49,11 @@ namespace PayRoll.Core.DAL.Repository
             string query = "select g.ScreenId,g.ScreenName,g.URL,g.ParentScreenId,g.IconName from Screens g where g.ScreenId in ("
                           + " select a.ParentScreenId from Screens a where a.ScreenId in(select a.ScreenId from "
                           + " (select * from Screens s where s.ParentScreenId in (select s.ScreenId from Screens s where s.ParentScreenId='0000') )"
-                          + " a inner join RoleWiseScreenPermission r on a.ScreenId=r.ScreenId where  r.RoleId='"+roleId+"'))";
+                          + " a inner join RoleWiseScreenPermission r on a.ScreenId=r.ScreenId where  r.RoleId='" + roleId + "'))";
 
             var data = _dbContext.GetDataTable(query);
             return (from DataRow row in data.Rows select RoleWiseScreenPermission.ConvertToModel(row));
         }
-
         public IEnumerable<RoleWiseScreenPermission> GetSubModules(string roleId, string parentScreenId)
         {
 
@@ -68,31 +63,33 @@ namespace PayRoll.Core.DAL.Repository
                 strWhere = " and b.RoleId = '" + roleId + "'";
             }
             string query = " SELECT  distinct   a.ScreenId, a.ScreenName, a.URL, a.ParentScreenId, a.IconName FROM  Screens AS a"
-                           +" INNER JOIN (select * from  RoleWiseScreenPermission a where  a.RoleId='"+roleId+"'  )b "
+                           + " INNER JOIN (select * from  RoleWiseScreenPermission a where  a.RoleId='" + roleId + "'  )b "
                            + " ON a.ScreenId = b.ScreenId where a.ParentScreenId <> '0000' ";
             var data = _dbContext.GetDataTable(query);
             return (from DataRow row in data.Rows select RoleWiseScreenPermission.ConvertToModel(row));
         }
-
         public string GetServerDate()
         {
 
             string query = "select GetDate()";
             var data = _dbContext.GetQueryDate(query);
             return data;
-        
-        }
 
+        }
         public Permission GetScreenWisePermission(string screenCode)
         {
-            string query = "select CanSave= (CASE WHEN left(a.Permission,1)=0 THEN 0 ELSE 1 END) , CanUpdate= (CASE WHEN substring(a.Permission,2,1)=0 THEN 0 ELSE 1 END), CanDelete= (CASE WHEN right(a.Permission,1)=0 THEN 0 ELSE 1 END) from RoleWiseScreenPermission a where a.RoleId='"+session.UserRoleId+"' and a.ScreenId='"+screenCode+"'";
+            string query = "select CanSave= (CASE WHEN left(a.Permission,1)=0 THEN 0 ELSE 1 END) , CanUpdate= (CASE WHEN substring(a.Permission,2,1)=0 THEN 0 ELSE 1 END), CanDelete= (CASE WHEN right(a.Permission,1)=0 THEN 0 ELSE 1 END) from RoleWiseScreenPermission a where a.RoleId='" + session.UserRoleId + "' and a.ScreenId='" + screenCode + "'";
             var data = _dbContext.GetDataTable(query);
             return (from DataRow row in data.Rows select Permission.ConvertToModel(row)).FirstOrDefault();
 
-        
-        }
 
-        public DataTable GetDDlist(DDLSourceModel sourceModel)
+        }
+        public DataTable GetDepartment(DDLSourceModel sourceModel)
+        {
+            var data = _dbContext.GetDDlist(sourceModel);
+            return data;
+        }
+        public DataTable GetLoadCombo(DDLSourceModel sourceModel)
         {
             var data = _dbContext.GetDDlist(sourceModel);
             return data;

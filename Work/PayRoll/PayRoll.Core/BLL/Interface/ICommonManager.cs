@@ -10,7 +10,7 @@ using System.Web.Mvc;
 namespace PayRoll.Core.BLL.Interface
 {
     public interface ICommonManager
-    {             
+    {
         UserStatus GetAStatus(string statusId);
         IEnumerable<SelectListItem> GetUserStatuses();
         IEnumerable<SelectListItem> GetMonthsOfYear();
@@ -20,7 +20,8 @@ namespace PayRoll.Core.BLL.Interface
         Permission GetScreenWisePermission(string screenCode);
         IEnumerable<SelectListItem> GetAllMaritalStatus();
         Object GetEmployeeBasicInfo(string EmployeeId);
-        IEnumerable<DDLSourceModel> GetDDlist(DDLSourceModel sourceModel);
+        IEnumerable<DDLSourceModel> GetDepartment(DDLSourceModel sourceModel);
+        IEnumerable<DDLSourceModel> GetLoadCombo(DDLSourceModel sourceModel);
 
     }
 }

@@ -17,15 +17,12 @@ namespace PayRoll.Core.BLL.Interface
     {
         private readonly DBContext _dbContext;
         private readonly ICommonRepository _iCommonRepository;
-       
 
         public CommonManager()
         {
             _dbContext = new DBContext(DatabaseConfiguration.ConnectionString);
             _iCommonRepository = new CommonRepository(_dbContext);
         }
-
-
         public UserStatus GetAStatus(string statusId)
         {
             try
@@ -44,8 +41,7 @@ namespace PayRoll.Core.BLL.Interface
                 _dbContext.Close();
             }
         }
-
-        public Object GetEmployeeBasicInfo(string EmployeeId) 
+        public Object GetEmployeeBasicInfo(string EmployeeId)
         {
             try
             {
@@ -59,14 +55,12 @@ namespace PayRoll.Core.BLL.Interface
             {
                 return null;
             }
-            finally 
+            finally
             {
                 _dbContext.Close();
             }
-        
+
         }
-
-
         public Permission GetScreenWisePermission(string screenCode)
         {
             try
@@ -85,15 +79,13 @@ namespace PayRoll.Core.BLL.Interface
                 _dbContext.Close();
             }
         }
-
-
         public string GetServerDate()
         {
             try
             {
                 _dbContext.Open();
                 var date = _iCommonRepository.GetServerDate();
-                return DateTime.Parse( date).ToString("dd-MMM-yyyy");
+                return DateTime.Parse(date).ToString("dd-MMM-yyyy");
             }
             catch (Exception)
             {
@@ -103,12 +95,9 @@ namespace PayRoll.Core.BLL.Interface
             finally
             {
                 _dbContext.Close();
-            
-            }
-        
-        
-        }
 
+            }
+        }
         public IEnumerable<SelectListItem> GetUserStatuses()
         {
             try
@@ -131,21 +120,6 @@ namespace PayRoll.Core.BLL.Interface
                 _dbContext.Close();
             }
         }
-
-       
-
-
-
-       
-
-
-
-
-       
-
-      
-
-
         public IEnumerable<SelectListItem> GetMonthsOfYear()
         {
             string[] months = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
@@ -156,7 +130,6 @@ namespace PayRoll.Core.BLL.Interface
             }).ToList();
             return monthsYear;
         }
-
         public IEnumerable<SelectListItem> GetAllMaritalStatus()
         {
             string[] maStatus = { "Single", "Married", "Divorce" };
@@ -167,8 +140,6 @@ namespace PayRoll.Core.BLL.Interface
             }).ToList();
             return maritalStatus;
         }
-
-
         public IEnumerable<RoleWiseScreenPermission> GetModules(string roleId)
         {
             try
@@ -185,13 +156,7 @@ namespace PayRoll.Core.BLL.Interface
             {
                 _dbContext.Close();
             }
-
         }
-
-      
-       
-
-
         public IEnumerable<RoleWiseScreenPermission> GetSubModules(string roleId, string parentScreenId)
         {
             try
@@ -209,17 +174,42 @@ namespace PayRoll.Core.BLL.Interface
                 _dbContext.Close();
             }
 
-
         }
-
-        public IEnumerable<DDLSourceModel> GetDDlist(DDLSourceModel sourceModel)
+        public IEnumerable<DDLSourceModel> GetDepartment(DDLSourceModel sourceModel)
         {
             try
             {
                 DataTable dataTable = new DataTable();
                 List<DDLSourceModel> sourceModelsList = new List<DDLSourceModel>();
 
-                dataTable = _iCommonRepository.GetDDlist(sourceModel);
+                dataTable = _iCommonRepository.GetDepartment(sourceModel);
+                sourceModelsList = (from DataRow dr in dataTable.Rows
+                                    select new DDLSourceModel
+                                    {
+                                        Key = dr.ItemArray[0].ToString(),
+                                        Value = dr.ItemArray[1].ToString()
+                                    }).ToList();
+
+
+                return sourceModelsList;
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+
+            }
+        }
+        public IEnumerable<DDLSourceModel> GetLoadCombo(DDLSourceModel sourceModel)
+        {
+            try
+            {
+                DataTable dataTable = new DataTable();
+                List<DDLSourceModel> sourceModelsList = new List<DDLSourceModel>();
+
+                dataTable = _iCommonRepository.GetLoadCombo(sourceModel);
                 sourceModelsList = (from DataRow dr in dataTable.Rows
                                     select new DDLSourceModel
                                     {
