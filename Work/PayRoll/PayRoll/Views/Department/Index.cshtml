@@ -1,0 +1,307 @@
+﻿@{
+    /**/
+
+    ViewBag.Title = ":: Department information ::";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var permission = ViewData["Permission"] as PayRoll.Core.Utility.DBManager.Permission;
+}
+<link href="~/Content/kendo.common.min.css" rel="stylesheet" />
+
+<script src="~/Scripts/kendo.all.min.js"></script>
+@*<script src="~/Scripts/kendo.aspnetmvc.min.js"></script>*@
+<script src="~/Scripts/Common.js"></script>
+
+
+<div class="form-horizontal ">
+    <fieldset class="content-group">
+        <legend class="text-bold">Department Setup</legend>
+        <div class="form-group">
+            <div class="col-lg-12">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Department Name:</label>
+                        <div class="col-lg-9">
+                            <input type="text" id="txtDepartmentName" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-12">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Make By:</label>
+                        <div class="col-lg-9">
+                            <input type="text" id="txtMakeBy" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+
+                </div>
+            </div>
+        </div>
+
+        @*----------------------------Data Save Method-------------------------------*@
+
+        @*<div class="form-group">
+                <div class="col-lg-12">
+                    <div class="col-lg-6">
+                    </div>
+                    <div class="col-lg-6">
+                    </div>
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            <label class="control-label col-lg-2"> </label>
+            <div class="col-lg-10">
+                @if (permission.CanSave == "1")
+                {
+                    <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Save</button>
+                }
+                @if (permission.CanUpdate == "1")
+                {
+                    <button class="btn bg-teal" data-style="expand-left" id="btnUpdate" type="button" onclick="Update()"><i class="fa fa-save"></i>&nbsp; Update</button>
+                }
+                @if (permission.CanDelete == "1")
+                {
+                    <button class="btn btn-danger" data-style="expand-left" id="btnDelete" type="button" onclick="Delete()"><i class="icon-trash"></i>&nbsp; Delete</button>
+                }
+                <button class="btn btn-w-m btn-success btn-loading" type="button" id="btnReset" onclick="ResetForm()"><i class="glyphicon glyphicon-refresh"></i>&nbsp;Reset</button>
+            </div>
+        </div>
+    </fieldset>
+
+
+    <fieldset class="content-group">
+        <legend class="text-bold">Department List</legend>
+        @*<div id="divInfo">
+                <div class="form-group">
+                    <div class="table-responsive" id="div-employeeInfo">
+                    </div>
+                </div>
+            </div>*@
+        <div id="example">
+            <div id="grid"></div>
+        </div>
+    </fieldset>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        _serverDate = null;
+
+        $(document).ready(function () {
+           $("#grid").kendoGrid().empty();
+            var result = CallAjax_POST('GetDepartment/Department', '', false, false)
+            if (result.length > 0) {
+                PopulateGridView(result);
+            } else {
+                alert("Error! Please Contact..");
+            }
+
+            function PopulateGridView(result) {
+                //debugger;
+                $("#grid").kendoGrid({
+                    dataSource: result,
+                    pageable: true,
+                    filterable: true,
+                    pageSize: 20,
+                    pageable: true,
+                    pageable: {
+                        input: false,
+                        numeric: true,
+                        butonCount: 5,
+                        pageSize: 20,
+                        alwaysVisible: true,
+                        previousNext: true,
+                        serverPaging: true,
+                        serverFiltering: true,
+                    },
+                    //height: 550,
+                    // toolbar: ["create"],
+                    selectable: true,
+                    //toolbar: ["search"],//search commented on 20aug22
+                    search: {
+                        fields: [
+                            { name: "DepartmentId", operator: "eq" },
+                            { name: "DepartmentName", operator: "contains" },
+                            { name: "FatherName", operator: "contains" },
+                            { name: "MotherName", operator: "contains" },
+
+                        ]
+                    },
+                    columns: [
+
+                        { field: "DepartmentId", title: "Department Id", filterable: true, filterable: { multi: true, search: true }, width: "70px" },
+                        { field: "DepartmentName", title: "Department Name", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
+                        { field: "CreatedBy", title: "Created By", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
+                        { field: "CreatedDate", title: "Created Date", filterable: true, filterable: { multi: true, search: true }, width: "90px" },
+                        { field: "MakeBy", title: "Make By", filterable: true, filterable: { multi: true, search: true }, width: "120px" },
+                        { field: "MakeDate", title:"Make Date", filterable: true, filterable: { multi: true, search: true }, width: "120px" },
+
+                    ],
+
+                });
+            }
+        });
+
+    function FormDataAsObject() {
+        var object = new Object();
+        object.DepartmentName = $('#txtDepartmentName').val();
+        object.MakeBy = $('#txtMakeBy').val();
+
+        return object;
+    }
+
+    function ResetForm() {
+        $('#txtDepartmentName').val('');
+        $('#txtMakeBy').val('');
+
+        EnableDisableControls("1");
+    }
+
+    function EnableDisableControls(status) {
+        if (status == "1") {
+            $('#btnSave').prop('disabled', false);
+            $('#btnUpdate').prop('disabled', true);
+            $('#btnDelete').prop('disabled', true);
+        }
+        else if (status == "2") {
+            $('#btnSave').prop('disabled', true);
+            $('#btnUpdate').prop('disabled', false);
+            $('#btnDelete').prop('disabled', false);
+        }
+
+        else {
+            $('#btnSave').prop('disabled', false);
+            $('#btnUpdate').prop('disabled', false);
+            $('#btnDelete').prop('disabled', false);
+        }
+    }
+
+        function Save()
+        {
+            var object = FormDataAsObject();
+            debugger;
+
+            if (EmployeeInfoValidation(object)) {
+
+                $.ajax({
+                    url: '@Url.Action("CreateOrUpdate", "Department")',
+                    method: 'post',
+                    dataType: 'json',
+                    async: false,
+                    data: {
+                        DepartmentName: object.DepartmentName,
+                        MakeBy: object.MakeBy,
+
+                    },
+                    success: function (data) {
+                        var vmMsg = data;
+                        if (vmMsg.MessageType == 1) {
+                            ShowNotification(1, vmMsg.ReturnMessage);
+                            ResetForm();
+                            //LoadUserInfoGrid();
+
+                        } else {
+                            ShowNotification(3, vmMsg.ReturnMessage);
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }
+        }
+
+        @*function Update()
+        {
+            var formObject = FormDataAsObject();
+
+            if (EmployeeInfoValidation(formObject)) {
+
+                $.ajax({
+                    url: '@Url.Action("Update", "UserInfo")',
+                    method: 'post',
+                    dataType: 'json',
+                    async: false,
+                    data: {
+                        UserName: formObject.UserName,
+                        UserFullName: formObject.UserFullName,
+                        UserPassword: formObject.UserPassword,
+                        UserRoleId: formObject.UserRoleId,
+                        UserStatusId: formObject.UserStatus,
+                    },
+                    success: function (data) {
+                        var vmMsg = data;
+                        if (vmMsg.MessageType == 1) {
+                            ShowNotification(1, vmMsg.ReturnMessage);
+                            ResetForm();
+                            LoadUserInfoGrid();
+
+                        } else {
+                            ShowNotification(3, vmMsg.ReturnMessage);
+
+                        }
+                    },
+                    error: function () {
+
+                    }
+                });
+
+            }
+
+        }*@
+
+        @*function Delete()
+        {
+            var formObject = FormDataAsObject();
+
+            $.ajax({
+                url: '@Url.Action("Delete", "UserInfo")',
+                method: 'post',
+                dataType: 'json',
+                async: false,
+                data: {
+                    userName: formObject.UserName,
+                },
+                success: function (data) {
+                    var vmMsg = data;
+                    if (vmMsg.MessageType == 1) {
+                        ShowNotification(1, vmMsg.ReturnMessage);
+                        ResetForm();
+                        LoadUserInfoGrid();
+
+                    } else {
+                        ShowNotification(3, vmMsg.ReturnMessage);
+
+                    }
+                },
+                error: function () {
+                }
+            });
+
+        }*@
+
+        function EmployeeInfoValidation(formObject) {
+
+            if (!formObject.DepartmentName) {
+                $('#txtDepartmentName').focus();
+                ShowNotification('2', 'Department Name Can not be empty.');
+                return false;
+            }
+
+
+            return true;
+        }
+
+
+    </script>
+
+}

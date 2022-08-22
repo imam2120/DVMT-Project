@@ -18,8 +18,8 @@ namespace PayRoll.Core.Model
             ProductPurces = 4001,
             Distribution = 4002,
             SaleEntry = 4003,
-            DayClose = 5001,
-            DayOpen = 5002,
+            Department = 5001,
+            Designation = 5002,
             ProductSetup = 6001
         }
     }
