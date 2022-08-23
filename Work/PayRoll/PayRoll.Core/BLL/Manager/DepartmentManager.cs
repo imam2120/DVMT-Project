@@ -13,21 +13,23 @@ using System.Web.Mvc;
 
 namespace PayRoll.Core.BLL.Interface
 {
-    public class EmployeeInfoManager : IEmployeeInfoManager
+    public class DepartmentManager : IDepartmentManager
     {
         private readonly DBContext _dbContext;
-        private readonly IEmployeeInfoRepository _iEmployeeRepository;
-        public EmployeeInfoManager()
+        private readonly IDepartmentRepository _iDepartmentRepository;
+        public DepartmentManager()
         {
             _dbContext = new DBContext(DatabaseConfiguration.ConnectionString);
-            _iEmployeeRepository = new EmployeeInfoRepository(_dbContext);
+            _iDepartmentRepository = new DepartmentRepository(_dbContext);
         }
-        public IEnumerable<EmployeeInfo> GetEmployee()
+
+
+        public IEnumerable<Department> GetDepartment()
         {
             try
             {
                 _dbContext.Open();
-                var users = _iEmployeeRepository.GetEmployee();
+                var users = _iDepartmentRepository.GetDepartment();
                 return users;
             }
             catch
@@ -39,12 +41,13 @@ namespace PayRoll.Core.BLL.Interface
                 _dbContext.Close();
             }
         }
-        public EmployeeInfo GetAEmployee(string employeeid)
+
+        public Department GetADepartment(string departmentid)
         {
             try
             {
                 _dbContext.Open();
-                var userStatus = _iEmployeeRepository.GetAEmployee(employeeid);
+                var userStatus = _iDepartmentRepository.GetADepartment(departmentid);
                 return userStatus;
             }
             catch
@@ -56,18 +59,18 @@ namespace PayRoll.Core.BLL.Interface
                 _dbContext.Close();
             }
         }
-        public Message CreateOrUpdate(EmployeeInfo employee, int create)
+        public Message CreateOrUpdate(Department department, int create)
         {
             var message = new Message();
             try
             {
                 _dbContext.Open();
-                _iEmployeeRepository.CreateOrUpdate(employee, create);
-                message = Message.SetMessages.SetSuccessMessage("Employee Created Successfully");
+                _iDepartmentRepository.CreateOrUpdate(department, create);
+                message = Message.SetMessages.SetSuccessMessage("Department Created Successfully");
             }
             catch (Exception ex)
             {
-                message = Message.SetMessages.SetErrorMessage("Error in Creating Employee" + ex.Message);
+                message = Message.SetMessages.SetErrorMessage("Error in Creating Department" + ex.Message);
             }
             finally
             {
@@ -76,18 +79,18 @@ namespace PayRoll.Core.BLL.Interface
 
             return message;
         }
-        public Message Delete(string employeeid)
+        public Message Delete(string departmentid)
         {
             var message = new Message();
             try
             {
                 _dbContext.Open();
-                _iEmployeeRepository.Delete(employeeid);
-                message = Message.SetMessages.SetSuccessMessage("Employee Deleted Successfully");
+                _iDepartmentRepository.Delete(departmentid);
+                message = Message.SetMessages.SetSuccessMessage("Department Deleted Successfully");
             }
             catch (Exception ex)
             {
-                message = Message.SetMessages.SetErrorMessage("Error in Deleting Employee" + ex.Message);
+                message = Message.SetMessages.SetErrorMessage("Error in Deleting Department" + ex.Message);
             }
             finally
             {
@@ -96,5 +99,7 @@ namespace PayRoll.Core.BLL.Interface
 
             return message;
         }
+
+
     }
 }

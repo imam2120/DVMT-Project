@@ -8,28 +8,27 @@ using System.Web.Mvc;
 
 namespace PayRoll.Controllers
 {
-    public class DepartmentController : Controller
+    public class DesignationController : Controller
     {
-        // GET: Department
-        IDepartmentManager _iDepartmentManager = new DepartmentManager();
+        // GET: Designation
+        IDesignationManager _iDesignationManager = new DesignationManager();
         ICommonManager commonManager = new CommonManager();
         public ActionResult Index()
         {
-            int screenCode = (int)Enum.Parse(typeof(ScreenList.Screens), Enum.GetName(typeof(ScreenList.Screens), ScreenList.Screens.Department));
+            int screenCode = (int)Enum.Parse(typeof(ScreenList.Screens), Enum.GetName(typeof(ScreenList.Screens), ScreenList.Screens.Designation));
             var data = commonManager.GetScreenWisePermission(screenCode.ToString());
             ViewData["Permission"] = data;
             return View();
         }
-        public ActionResult CreateOrUpdate(Department department)
+        public ActionResult CreateOrUpdate(Designation designation)
         {
-            var data = _iDepartmentManager.CreateOrUpdate(department, 1);
+            var data = _iDesignationManager.CreateOrUpdate(designation, 1);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult GetDepartment()
+        public ActionResult GetDesignation()
         {
-            var data = _iDepartmentManager.GetDepartment();
+            var data = _iDesignationManager.GetDesignation();
             return Json(data, JsonRequestBehavior.AllowGet);
         }
-
     }
 }

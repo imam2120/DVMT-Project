@@ -9,19 +9,20 @@ namespace PayRoll.Core.Model
 {
    public class SupplierInfo
     {
-        public string SupplierId { get; set; }
+        public string SupplierId { get; set; }       
+        public string GLAccountNo { get; set; }
         public string SupplierName { get; set; }
-        public string SupplierGLAC { get; set; }
-        public string SupplierBalance { get; set; }
-        public string PresentAddress { get; set; }
-        public string PermanentAddress { get; set; }
-        public string ContractNumber { get; set; }
-        public string EmergencyNumber { get; set; }
-        public string NID { get; set; }
-        public string StatusId { get; set; }
-        public string Image { get; set; }
-        public string CreatedBy { get; set; }
-        public string CreatedDate { get; set; }
+        public string ContactPerson { get; set; }
+        public string ContactNumber { get; set; }
+        public string EmailAddress { get; set; }
+        public string MailingAddress { get; set; }
+        public string CurrentBalance { get; set; }
+        public string DueBalance { get; set; }
+        public string Status { get; set; }
+        public string SetupDate { get; set; }
+        public string UserId { get; set; }
+        public string CreateBy { get; set; }
+        public string CreateDate { get; set; }
         public string ModifyBy { get; set; }
         public string ModifyDate { get; set; }
 
@@ -30,18 +31,19 @@ namespace PayRoll.Core.Model
             return new SupplierInfo
             {
                 SupplierId = row.Table.Columns.Contains("SupplierId") ? Convert.ToString(row["SupplierId"]) : "",
+                GLAccountNo = row.Table.Columns.Contains("GLAccountNo") ? Convert.ToString(row["GLAccountNo"]) : "",
                 SupplierName = row.Table.Columns.Contains("SupplierName") ? Convert.ToString(row["SupplierName"]) : "",
-                SupplierGLAC = row.Table.Columns.Contains("SupplierGLAC") ? Convert.ToString(row["SupplierGLAC"]) : "",
-                SupplierBalance = row.Table.Columns.Contains("SupplierBalance") ? Convert.ToString(row["SupplierBalance"]) : "",
-                PresentAddress = row.Table.Columns.Contains("PresentAddress") ? Convert.ToString(row["PresentAddress"]) : "",
-                PermanentAddress = row.Table.Columns.Contains("PermanentAddress") ? Convert.ToString(row["PermanentAddress"]) : "",
-                ContractNumber = row.Table.Columns.Contains("ContractNumber") ? Convert.ToString(row["ContractNumber"]) : "",
-                EmergencyNumber = row.Table.Columns.Contains("EmergencyNumber") ? Convert.ToString(row["EmergencyNumber"]) : "",
-                NID = row.Table.Columns.Contains("NID") ? Convert.ToString(row["NID"]) : "",
-                StatusId = row.Table.Columns.Contains("StatusId") ? Convert.ToString(row["StatusId"]) : "",
-                Image = row.Table.Columns.Contains("Image") ? Convert.ToString(row["Image"]) : "",
-                CreatedBy = row.Table.Columns.Contains("CreatedBy") ? Convert.ToString(row["CreatedBy"]) : "",
-                CreatedDate = row.Table.Columns.Contains("CreatedDate") ? Convert.ToString(row["CreatedDate"]) : "",
+                ContactPerson = row.Table.Columns.Contains("ContactPerson") ? Convert.ToString(row["ContactPerson"]) : "",
+                ContactNumber = row.Table.Columns.Contains("ContactNumber") ? Convert.ToString(row["ContactNumber"]) : "",
+                EmailAddress = row.Table.Columns.Contains("EmailAddress") ? Convert.ToString(row["EmailAddress"]) : "",
+                MailingAddress = row.Table.Columns.Contains("MailingAddress") ? Convert.ToString(row["MailingAddress"]) : "",
+                CurrentBalance = row.Table.Columns.Contains("CurrentBalance") ? Convert.ToString(row["CurrentBalance"]) : "",
+                DueBalance = row.Table.Columns.Contains("DueBalance") ? Convert.ToString(row["DueBalance"]) : "",
+                Status = row.Table.Columns.Contains("Status") ? Convert.ToString(row["Status"]) : "",
+                SetupDate = row.Table.Columns.Contains("SetupDate") ? Convert.ToString(row["SetupDate"]) : "",
+                UserId = row.Table.Columns.Contains("UserId") ? Convert.ToString(row["UserId"]) : "",
+                CreateBy = row.Table.Columns.Contains("CreateBy") ? Convert.ToString(row["CreateBy"]) : "",
+                CreateDate = row.Table.Columns.Contains("CreateDate") ? Convert.ToString(row["CreateDate"]) : "",
                 ModifyBy = row.Table.Columns.Contains("ModifyBy") ? Convert.ToString(row["ModifyBy"]) : "",
                 ModifyDate = row.Table.Columns.Contains("ModifyDate") ? Convert.ToString(row["ModifyDate"]) : "",
             };

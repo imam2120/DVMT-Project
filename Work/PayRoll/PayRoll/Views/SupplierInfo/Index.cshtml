@@ -4,34 +4,6 @@
     var permission = ViewData["Permission"] as PayRoll.Core.Utility.DBManager.Permission;
 }
 
-<script id="templateUserIndoModal" type="text/html">
-    <table class="table table-bordered table-striped table-hover datatable-sorting" id="UserInfoDataTableModal">
-        <thead class="ruhee">
-        <th>Supplier ID</th>
-        <th>Supplier Name</th>
-        <th>National ID</th>
-        <th>SupplierGLAC</th>
-        <th>Balance</th>
-        <th>Action</th>
-        </thead>
-        <tbody>
-            {{#EmployeeInfoSearch}}
-
-            <tr>
-                <td> {{UserFullName}}</td>
-                <td> {{UserName}}</td>
-                <td> {{UserRole.RoleName}}</td>
-                <td> {{UserStatus.StatusName}}</td>
-                <td class="action-sm">
-                    <a class="btn btn-default btn-rounded btn-sm" onclick="OnSelectUser('{{UserName}}')"><i class="icon-select2"></i> Select</a>
-                </td>
-            </tr>
-
-            {{/EmployeeInfoSearch}}
-        </tbody>
-    </table>
-</script>
-
 <div class="form-horizontal ">
     <fieldset class="content-group">
         <legend class="text-bold">Supplier Setup</legend>
@@ -46,37 +18,12 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-lg-12">
-                <div class="col-lg-6">
                     <div class="form-group">
-                        <label class="control-label col-lg-3">SupplierGLAC:</label>
-                        <div class="col-lg-9">
-                            <input type="text" id="txtSupplierGLAC" class="form-control">
+                        <label class="control-label col-lg-3">Account No:</label>
+                        <div class="col-lg-3">
+                            <input type="text" id="txtGLAccountNo" class="form-control">
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-6">
-
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-lg-12">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="control-label col-lg-3">Balance:</label>
-                        <div class="col-lg-9">
-                            <input type="text" id="txtSupplierBalance" class="form-control">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-
                 </div>
             </div>
         </div>
@@ -91,7 +38,12 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Contact Person:</label>
+                        <div class="col-lg-9">
+                            <input type="text" id="txtContactPerson" class="form-control">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -99,9 +51,49 @@
             <div class="col-lg-12">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label class="control-label col-lg-3">Contract Number:</label>
+                        <label class="control-label col-lg-3">Contact Number:</label>
                         <div class="col-lg-9">
-                            <input type="text" id="txtContractNumber" class="form-control">
+                            <input type="text" id="txtContactNumber" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Email Address:</label>
+                        <div class="col-lg-9">
+                            <input type="text" id="txtEmailAddress" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-12">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Mailing Address:</label>
+                        <div class="col-lg-9">
+                            <input type="text" id="txtMailingAddress" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Current Balance:</label>
+                        <div class="col-lg-9">
+                            <input type="text" id="txtCurrentBalance" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-12">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Due Balance:</label>
+                        <div class="col-lg-9">
+                            <input type="text" id="txtDueBalance" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -110,176 +102,121 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-lg-12">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="control-label col-lg-3">Emergency Number:</label>
-                        <div class="col-lg-9">
-                            <input type="text" id="txtEmergencyNumber" class="form-control">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-lg-12">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="control-label col-lg-3">National ID:</label>
-                        <div class="col-lg-9">
-                            <input type="text" id="txtNationalId" class="form-control">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-lg-12">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="control-label col-lg-3">Present Address:</label>
-                        <div class="col-lg-9">
-                            <input type="text" id="txtPresentAddress" class="form-control">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-lg-12">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="control-label col-lg-3">Permanent Address:</label>
-                        <div class="col-lg-9">
-                            <input type="text" id="txtPermanentAddress" class="form-control">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-
-                </div>
-            </div>
-        </div>
-
         @*----------------------------Data Save Method-------------------------------*@
-
-        <div class="form-group">
-            <div class="col-lg-12">
-                <div class="col-lg-6">
-
-                </div>
-                <div class="col-lg-6">
-
-                </div>
-            </div>
-        </div>
 
         <div class="form-group">
             <label class="control-label col-lg-2"> </label>
             <div class="col-lg-10">
-                @*@if (permission.CanSave == "1")
-                    {
-                        <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Save</button>
-                    }
-                    @if (permission.CanUpdate == "1")
-                    {
-                        <button class="btn bg-teal" data-style="expand-left" id="btnUpdate" type="button" onclick="Update()"><i class="fa fa-save"></i>&nbsp; Update</button>
-                    }
-                    @if (permission.CanDelete == "1")
-                    {
-                        <button class="btn btn-danger" data-style="expand-left" id="btnDelete" type="button" onclick="Delete()"><i class="icon-trash"></i>&nbsp; Delete</button>
-                    }*@
+                @if (permission.CanSave == "1")
+                {
+                    <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Save</button>
+                }
+                @if (permission.CanUpdate == "1")
+                {
+                    <button class="btn bg-teal" data-style="expand-left" id="btnUpdate" type="button" onclick="Update()"><i class="fa fa-save"></i>&nbsp; Update</button>
+                }
+                @if (permission.CanDelete == "1")
+                {
+                    <button class="btn btn-danger" data-style="expand-left" id="btnDelete" type="button" onclick="Delete()"><i class="icon-trash"></i>&nbsp; Delete</button>
+                }
 
-                <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Save</button>
-
-                <button class="btn bg-teal" data-style="expand-left" id="btnUpdate" type="button" onclick="Update()"><i class="fa fa-save"></i>&nbsp; Update</button>
-
-                <button class="btn btn-danger" data-style="expand-left" id="btnDelete" type="button" onclick="Delete()"><i class="icon-trash"></i>&nbsp; Delete</button>
-
-                <button class="btn btn-w-m btn-success btn-loading" type="button" id="btnReset" onclick="ResetForm()"><i class="glyphicon glyphicon-refresh"></i>&nbsp;Reset</button>
             </div>
         </div>
 
 
     </fieldset>
-
-
     <fieldset class="content-group">
-        <legend class="text-bold">Supplier List</legend>
-        <div id="divInfo">
-
-            <div class="form-group">
-                <div class="table-responsive" id="div-userInfo">
-                </div>
-            </div>
-
+        <legend class="text-bold">Supplier List</legend>        
+        <div id="example">
+            <div id="grid"></div>
         </div>
-
     </fieldset>
-
 </div>
 
 @section scripts
 {
     <script type="text/javascript">
         _serverDate = null;
-        $(document).ready(function () {
-            //LoadCombos();
-            //LoadUserInfoGrid();
-            //EnableDisableControls("1");
 
+        $(document).ready(function () {            
+            $("#grid").kendoGrid().empty();
+            var result = CallAjax_POST('GetSupplier/SupplierInfo', '', false, false)
+            if (result.length > 0) {
+                PopulateGridView(result);
+            } else {
+                alert("Error! Please Contact..");
+            }
+
+            function PopulateGridView(result) {
+                //debugger;
+                $("#grid").kendoGrid({
+                    dataSource: result,
+                    pageable: true,
+                    filterable: true,
+                    pageSize: 20,
+                    pageable: true,
+                    pageable: {
+                        input: false,
+                        numeric: true,
+                        butonCount: 5,
+                        pageSize: 20,
+                        alwaysVisible: true,
+                        previousNext: true,
+                        serverPaging: true,
+                        serverFiltering: true,
+                    },
+                    //height: 550,
+                    // toolbar: ["create"],
+                    selectable: true,
+                    //toolbar: ["search"],//search commented on 20aug22
+                    search: {
+                        fields: [
+                            { name: "SupplierId", operator: "eq" },
+                            { name: "GLAccountNo", operator: "eq" },
+                            { name: "SupplierName", operator: "contains" },
+
+                        ]
+                    },
+                    columns: [
+
+                        { field: "SupplierId", title: "Supplier Id", filterable: true, filterable: { multi: true, search: true }, width: "70px" },
+                        { field: "GLAccountNo", title: "Account No", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
+                        { field: "SupplierName", title: "Supplier Name", filterable: true, filterable: { multi: true, search: true }, width: "120px" },
+                        { field: "ContactNumber", title: "Contract Number", filterable: { multi: true, search: true }, width: "120px" },
+                        { field: "EmailAddress", title: "Email Address", filterable: { multi: true, search: true }, width: "120px" },
+                        { field: "CurrentBalance", title: "Current Balance", filterable: true, filterable: { multi: true, search: true }, width: "120px" }, 
+                        { field: "DueBalance", title: "Due Balance", filterable: true, filterable: { multi: true, search: true }, width: "120px" },
+                        { field: "Status", title: "Status", filterable: true, filterable: { multi: true, search: true }, width: "50px" }, 
+                        { field: "Select ", title: "Action", filterable: false, width: "50px", template: "<button type='button' class='btn btn-success btn-sm' id='btnEdit'>Select</button>" }
+                    ],
+
+                });
+            }
         });
-
-
-        @*function LoadUserInfoGrid() {
-            var url = '@Url.Action("GetEmployee", "EmployeeInfo")';
-
-            $.ajax({
-                url: url,
-                method: 'get',
-                success: function (res) {
-                    var templateWithData = Mustache.to_html($("#templateUserIndoModal").html(), { UserInfoSearch: res });
-                    $("#div-userInfo").empty().html(templateWithData);
-                    MakePagination('UserInfoDataTableModal');
-
-                },
-                error: function () {
-
-                }
-            });
-
-
-        }*@
-
 
     function FormDataAsObject() {
         var object = new Object();
-        object.Name = $('#txtSupplierName').val();
-        object.ContractNumber = $('#txtContractNumber').val();
-        object.NID = $('#txtNationalId').val();
-        object.EmergencyNumber = $('#txtEmergencyNumber').val();
-        object.PresentAddress = $('#txtPresentAddress').val();
-        object.PermanentAddress = $('#txtPermanentAddress').val();
+        object.SupplierName = $('#txtSupplierName').val();
+        object.GLAccountNo = $('#txtGLAccountNo').val();
+        object.ContactPerson = $('#txtContactPerson').val();
+        object.ContactNumber = $('#txtContactNumber').val();
+        object.EmailAddress = $('#txtEmailAddress').val();  
+        object.MailingAddress = $('#txtMailingAddress').val();
+        object.CurrentBalance = $('#txtCurrentBalance').val();
+        object.DueBalance = $('#txtDueBalance').val();
 
         return object;
     }
 
     function ResetForm() {
         $('#txtSupplierName').val('');
-        $('#txtContractNumber').val('');
-        $('#txtNationalId').val('');
-        $('#txtEmergencyNumber').val('');
-        $('#txtPresentAddress').val('');
-        $('#txtPermanentAddress').val('');
+        $('#txtGLAccountNo').val('');
+        $('#txtContactPerson').val('');
+        $('#txtContactNumber').val('');
+        $('#txtEmailAddress').val('');
+        $('#txtMailingAddress').val('');
+        $('#txtCurrentBalance').val('');
+        $('#txtDueBalance').val('');
 
         EnableDisableControls("1");
     }
@@ -303,62 +240,28 @@
         }
     }
 
-
-
-    @*function OnSelectUser(userName) {
-
-        $.ajax({
-            url: '@Url.Action("GetAUser", "UserInfo")',
-            type: 'get',
-            dataType: 'json',
-            async: false,
-            data: {
-                userName: userName
-            },
-            success: function (data) {
-                ResetForm();
-                $('#txtUserName').val(data.UserName);
-                $('#txtUserFullName').val(data.UserFullName);
-                $('#txtUserPassword').val(data.UserPassword);
-                $('#ddlUserRole').val(data.UserRoleId);
-                $('#ddlUserStatus').val(data.UserStatusId);
-                EnableDisableControls("2");
-                LoadUserInfoGrid();
-
-            },
-            error: function () {
-
-            }
-        });
-    }*@
-
-
         function Save()
         {
             var object = FormDataAsObject();
-
-            //alert($('#ddlDepartment').val);
+            debugger;
 
             if (SupplierInfoValidation(object)) {
 
                 $.ajax({
-                    url: '@Url.Action("CreateOrUpdate", "EmployeeInfo")',
+                    url: '@Url.Action("CreateOrUpdate", "SupplierInfo")',
                     method: 'post',
                     dataType: 'json',
                     async: false,
                     data: {
                         SupplierName: object.SupplierName,
-                        ContractNumber: object.ContractNumber,
-                        NID: object.NID,
-                        EmergencyNumber : object.EmergencyNumber,
-                        PresentAddress : object.PresentAddress,
-                        PermanentAddress : object.PermanentAddress,
+                        GLAccountNo: object.GLAccountNo,
+                        ContactPerson: object.ContactPerson,
+                        ContactNumber: object.ContactNumber,
+                        EmailAddress: object.EmailAddress,
+                        MailingAddress: object.MailingAddress,
+                        CurrentBalance: object.CurrentBalance,
+                        DueBalance: object.DueBalance,
 
-                        //UserName: formObject.UserName,
-                        //UserFullName: formObject.UserFullName,
-                        //UserPassword: formObject.UserPassword,
-                        //UserRoleId: formObject.UserRoleId,
-                        //UserStatusId: formObject.UserStatus,
                     },
                     success: function (data) {
                         var vmMsg = data;
@@ -446,115 +349,38 @@
 
         }*@
 
-        //function LoadCombos()
-        //{
-        //    LoadUserRoleCombo();
-        //    LoadUserStatusCombo();
-        //}
-
-        @*function LoadUserRoleCombo() {
-
-            $.ajax({
-                url: '@Url.Action("GetAllRoles", "UserRole")',
-                type: 'Get',
-                async: false,
-                success: function (responseData) {
-                    $('#ddlUserRole').empty();
-                    $('#ddlUserRole').get(0).options.length = 0;
-
-                    if (responseData != null) {
-                        $("#ddlUserRole").get(0).options[0] = new Option("--Select--", "");
-                        $.each(responseData, function (index, item) {
-                            $('#ddlUserRole').get(0).options[$('#ddlUserRole').get(0).options.length] = new Option(item.Text, item.Value);
-                        });
-                    }
-
-                },
-                error: function () {
-
-                }
-            });
-        }*@
-
-
-        @*function LoadUserStatusCombo() {
-
-            $.ajax({
-                url: '@Url.Action("GetAllUserStatuses", "UserInfo")',
-                type: 'Get',
-                async: false,
-                success: function (responseData) {
-                    $('#ddlUserStatus').empty();
-                    $('#ddlUserStatus').get(0).options.length = 0;
-
-                    if (responseData != null) {
-                        $("#ddlUserStatus").get(0).options[0] = new Option("--Select--", "");
-                        $.each(responseData, function (index, item) {
-                            $('#ddlUserStatus').get(0).options[$('#ddlUserStatus').get(0).options.length] = new Option(item.Text, item.Value);
-                        });
-                    }
-
-                },
-                error: function () {
-
-                }
-            });
-        }*@
-
         function SupplierInfoValidation(formObject) {
 
             if (!formObject.SupplierName) {
                 $('#txtSupplierName').focus();
-                ShowNotification('2', 'Supplier Name Can not be empty.');
+                ShowNotification('2', 'Supplier Name Name Can not be empty.');
                 return false;
             }
 
-            if (!formObject.ContractNumber) {
-                $('#txtContractNumber').focus();
-                ShowNotification('2', 'Contract No Can not be empty.');
+            if (!formObject.ContactPerson) {
+                $('#txtContactPerson').focus();
+                ShowNotification('2', 'Contact Person No Can not be empty.');
                 return false;
             }
 
-            if (!formObject.NID) {
-                $('#txtNationalId').focus();
-                ShowNotification('2', 'National ID Can not be empty.');
+            if (!formObject.ContactNumber) {
+                $('#txtContactNumber').focus();
+                ShowNotification('2', 'Contact Number ID Can not be empty.');
                 return false;
             }
-
-            if (!formObject.PresentAddress) {
-                $('#txtPresentAddress').focus();
-                ShowNotification('2', 'Present Address Can not be empty.');
+            if (!formObject.EmailAddress) {
+                $('#txtEmailAddress').focus();
+                ShowNotification('2', 'Email Address Can not be empty.');
                 return false;
             }
-
-            if (!formObject.PermanentAddress) {
-                $('#txtPermanentAddress').focus();
-                ShowNotification('2', 'Permanent Address Can not be empty.');
+            if (!formObject.MailingAddress) {
+                $('#txtMailingAddress').focus();
+                ShowNotification('2', 'Mailing Address Can not be empty.');
                 return false;
             }
-
-
+            
             return true;
         }
-
-        @*function isUserExist(userName)
-        {
-            var exist = true;
-            $.ajax({
-                url: '@Url.Action("IsUserExist", "UserInfo")',
-                type: 'Get',
-                async: false,
-                data:{userName:userName},
-                success: function (responseData) {
-                    if (responseData.MessageType == 3) { exist = true } else { exist = false }
-                },
-                error: function () {
-                }
-            });
-
-            return exist;
-
-        }*@
 
     </script>
 

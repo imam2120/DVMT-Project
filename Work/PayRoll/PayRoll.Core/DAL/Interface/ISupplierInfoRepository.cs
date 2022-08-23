@@ -1,17 +1,21 @@
 ﻿using PayRoll.Core.Model;
+using PayRoll.Core.Utility.DBManager;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PayRoll.Core.BLL.Interface
+namespace PayRoll.Core.DAL.Interface
 {
-   public interface ISupplierInfoManager
+    public interface ISupplierInfoRepository
     {
         IEnumerable<SupplierInfo> GetSupplier();
         SupplierInfo GetASupplier(string supplierId);
-        Message CreateOrUpdate(SupplierInfo supplierInfo, int create);
-        Message Delete(string supplierId);
+        void CreateOrUpdate(SupplierInfo supplier, int create);
+        void Delete(string supplierId);
+
+
     }
 }
