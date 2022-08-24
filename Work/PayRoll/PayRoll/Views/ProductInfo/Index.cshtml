@@ -4,56 +4,32 @@
     var permission = ViewData["Permission"] as PayRoll.Core.Utility.DBManager.Permission;
 }
 
-<script id="templateProductIndoModal" type="text/html">
-    <table class="table table-bordered table-striped table-hover datatable-sorting" id="ProductInfoDataTableModal">
-        <thead class="ruhee">
-        <th>Product ID</th>
-        <th>Product Name</th>
-        <th>Product Group</th>
-        <th>Unit</th>
-        <th>Cost Price</th>
-        <th>Retail Price</th>
-        <th>Whole Price</th>
-        <th>Status</th>
-        </thead>
-        <tbody>
-            {{#ProductInfoSearch}}
+<link href="~/Content/kendo.common.min.css" rel="stylesheet" />
 
-            <tr>
-                <td> {{ProductId}}</td>
-                <td> {{ProductName}}</td>
-                <td> {{ProductGroup}}</td>
-                <td> {{Unit}}</td>
-                <td> {{CostPrice}}</td>
-                <td> {{RetailSalePrice}}</td>
-                <td> {{WholeSalePrice}}</td>
-                <td> {{Status}}</td>
-
-                <td class="action-sm">
-                    <a class="btn btn-default btn-rounded btn-sm" onclick="OnSelectUser('{{ProductId}}')"><i class="icon-select2"></i> Select</a>
-                </td>
-            </tr>
-
-            {{/ProductInfoSearch}}
-        </tbody>
-    </table>
-</script>
+<script src="~/Scripts/kendo.all.min.js"></script>
+@*<script src="~/Scripts/kendo.aspnetmvc.min.js"></script>*@
+<script src="~/Scripts/Common.js"></script>
 
 <div class="form-horizontal ">
     <fieldset class="content-group">
-        <legend class="text-bold">Product Setup</legend>
+        @*<legend class="text-bold">Product Setup</legend>*@
         <div class="form-group">
             <div class="col-lg-12">
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label class="control-label col-lg-3">Product Id:</label>
                         <div class="col-lg-3">
-                            <input type="text" id="txtCustomerId" class="form-control">
+                            <input type="text" id="txtProductId" class="form-control">
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
-
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Balance:</label>
+                        <div class="col-lg-3">
+                            <input type="text" id="txtBalance" class="form-control">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -68,61 +44,32 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-lg-12">
-                <div class="col-lg-6">
                     <div class="form-group">
-                        <label class="control-label col-lg-3">Product Group:</label>
+                        <label class="control-label col-lg-3">GLAccountNo:</label>
                         <div class="col-lg-9">
-                            <select class="form-control" id="ddlProductGroup" name="ddlProductGroup">
-                                <option>--Select--</option>
-                                <option value="1">Virtual Money</option>
-                                <option value="2">Other Product</option>
-                            </select>
+                            <input type="text" id="txtGLAccountNo" class="form-control">
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    
-                </div>
             </div>
         </div>
         <div class="form-group">
             <div class="col-lg-12">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label class="control-label col-lg-3">Product Unit:</label>
-                        <div class="col-lg-9">
-                            <select class="form-control" id="ddlProductUnit" name="ddlProductUnit">
-                                <option>--Select--</option>
-                                <option value="1">Pices</option>
-                                <option value="2">KG</option>
-                                <option value="3">Others</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-lg-12">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="control-label col-lg-3">Cost Price:</label>
+                        <label class="control-label col-lg-3">CostPrice:</label>
                         <div class="col-lg-9">
                             <input type="text" id="txtCostPrice" class="form-control">
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
-
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Effective Date:</label>
+                        <div class="col-lg-9">
+                            <input placeholder="Select date" type="date" id="txtEffectiveDate" class="form-control">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -137,7 +84,12 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Expiry Date:</label>
+                        <div class="col-lg-9">
+                            <input placeholder="Select date" type="date" id="txtExpiryDate" class="form-control">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -156,92 +108,35 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-lg-12">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="control-label col-lg-3">Effective Date:</label>
-                        <div class="col-lg-9">
-                            <input type="text" id="txtEffectiveDate" class="form-control">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-lg-12">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="control-label col-lg-3">Expiry Date:</label>
-                        <div class="col-lg-9">
-                            <input type="text" id="txtExpiryDate" class="form-control">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-
-                </div>
-            </div>
-        </div>
 
         @*----------------------------Data Save Method-------------------------------*@
 
-        <div class="form-group">
-            <div class="col-lg-12">
-                <div class="col-lg-6">
-
-                </div>
-                <div class="col-lg-6">
-
-                </div>
-            </div>
-        </div>
 
         <div class="form-group">
             <label class="control-label col-lg-2"> </label>
             <div class="col-lg-10">
-                @*@if (permission.CanSave == "1")
-                    {
-                        <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Save</button>
-                    }
-                    @if (permission.CanUpdate == "1")
-                    {
-                        <button class="btn bg-teal" data-style="expand-left" id="btnUpdate" type="button" onclick="Update()"><i class="fa fa-save"></i>&nbsp; Update</button>
-                    }
-                    @if (permission.CanDelete == "1")
-                    {
-                        <button class="btn btn-danger" data-style="expand-left" id="btnDelete" type="button" onclick="Delete()"><i class="icon-trash"></i>&nbsp; Delete</button>
-                    }*@
-
-                <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Save</button>
-
-                <button class="btn bg-teal" data-style="expand-left" id="btnUpdate" type="button" onclick="Update()"><i class="fa fa-save"></i>&nbsp; Update</button>
-
-                <button class="btn btn-danger" data-style="expand-left" id="btnDelete" type="button" onclick="Delete()"><i class="icon-trash"></i>&nbsp; Delete</button>
-
-                <button class="btn btn-w-m btn-success btn-loading" type="button" id="btnReset" onclick="ResetForm()"><i class="glyphicon glyphicon-refresh"></i>&nbsp;Reset</button>
+                @if (permission.CanSave == "1")
+                {
+                    <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Save</button>
+                }
+                @if (permission.CanUpdate == "1")
+                {
+                    <button class="btn bg-teal" data-style="expand-left" id="btnUpdate" type="button" onclick="Update()"><i class="fa fa-save"></i>&nbsp; Update</button>
+                }
+                @if (permission.CanDelete == "1")
+                {
+                    <button class="btn btn-danger" data-style="expand-left" id="btnDelete" type="button" onclick="Delete()"><i class="icon-trash"></i>&nbsp; Delete</button>
+                }
             </div>
         </div>
-
-
     </fieldset>
-
 
     <fieldset class="content-group">
-        <legend class="text-bold">Product List</legend>
-        <div id="divInfo">
-
-            <div class="form-group">
-                <div class="table-responsive" id="div-userInfo">
-                </div>
-            </div>
-
+        @*<legend class="text-bold">Product Setup</legend>*@
+        <div id="example">
+            <div id="grid"></div>
         </div>
-
     </fieldset>
-
 </div>
 
 @section scripts
@@ -249,53 +144,82 @@
     <script type="text/javascript">
         _serverDate = null;
         $(document).ready(function () {
-            //LoadCombos();
-            //LoadUserInfoGrid();
-            //EnableDisableControls("1");
+            $("#grid").kendoGrid().empty();
+            var result = CallAjax_POST('GetProduct/ProductInfo', '', false, false)
+            if (result.length > 0) {
+                PopulateGridView(result);
+            } else {
+                alert("Error! Please Contact..");
+            }
 
+            function PopulateGridView(result) {
+                //debugger;
+                $("#grid").kendoGrid({
+                    dataSource: result,
+                    pageable: true,
+                    filterable: true,
+                    pageSize: 20,
+                    pageable: true,
+                    pageable: {
+                        input: false,
+                        numeric: true,
+                        butonCount: 5,
+                        pageSize: 20,
+                        alwaysVisible: true,
+                        previousNext: true,
+                        serverPaging: true,
+                        serverFiltering: true,
+                    },
+                    //height: 550,
+                    // toolbar: ["create"],
+                    selectable: true,
+                    //toolbar: ["search"],//search commented on 20aug22
+                    search: {
+                        fields: [
+                            { name: "ProductId", operator: "eq" },
+                            { name: "ProductName", operator: "contains" },
+                            { name: "GLAccountNo", operator: "contains" },
+
+                        ]
+                    },
+                    columns: [
+
+                        { field: "ProductId", title: "Product Id", filterable: true, filterable: { multi: true, search: true }, width: "70px" },
+                        { field: "ProductName", title: "Product Name", filterable: true, filterable: { multi: true, search: true }, width: "120px" },
+                        { field: "GLAccountNo", title: "Account No", filterable: true, filterable: { multi: true, search: true }, width: "100px" },
+                        { field: "CostPrice", title: "CostPrice", filterable: true, filterable: { multi: true, search: true }, width: "100px" },
+                        { field: "RetailSalePrice", title:"RetailSalePrice", filterable: true, filterable: { multi: true, search: true }, width: "110px" },
+                        { field: "WholeSalePrice", title: "WholeSalePrice", filterable: { multi: true, search: true }, width: "120px" },
+                        { field: "Balance", title: "Balance", filterable: { multi: true, search: true }, width: "100px" },
+                        { field: "Select ", title: "Action", filterable: false, width: "50px", template: "<button type='button' class='btn btn-success btn-sm' id='btnEdit'>Select</button>" }
+
+                    ],
+
+                });
+            }
         });
-
-
-        @*function LoadUserInfoGrid() {
-            var url = '@Url.Action("GetEmployee", "EmployeeInfo")';
-
-            $.ajax({
-                url: url,
-                method: 'get',
-                success: function (res) {
-                    var templateWithData = Mustache.to_html($("#templateUserIndoModal").html(), { UserInfoSearch: res });
-                    $("#div-userInfo").empty().html(templateWithData);
-                    MakePagination('UserInfoDataTableModal');
-
-                },
-                error: function () {
-
-                }
-            });
-
-
-        }*@
-
 
     function FormDataAsObject() {
         var object = new Object();
-        object.Name = $('#txtCustomerName').val();
-        object.ContractNumber = $('#txtContractNumber').val();
-        object.NID = $('#txtNationalId').val();
-        object.EmergencyNumber = $('#txtEmergencyNumber').val();
-        object.PresentAddress = $('#txtPresentAddress').val();
-        object.PermanentAddress = $('#txtPermanentAddress').val();
+        object.ProductName = $('#txtProductName').val();
+        object.CostPrice = $('#txtCostPrice').val();
+        object.RetailSalePrice = $('#txtRetailSalePrice').val();
+        object.WholeSalePrice = $('#txtWholeSalePrice').val();
+        object.Balance = $('#txtBalance').val();
+        object.EffectiveDate = $('#txtEffectiveDate').val();
+        object.ExpiryDate = $('#txtExpiryDate').val();
 
         return object;
     }
 
     function ResetForm() {
-        $('#txtCustomerName').val('');
-        $('#txtContractNumber').val('');
-        $('#txtNationalId').val('');
-        $('#txtEmergencyNumber').val('');
-        $('#txtPresentAddress').val('');
-        $('#txtPermanentAddress').val('');
+        $('#txtProductName').val('');
+        $('#txtCostPrice').val('');
+        $('#txtRetailSalePrice').val('');
+        $('#txtWholeSalePrice').val('');
+        $('#txtBalance').val('');
+        $('#txtEffectiveDate').val('');
+        $('#txtExpiryDate').val('');
 
         EnableDisableControls("1");
     }
@@ -319,62 +243,28 @@
         }
     }
 
-
-
-    @*function OnSelectUser(userName) {
-
-        $.ajax({
-            url: '@Url.Action("GetAUser", "UserInfo")',
-            type: 'get',
-            dataType: 'json',
-            async: false,
-            data: {
-                userName: userName
-            },
-            success: function (data) {
-                ResetForm();
-                $('#txtUserName').val(data.UserName);
-                $('#txtUserFullName').val(data.UserFullName);
-                $('#txtUserPassword').val(data.UserPassword);
-                $('#ddlUserRole').val(data.UserRoleId);
-                $('#ddlUserStatus').val(data.UserStatusId);
-                EnableDisableControls("2");
-                LoadUserInfoGrid();
-
-            },
-            error: function () {
-
-            }
-        });
-    }*@
-
-
         function Save()
         {
             var object = FormDataAsObject();
+            debugger;
 
-            //alert($('#ddlDepartment').val);
-
-            if (CustomerInfoValidation(object)) {
+            if (ProductInfoValidation(object)) {
 
                 $.ajax({
-                    url: '@Url.Action("CreateOrUpdate", "EmployeeInfo")',
+                    url: '@Url.Action("CreateOrUpdate", "ProductInfo")',
                     method: 'post',
                     dataType: 'json',
                     async: false,
                     data: {
-                        CustomerName: object.CustomerName,
-                        ContractNumber: object.ContractNumber,
-                        NID: object.NID,
-                        EmergencyNumber : object.EmergencyNumber,
-                        PresentAddress : object.PresentAddress,
-                        PermanentAddress : object.PermanentAddress,
+                        ProductName: object.ProductName,
+                        GLAccountNo: object.GLAccountNo,
+                        CostPrice: object.CostPrice,
+                        RetailSalePrice: object.RetailSalePrice,
+                        WholeSalePrice: object.WholeSalePrice,
+                        Balance: object.Balance,
+                        EffectiveDate: object.EffectiveDate,
+                        ExpiryDate: object.ExpiryDate,
 
-                        //UserName: formObject.UserName,
-                        //UserFullName: formObject.UserFullName,
-                        //UserPassword: formObject.UserPassword,
-                        //UserRoleId: formObject.UserRoleId,
-                        //UserStatusId: formObject.UserStatus,
                     },
                     success: function (data) {
                         var vmMsg = data;
@@ -462,91 +352,32 @@
 
         }*@
 
-        //function LoadCombos()
-        //{
-        //    LoadUserRoleCombo();
-        //    LoadUserStatusCombo();
-        //}
-
-        @*function LoadUserRoleCombo() {
-
-            $.ajax({
-                url: '@Url.Action("GetAllRoles", "UserRole")',
-                type: 'Get',
-                async: false,
-                success: function (responseData) {
-                    $('#ddlUserRole').empty();
-                    $('#ddlUserRole').get(0).options.length = 0;
-
-                    if (responseData != null) {
-                        $("#ddlUserRole").get(0).options[0] = new Option("--Select--", "");
-                        $.each(responseData, function (index, item) {
-                            $('#ddlUserRole').get(0).options[$('#ddlUserRole').get(0).options.length] = new Option(item.Text, item.Value);
-                        });
-                    }
-
-                },
-                error: function () {
-
-                }
-            });
-        }*@
-
-
-        @*function LoadUserStatusCombo() {
-
-            $.ajax({
-                url: '@Url.Action("GetAllUserStatuses", "UserInfo")',
-                type: 'Get',
-                async: false,
-                success: function (responseData) {
-                    $('#ddlUserStatus').empty();
-                    $('#ddlUserStatus').get(0).options.length = 0;
-
-                    if (responseData != null) {
-                        $("#ddlUserStatus").get(0).options[0] = new Option("--Select--", "");
-                        $.each(responseData, function (index, item) {
-                            $('#ddlUserStatus').get(0).options[$('#ddlUserStatus').get(0).options.length] = new Option(item.Text, item.Value);
-                        });
-                    }
-
-                },
-                error: function () {
-
-                }
-            });
-        }*@
-
-        function CustomerInfoValidation(formObject) {
+        function ProductInfoValidation(formObject) {
 
             if (!formObject.ProductName) {
                 $('#txtProductName').focus();
-                ShowNotification('2', 'Product Name Can not be empty.');
+                ShowNotification('2', 'Product Name Can not be null or empty.');
                 return false;
             }
 
+           if (!formObject.CostPrice) {
+                $('#txtCostPrice').focus();
+               ShowNotification('2', 'Cost Price Can not be null or empty.');
+                return false;
+            }
+            if (!formObject.RetailSalePrice) {
+                $('#txtRetailSalePrice').focus();
+                ShowNotification('2', 'Retail Sale Price Can not be null or empty.');
+                return false;
+            }
+            if (!formObject.WholeSalePrice) {
+                $('#txtWholeSalePrice').focus();
+                ShowNotification('2', 'Whole Sale Price Can not be null or empty.');
+                return false;
+            }
 
             return true;
         }
-
-        @*function isUserExist(userName)
-        {
-            var exist = true;
-            $.ajax({
-                url: '@Url.Action("IsUserExist", "UserInfo")',
-                type: 'Get',
-                async: false,
-                data:{userName:userName},
-                success: function (responseData) {
-                    if (responseData.MessageType == 3) { exist = true } else { exist = false }
-                },
-                error: function () {
-                }
-            });
-
-            return exist;
-
-        }*@
 
     </script>
 

@@ -11,18 +11,19 @@ namespace PayRoll.Core.Model
     {
         public string ProductId { get; set; }
         public string ProductName { get; set; }
-        public string ProductGroup { get; set; }
+        public string GLAccountNo { get; set; }
         public string Unit { get; set; }
         public string CostPrice { get; set; }
         public string RetailSalePrice { get; set; }
         public string WholeSalePrice { get; set; }
+        public string Balance { get; set; }
         public string Status { get; set; }
         public string Retunable { get; set; }
         public string IsSync { get; set; }
         public string EffectiveDate { get; set; }
         public string ExpiryDate { get; set; }
         public string CreatedBy { get; set; }
-        public string CreatedDate { get; set; }
+        public string CreateDate { get; set; }
         public string ModifyBy { get; set; }
         public string ModifyDate { get; set; }
 
@@ -32,18 +33,19 @@ namespace PayRoll.Core.Model
             {
                 ProductId = row.Table.Columns.Contains("ProductId") ? Convert.ToString(row["ProductId"]) : "",
                 ProductName = row.Table.Columns.Contains("ProductName") ? Convert.ToString(row["ProductName"]) : "",
-                ProductGroup = row.Table.Columns.Contains("ProductGroup") ? Convert.ToString(row["ProductGroup"]) : "",
+                GLAccountNo = row.Table.Columns.Contains("GLAccountNo") ? Convert.ToString(row["GLAccountNo"]) : "",
                 Unit = row.Table.Columns.Contains("Unit") ? Convert.ToString(row["Unit"]) : "",
                 CostPrice = row.Table.Columns.Contains("CostPrice") ? Convert.ToString(row["CostPrice"]) : "",
                 RetailSalePrice = row.Table.Columns.Contains("RetailSalePrice") ? Convert.ToString(row["RetailSalePrice"]) : "",
                 WholeSalePrice = row.Table.Columns.Contains("WholeSalePrice") ? Convert.ToString(row["WholeSalePrice"]) : "",
+                Balance = row.Table.Columns.Contains("Balance") ? Convert.ToString(row["Balance"]) : "",
                 Status = row.Table.Columns.Contains("Status") ? Convert.ToString(row["Status"]) : "",
                 Retunable = row.Table.Columns.Contains("Retunable") ? Convert.ToString(row["Retunable"]) : "",
                 IsSync = row.Table.Columns.Contains("IsSync") ? Convert.ToString(row["IsSync"]) : "",
                 EffectiveDate = row.Table.Columns.Contains("EffectiveDate") ? Convert.ToString(row["EffectiveDate"]) : "",
                 ExpiryDate = row.Table.Columns.Contains("ExpiryDate") ? Convert.ToString(row["ExpiryDate"]) : "",
                 CreatedBy = row.Table.Columns.Contains("CreatedBy") ? Convert.ToString(row["CreatedBy"]) : "",
-                CreatedDate = row.Table.Columns.Contains("CreatedDate") ? Convert.ToString(row["CreatedDate"]) : "",
+                CreateDate = row.Table.Columns.Contains("CreateDate") ? Convert.ToString(row["CreateDate"]) : "",
                 ModifyBy = row.Table.Columns.Contains("ModifyBy") ? Convert.ToString(row["ModifyBy"]) : "",
                 ModifyDate = row.Table.Columns.Contains("ModifyDate") ? Convert.ToString(row["ModifyDate"]) : "",
             };

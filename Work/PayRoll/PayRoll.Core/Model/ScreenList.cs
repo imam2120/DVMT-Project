@@ -20,7 +20,7 @@ namespace PayRoll.Core.Model
             SaleEntry = 4003,
             Department = 5001,
             Designation = 5002,
-            ProductSetup = 6001
+            ProductInfo = 6001
         }
     }
 }

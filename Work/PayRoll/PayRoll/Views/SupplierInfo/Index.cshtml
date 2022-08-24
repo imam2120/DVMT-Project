@@ -4,9 +4,15 @@
     var permission = ViewData["Permission"] as PayRoll.Core.Utility.DBManager.Permission;
 }
 
+<link href="~/Content/kendo.common.min.css" rel="stylesheet" />
+
+<script src="~/Scripts/kendo.all.min.js"></script>
+@*<script src="~/Scripts/kendo.aspnetmvc.min.js"></script>*@
+<script src="~/Scripts/Common.js"></script>
+
 <div class="form-horizontal ">
     <fieldset class="content-group">
-        <legend class="text-bold">Supplier Setup</legend>
+        @*<legend class="text-bold">Supplier Setup</legend>*@
         <div class="form-group">
             <div class="col-lg-12">
                 <div class="col-lg-6">
@@ -126,7 +132,7 @@
 
     </fieldset>
     <fieldset class="content-group">
-        <legend class="text-bold">Supplier List</legend>        
+        @*<legend class="text-bold">Supplier List</legend>*@
         <div id="example">
             <div id="grid"></div>
         </div>
@@ -138,7 +144,7 @@
     <script type="text/javascript">
         _serverDate = null;
 
-        $(document).ready(function () {            
+        $(document).ready(function () {
             $("#grid").kendoGrid().empty();
             var result = CallAjax_POST('GetSupplier/SupplierInfo', '', false, false)
             if (result.length > 0) {
@@ -179,14 +185,13 @@
                     },
                     columns: [
 
-                        { field: "SupplierId", title: "Supplier Id", filterable: true, filterable: { multi: true, search: true }, width: "70px" },
+                        { field: "SupplierId", title: "Supplier Id", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
                         { field: "GLAccountNo", title: "Account No", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
                         { field: "SupplierName", title: "Supplier Name", filterable: true, filterable: { multi: true, search: true }, width: "120px" },
                         { field: "ContactNumber", title: "Contract Number", filterable: { multi: true, search: true }, width: "120px" },
                         { field: "EmailAddress", title: "Email Address", filterable: { multi: true, search: true }, width: "120px" },
-                        { field: "CurrentBalance", title: "Current Balance", filterable: true, filterable: { multi: true, search: true }, width: "120px" }, 
+                        { field: "CurrentBalance", title: "Current Balance", filterable: true, filterable: { multi: true, search: true }, width: "120px" },
                         { field: "DueBalance", title: "Due Balance", filterable: true, filterable: { multi: true, search: true }, width: "120px" },
-                        { field: "Status", title: "Status", filterable: true, filterable: { multi: true, search: true }, width: "50px" }, 
                         { field: "Select ", title: "Action", filterable: false, width: "50px", template: "<button type='button' class='btn btn-success btn-sm' id='btnEdit'>Select</button>" }
                     ],
 
@@ -200,7 +205,7 @@
         object.GLAccountNo = $('#txtGLAccountNo').val();
         object.ContactPerson = $('#txtContactPerson').val();
         object.ContactNumber = $('#txtContactNumber').val();
-        object.EmailAddress = $('#txtEmailAddress').val();  
+        object.EmailAddress = $('#txtEmailAddress').val();
         object.MailingAddress = $('#txtMailingAddress').val();
         object.CurrentBalance = $('#txtCurrentBalance').val();
         object.DueBalance = $('#txtDueBalance').val();
@@ -378,7 +383,7 @@
                 ShowNotification('2', 'Mailing Address Can not be empty.');
                 return false;
             }
-            
+
             return true;
         }
 
