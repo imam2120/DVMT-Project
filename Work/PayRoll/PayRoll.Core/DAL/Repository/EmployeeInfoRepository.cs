@@ -24,7 +24,7 @@ namespace PayRoll.Core.DAL.Repository
         public void CreateOrUpdate(EmployeeInfo employee, int create)
         {
 
-            Dictionary<string, string> keyValues = new Dictionary<string, string>();
+            Dictionary<string, object> keyValues = new Dictionary<string, object>();
             keyValues.Add("@EmployeeId", employee.EmployeeId);
             keyValues.Add("@GLAccountNo", employee.GLAccountNo);
             keyValues.Add("@EmployeeName", employee.EmployeeName);

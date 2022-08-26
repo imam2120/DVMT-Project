@@ -21,23 +21,46 @@ namespace PayRoll.Core.DAL.Repository
             _dbContext = dbContext;
             session = CurrentSession.GetCurrentSession();
         }
-        public void CreateOrUpdate(Department department, int create)
+        public void CreateOrUpdate(Department department, int operationType)
         {
+            try
+            {  
+            Dictionary<string, object> keyValues = new Dictionary<string, object>();
 
-            Dictionary<string, string> keyValues = new Dictionary<string, string>();
-            keyValues.Add("@DepartmentId", department.DepartmentId);
-            keyValues.Add("@DepartmentName", department.DepartmentName);
-            keyValues.Add("@Status", department.Status);
-            keyValues.Add("@CreateBy", department.CreatedBy);
-            keyValues.Add("@CreateDate", department.CreatedDate);
-            keyValues.Add("@MakeBy", department.MakeBy);
-            keyValues.Add("@MakeDate", department.MakeDate);
-            keyValues.Add("@Action", "1");
+                if (operationType == 1 && department.DepartmentId <= 0)
+                {
+                    //keyValues.Add("@DepartmentId", department.DepartmentId);
+                    keyValues.Add("@DepartmentName", department.DepartmentName);
+                    keyValues.Add("@Status", department.Status);
+                    keyValues.Add("@UserId", session.UserId);
+                    //keyValues.Add("@CreateDate", department.CreatedDate);
+                    //keyValues.Add("@MakeBy", department.MakeBy);
+                    //keyValues.Add("@MakeDate", department.MakeDate);
+                    keyValues.Add("@Action", 1);
+                }
+                else if (operationType == 2)
+                {
+                    keyValues.Add("@DepartmentId", department.DepartmentId);
+                    keyValues.Add("@DepartmentName", department.DepartmentName);
+                    keyValues.Add("@UserId", session.UserId);
+                    keyValues.Add("@Action", 2);
+                }
+                else if (operationType == 3 && department.DepartmentId > 0)
+                {
+                    keyValues.Add("@DepartmentId", department.DepartmentId);                   
+                    keyValues.Add("@Action", 3);
+                }
 
-            string spName = "USP_DepartmentEntry";
+
+                string spName = "USP_DepartmentEntry";
 
             _dbContext.GetExecuteNonQuery(spName, keyValues);
+            }
+            catch (Exception ex)
+            {
 
+                throw ex;
+            }
         }
         public void Delete(string departmentid)
         {

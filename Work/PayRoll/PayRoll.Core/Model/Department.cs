@@ -9,7 +9,7 @@ namespace PayRoll.Core.Model
 {
     public class Department
     {
-        public string DepartmentId { get; set; }
+        public int DepartmentId { get; set; }
         public string DepartmentName { get; set; }
         public string Status { get; set; }
         public string CreatedBy { get; set; }
@@ -20,7 +20,7 @@ namespace PayRoll.Core.Model
         {
             return new Department
             {
-                DepartmentId = row.Table.Columns.Contains("DepartmentId") ? Convert.ToString(row["DepartmentId"]) : "",
+                DepartmentId = row.Table.Columns.Contains("DepartmentId") ? Convert.ToInt32(row["DepartmentId"]) : 0,
                 DepartmentName = row.Table.Columns.Contains("DepartmentName") ? Convert.ToString(row["DepartmentName"]) : "",
                 Status = row.Table.Columns.Contains("Status") ? Convert.ToString(row["Status"]) : "",
                 CreatedBy = row.Table.Columns.Contains("CreatedBy") ? Convert.ToString(row["CreatedBy"]) : "",

@@ -184,7 +184,7 @@ namespace PayRoll.Core.Utility.DBManager
                 conn.Dispose();
             }
         }
-        public int GetExecuteNonQuery(string spName, Dictionary<string, string> inputParameters)
+        public int GetExecuteNonQuery(string spName, Dictionary<string, object> inputParameters)
         {
             SqlConnection conn = new SqlConnection(DatabaseConfiguration.ConnectionString);
             conn.Open();
@@ -199,7 +199,7 @@ namespace PayRoll.Core.Utility.DBManager
                 //    command.Parameters.AddWithValue(inputParameters[i].ParameterName, inputParameters[i].ParameterValue);
                 //}
 
-                foreach (KeyValuePair<string, string> entry in inputParameters)
+                foreach (KeyValuePair<string, object> entry in inputParameters)
                 {
                     command.Parameters.AddWithValue(entry.Key, entry.Value);
 

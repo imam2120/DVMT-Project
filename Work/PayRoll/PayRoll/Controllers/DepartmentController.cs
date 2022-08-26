@@ -20,10 +20,20 @@ namespace PayRoll.Controllers
             ViewData["Permission"] = data;
             return View();
         }
-        public ActionResult CreateOrUpdate(Department department)
+        public ActionResult CreateOrUpdate(Department department,int operationType)
         {
-            var data = _iDepartmentManager.CreateOrUpdate(department, 1);
+            Message data=new Message();
+            try
+            {
+   
+             data = _iDepartmentManager.CreateOrUpdate(department, operationType);
             return Json(data, JsonRequestBehavior.AllowGet);
+               
+            }
+            catch (Exception)
+            {
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
         }
         public ActionResult GetDepartment()
         {

@@ -24,7 +24,7 @@ namespace PayRoll.Core.DAL.Repository
         public void CreateOrUpdate(Designation designation, int create)
         {
 
-            Dictionary<string, string> keyValues = new Dictionary<string, string>();
+            Dictionary<string, object> keyValues = new Dictionary<string, object>();
             keyValues.Add("@DesignationId", designation.DesignationId);
             keyValues.Add("@DesignationName", designation.DesignationName);
             keyValues.Add("@Status", designation.Status);

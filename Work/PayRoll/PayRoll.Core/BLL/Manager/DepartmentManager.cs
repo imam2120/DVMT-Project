@@ -59,14 +59,29 @@ namespace PayRoll.Core.BLL.Interface
                 _dbContext.Close();
             }
         }
-        public Message CreateOrUpdate(Department department, int create)
+        public Message CreateOrUpdate(Department department, int operationType)
         {
             var message = new Message();
             try
             {
-                _dbContext.Open();
-                _iDepartmentRepository.CreateOrUpdate(department, create);
-                message = Message.SetMessages.SetSuccessMessage("Department Created Successfully");
+               // _dbContext.Open();
+                _iDepartmentRepository.CreateOrUpdate(department, operationType);
+
+                #region message generate
+                if (operationType==1)
+                {
+                    message = Message.SetMessages.SetSuccessMessage("Department Created Successfully");
+                }
+                else if (operationType == 2)
+                {
+                    message = Message.SetMessages.SetSuccessMessage("Department Updated Successfully");
+                }
+                else if (operationType == 3)
+                {
+                    message = Message.SetMessages.SetSuccessMessage("Department Deleted Successfully");
+                }
+                #endregion
+
             }
             catch (Exception ex)
             {
@@ -74,7 +89,7 @@ namespace PayRoll.Core.BLL.Interface
             }
             finally
             {
-                _dbContext.Close();
+               // _dbContext.Close();
             }
 
             return message;
