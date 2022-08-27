@@ -1,0 +1,248 @@
+﻿
+@{
+    /**/
+
+    ViewBag.Title = ":: Transaction information ::";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var permission = ViewData["Permission"] as PayRoll.Core.Utility.DBManager.Permission;
+}
+<link href="~/Content/kendo.common.min.css" rel="stylesheet" />
+
+<script src="~/Scripts/kendo.all.min.js"></script>
+@*<script src="~/Scripts/kendo.aspnetmvc.min.js"></script>*@
+<script src="~/Scripts/Common.js"></script>
+
+<style>
+    table {
+        width: 100%;
+        margin: 20px 0;
+        border-collapse: collapse;
+    }
+
+    table, th, td {
+        border: 1px solid #cdcdcd;
+    }
+
+        table th, table td {
+            padding: 5px;
+            text-align: left;
+        }
+</style>
+<div class="form-horizontal ">
+    <fieldset class="content-group">
+        <legend class="text-bold">Transaction Entry</legend>
+        <div class="form-group">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Transaction NO :</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtTransactionNO" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Transaction Date:</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtTransactionDate" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*<input type="text" id="name">*@
+
+
+
+
+        @*<input type="text" id="txtAmount" class="form-control"  placeholder="Amount">*@
+        @*<input type="button" class="btn btn-primary add-row" value="Add Row">*@
+
+
+        <div class="form-group">
+            <div class="col-md-12">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">AccountNo :</label>
+                        <div class="col-md-9">
+                            <select class="form-control" id="ddlAccountNo" name="ddlAccountNo"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Narration:</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtNarration" class="form-control" placeholder="Narration">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Dr :</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtDrAmount" class="form-control" placeholder="DrAmount">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Cr :</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtCrAmount" class="form-control" placeholder="CrAmount"> <br /> <input type="button" class="btn btn-primary add-row" value="Add"> &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; <button type="button" class="delete-row btn btn-danger">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+
+
+        @*<table id="t1">
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>AccountNo</th>
+                    <th>Narration</th>
+                    <th>DrAmount</th>
+                    <th>CrAmount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox" name="record1"></td>
+                    <td></td>
+                    <td> </td>
+                    <td>
+                    </td>
+                    <td> </td>
+                    <td><input type="button" class="btn btn-primary add-row" value="Add Row"></td>
+                </tr>
+            </tbody>
+        </table>*@
+
+
+        <table id="t2" >
+            <thead style="background-color :#cdcdcd;" class="font-weight-bold">
+                <tr >
+                    <th>Select</th>
+                    <th>AccountNo</th>
+                    <th>Narration</th>
+                    <th>DrAmount</th>
+                    <th>CrAmount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--<tr>-->
+                    @*<td><input type="checkbox" name="record"></td>
+                    <td id="t2"></td>
+                    <td id="t3"></td>
+                    <td id="t4"></td>
+                    <td id="t5"></td>*@
+                <!--</tr>-->
+            </tbody>
+        </table>
+       
+
+        @*----------------------------Data Save Method-------------------------------*@
+
+
+        <div class="form-group">
+            <label class="control-label col-md-2"> </label>
+            <div class="col-lg-10">
+                @if (permission.CanSave == "1")
+                {
+                    <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Save</button>
+                }
+                @*@if (permission.CanUpdate == "1")
+                {
+                    <button class="btn bg-teal" data-style="expand-left" id="btnUpdate" type="button" onclick="Update()"><i class="fa fa-save"></i>&nbsp; Update</button>
+                }
+                @if (permission.CanDelete == "1")
+                {
+                    <button class="btn btn-danger" data-style="expand-left" id="btnDelete" type="button" onclick="Delete()"><i class="icon-trash"></i>&nbsp; Delete</button>
+                }*@
+                <button class="btn btn-w-m btn-success btn-loading" type="button" id="btnReset" onclick="ResetForm()"><i class="glyphicon glyphicon-refresh"></i>&nbsp;Reset</button>
+            </div>
+        </div>
+    </fieldset>
+
+
+    <fieldset class="content-group">
+        @*<legend class="text-bold">Department List</legend>*@
+        @*<div id="divInfo">
+                <div class="form-group">
+                    <div class="table-responsive" id="div-employeeInfo">
+                    </div>
+                </div>
+            </div>*@
+        <div id="example">
+            <div id="grid"></div>
+        </div>
+    </fieldset>
+</div>
+
+
+
+
+@section scripts
+    {
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadAccountNO();
+        $('#txtTransactionDate').val('27-Aug-2022');
+        $(".add-row").click(function () {
+            //var name = $("#name").val();
+            //var email = $("#email").val();
+            if ($('#ddlAccountNo').val()>0) {
+                var markup = "<tr><td><input type='checkbox' name='record'></td><td>" + $('#ddlAccountNo').val() + "</td><td>" + $('#txtNarration').val() + "</td><td>" + $('#txtDrAmount').val() + "</td><td>" + $('#txtCrAmount').val() + "</td></tr>";
+                $("table tbody").append(markup);
+            }
+            
+        });
+
+        // Find and remove selected table rows
+        $(".delete-row").click(function () {
+            var count =0;
+            $("table tbody").find('input[name="record"]').each(function () {
+                if ($(this).is(":checked")) {
+                    count = count + 1;
+                    $(this).parents("tr").remove();
+                } 
+            });
+
+            if (count<=0) {
+                ShowNotification(3, "Select row first");
+            }
+        });
+
+
+
+    });
+
+
+
+    function LoadAccountNO() {
+        $.ajax({
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            url: "/Transaction/LoadAccountNO",
+            data: {},
+            async: false,
+            dataType: "json",
+            success: function (data) {
+                $("#ddlAccountNo").empty();
+                $("#ddlAccountNo").append($("<option></option>").val("-1").html("--Select Account No--"));
+                $.each(data, function (i, item) {
+                    //console.log(item);
+                    $("#ddlAccountNo").append($("<option></option>").val(item.Key).html(item.Value));
+                });
+            }
+        });
+        //$("#ddlAccountNo").selectpicker('refresh');
+    }
+</script>
+
+    }
