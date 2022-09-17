@@ -164,6 +164,54 @@ BEGIN
 	END 
 END
 
+GO
+
+ALTER PROCEDURE USP_POSTDATA(@TransDate datetime = NULL,
+							  @EntryInitial varchar (2),							 
+							  @TransNo varchar(11),
+							  @Action	int
+							  )AS
+BEGIN
+	declare @GeneratedTransNo varchar(11);
+	IF @EntryInitial = 'PP'
+	BEGIN
+		INSERT INTO ProductPurces
+		SELECT * FROM PreProductPurces;
+
+		DELETE FROM PreProductPurces;
+
+	END
+	IF @EntryInitial = 'PD'
+	BEGIN
+		INSERT INTO EmployeeTarget
+		SELECT * FROM PreEmployeeTarget;
+
+		DELETE FROM PreEmployeeTarget;
+	END 
+	IF @EntryInitial = 'PS'
+	BEGIN
+		INSERT INTO SaleEntry
+		SELECT * FROM PreSaleEntry;
+
+		DELETE FROM PreSaleEntry;
+	END 
+END
+
+--select  * from LastTransactionNo
+GO
+
+delete from LastTransactionNo;
+
+insert into LastTransactionNo values('PD','Product Distribution to Employee',0);
+insert into LastTransactionNo values('PS','Product Sale By Employee',0);
+insert into LastTransactionNo values('EE',	'Employee Expense Entry',0);
+insert into LastTransactionNo values('PP',	'Product Purces Entry',0);
+insert into LastTransactionNo values('CD',	'Customer Due Sale',0);
+insert into LastTransactionNo values('SD',	'Supplier Due Payment',0);
+
+select * from LastTransactionNo;
+
+
 
 
 
