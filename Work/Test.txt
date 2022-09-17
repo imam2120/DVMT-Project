@@ -145,6 +145,25 @@ END
 
 GO
 
+CREATE PROCEDURE USP_GetLastTransaction(@EntryInitial varchar (2),
+										@Action	int,
+										@TransNo varchar(11) out
+										)AS
+BEGIN
+	declare @GeneratedTransNo varchar(11);
+	IF @Action = 1
+	BEGIN
+		SELECT @GeneratedTransNo = TransType+RIGHT('00000000'+convert(varchar,LastSeqNo+1),9) 
+		FROM LastTransactionNo where TransType = @EntryInitial;
+
+		SELECT @TransNo  = @GeneratedTransNo;
+	END
+	IF @Action = 2
+	BEGIN
+		UPDATE A SET A.LastSeqNo = LastSeqNo + 1 FROM LastTransactionNo A where A.TransType = @EntryInitial;
+	END 
+END
+
 
 
 
