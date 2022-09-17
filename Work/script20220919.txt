@@ -1,0 +1,79 @@
+Create Table PreProductPurces (TransDate datetime, 
+							   TransNo varchar(11), 
+							   ProductAccNo varchar(11), 
+							   OpeningBalance numeric(18,2), 
+							   PurcesAmount numeric(18,2), 
+							   ClosingBalance numeric(18,2), 
+							   ByCashAmount numeric(18,2), 
+							   ByBankAmount numeric(18,2),
+							   DueAmount numeric(18,2), 
+							   SupAccNo varchar(11), 
+							   SupDueAmount numeric(18,2), 
+							   SupCurrBalance numeric(18,2)
+							   );
+GO
+
+Create Table ProductPurces (TransDate datetime, 
+							TransNo varchar(11), 
+							ProductAccNo varchar(11), 
+							OpeningBalance numeric(18,2), 
+							PurcesAmount numeric(18,2), 
+							ClosingBalance numeric(18,2), 
+							ByCashAmount numeric(18,2), 
+							ByBankAmount numeric(18,2),
+							DueAmount numeric(18,2), 
+							SupAccNo varchar(11), 
+							SupDueAmount numeric(18,2), 
+							SupCurrBalance numeric(18,2)
+							);
+GO
+Create Table PreEmployeeTarget (TransDate datetime, 
+								TransNo varchar(11), 
+								ProductAccNo varchar(11), 
+								PrdOpenBalance numeric(18,2), 
+								EmpAccNo nvarchar(11), 
+								OpeningBalance numeric(18,2), 
+								TargetAmount numeric(18,2), 
+								ClosingBalance numeric(18,2)
+								);
+GO
+Create Table EmployeeTarget (TransDate datetime, 
+							 TransNo varchar(11), 
+							 ProductAccNo varchar(11), 
+							 PrdOpenBalance numeric(18,2), 
+							 EmpAccNo nvarchar(11), 
+							 OpeningBalance numeric(18,2), 
+							 TargetAmount numeric(18,2), 
+							 ClosingBalance numeric(18,2)
+							 );
+GO
+Create Table PreSaleEntry (TransDate datetime, 
+						   TransNo varchar(11), 
+						   EmpAccNo varchar(11), 
+						   TargetAmount numeric(18,2), 
+						   SaleAmount numeric(18,2), 
+						   ByCashAmount numeric(18,2), 
+						   ByBankAmount numeric(18,2), 
+						   DueAmount numeric(18,2),
+						   SaleDueAmount numeric(18,2),
+						   CusAccNo varchar(11), 
+						   CusDueAmount numeric(18,2), 
+						   CurrBalance numeric(18,2)
+						   );
+GO
+Create Table SaleEntry (TransDate datetime, 
+						TransNo varchar(11), 
+						EmpAccNo varchar(11), 
+						TargetAmount numeric(18,2), 
+						SaleAmount numeric(18,2), 
+						ByCashAmount numeric(18,2), 
+						ByBankAmount numeric(18,2), 
+						DueAmount numeric(18,2),
+						SaleDueAmount numeric(18,2),
+						CusAccNo varchar(11), 
+						CusDueAmount numeric(18,2), 
+						CurrBalance numeric(18,2)
+						);
+GO
+
+
