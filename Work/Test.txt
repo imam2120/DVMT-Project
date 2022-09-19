@@ -212,6 +212,57 @@ insert into LastTransactionNo values('SD',	'Supplier Due Payment',0);
 select * from LastTransactionNo;
 
 
+===========================Last Added ===================================
+Create Proc USP_PreProductPurces
+(
+@TransDate	datetime ='01-01-2022',
+@TransNo	varchar(300),
+@ProductAccNo	varchar(300),
+@OpeningBalance	numeric(18,3),
+@PurcesAmount	numeric(18,3),
+@ClosingBalance	numeric(18,3),
+@ByCashAmount	numeric(18,3),
+@ByBankAmount	numeric(18,3),
+@DueAmount	numeric(18,3),
+@SupAccNo	varchar(300),
+@SupDueAmount	numeric(18,3),
+@SupCurrBalance	numeric(18,3),
+@qryOption int
+)
+As
+If (@qryOption=1)
+Begin
+Insert Into PreProductPurces(TransDate,TransNo,ProductAccNo,OpeningBalance,PurcesAmount,
+ClosingBalance,ByCashAmount,ByBankAmount,DueAmount,SupAccNo,SupDueAmount,SupCurrBalance)
+Values (getdate(),@TransNo,@ProductAccNo,@OpeningBalance,@PurcesAmount,@ClosingBalance
+,@ByCashAmount,@ByBankAmount,@DueAmount,@SupAccNo,@SupDueAmount,@SupCurrBalance)
+
+ Set @TransDate  =GETDATE();
+
+exec USP_POSTDATA @TransDate,'PP','000000001',0
+End
+
+--======================================================
+
+Create Proc [dbo].[USP_GetProductPurces]
+(
+@qryOption int =0
+)
+As
+if(@qryOption=1)
+begin 
+Select  PD.GLAccountNo  Value,PD.GLAccountNo +'-'+ PD.ProductName [Key]   from ChartOfAccounts CA 
+Join Product PD ON CA.GLAccountNo =PD.GLAccountNo 
+Where PD.Status=0 And LEFT(PD.GLAccountNo,3)='PRD' 
+end
+if(@qryOption=2)
+begin 
+Select SPL.GLAccountNo [Key] ,SPL.GLAccountNo +'-'+ SPL.SupplierName Value from ChartOfAccounts CA 
+Join Supplier SPL ON CA.GLAccountNo =SPL.GLAccountNo 
+Where SPL.Status=0 And LEFT(SPL.GLAccountNo,3)='SUP' 
+end
+
+
 
 
 
