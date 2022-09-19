@@ -145,73 +145,71 @@
         $(document).ready(function () {
             LoadProduct();
             LoadSupplier();
+           // $("#ddlProductName").change(function () {
+             
 
-            $("#grid").kendoGrid().empty();
-            var result = CallAjax_POST('GetEmployee/EmployeeInfo', '', false, false)
-            if (result.length > 0) {
-                PopulateGridView(result);
-            } else {
-                alert("Error! Please Contact..");
-            }
+            //$("#grid").kendoGrid().empty();
+            //var result = CallAjax_POST('GetEmployee/EmployeeInfo', '', false, false)
+            //if (result.length > 0) {
+            //    PopulateGridView(result);
+            //} else {
+            //    alert("Error! Please Contact..");
+            //}
 
-            function PopulateGridView(result) {                
-                $("#grid").kendoGrid({
-                    dataSource: result,
-                    pageable: true,
-                    filterable: true,
-                    pageSize: 20,
-                    pageable: true,
-                    pageable: {
-                        input: false,
-                        numeric: true,
-                        butonCount: 5,
-                        pageSize: 20,
-                        alwaysVisible: true,
-                        previousNext: true,
-                        serverPaging: true,
-                        serverFiltering: true,
-                    },                    
-                    selectable: true,                    
-                    search: {
-                        fields: [
-                            { name: "EmployeeId", operator: "eq" },
-                            { name: "EmployeeName", operator: "contains" },
-                            { name: "FatherName", operator: "contains" },
-                            { name: "MotherName", operator: "contains" },
-                        ]
-                    },
-                    columns: [
+            //function PopulateGridView(result) {                
+            //    $("#grid").kendoGrid({
+            //        dataSource: result,
+            //        pageable: true,
+            //        filterable: true,
+            //        pageSize: 20,
+            //        pageable: true,
+            //        pageable: {
+            //            input: false,
+            //            numeric: true,
+            //            butonCount: 5,
+            //            pageSize: 20,
+            //            alwaysVisible: true,
+            //            previousNext: true,
+            //            serverPaging: true,
+            //            serverFiltering: true,
+            //        },                    
+            //        selectable: true,                    
+            //        search: {
+            //            fields: [
+            //                { name: "EmployeeId", operator: "eq" },
+            //                { name: "EmployeeName", operator: "contains" },
+            //                { name: "FatherName", operator: "contains" },
+            //                { name: "MotherName", operator: "contains" },
+            //            ]
+            //        },
+            //        columns: [
 
-                        { field: "EmployeeId", title: "Employee Id", filterable: true, filterable: { multi: true, search: true }, width: "70px" },
-                        { field: "GLAccountNo", title: "Account No", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
-                        { field: "NationalId", title: "National Id", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
-                        { field: "ContractNumber", title: "Contract Number", filterable: true, filterable: { multi: true, search: true }, width: "90px" },
-                        { field: "EmployeeName", title: "Employee Name", filterable: true, filterable: { multi: true, search: true }, width: "120px" },
-                        { field: "FatherName", title:"Father's Name", filterable: true, filterable: { multi: true, search: true }, width: "120px" },
-                        { field: "MotherName", title: "Mother's Name", filterable: { multi: true, search: true }, width: "120px" },
-                        { field: "Select ", title: "Action", filterable: false, width: "50px", template: "<button type='button' class='btn btn-success btn-sm' id='btnEdit'>Select</button>" }
-                    ],
+            //            { field: "EmployeeId", title: "Employee Id", filterable: true, filterable: { multi: true, search: true }, width: "70px" },
+            //            { field: "GLAccountNo", title: "Account No", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
+            //            { field: "NationalId", title: "National Id", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
+            //            { field: "ContractNumber", title: "Contract Number", filterable: true, filterable: { multi: true, search: true }, width: "90px" },
+            //            { field: "EmployeeName", title: "Employee Name", filterable: true, filterable: { multi: true, search: true }, width: "120px" },
+            //            { field: "FatherName", title:"Father's Name", filterable: true, filterable: { multi: true, search: true }, width: "120px" },
+            //            { field: "MotherName", title: "Mother's Name", filterable: { multi: true, search: true }, width: "120px" },
+            //            { field: "Select ", title: "Action", filterable: false, width: "50px", template: "<button type='button' class='btn btn-success btn-sm' id='btnEdit'>Select</button>" }
+            //        ],
 
-                });
-            }
+            //    });
+            //}
         });
 
     function FormDataAsObject() {
         var object = new Object();
-        object.EmployeeName = $('#txtEmployeeName').val();
-        object.ContractNumber = $('#txtContractNumber').val();
-        object.NationalId = $('#txtNationalId').val();
-        object.EmergencyNumber = $('#txtEmergencyNumber').val();
-        object.GenderId = $('#ddlGender').val();
-        object.FatherName = $('#txtFatherName').val();
-        object.MaritalStatus = $('#ddlMaritalStatus').val();
-        object.MotherName = $('#txtMotherName').val();
-        object.DeptId = $('#ddlDepartment').val();
-        object.PresentAddress = $('#txtPresentAddress').val();
-        object.DesignationId = $('#ddlDesignation').val();
-        object.PermanentAddress = $('#txtPermanentAddress').val();
-        object.DateOfBirth = $('#txtDateOfBirth').val();
-        object.BloodGroup = $('#ddlBloodGroup').val();       
+        object.ProductAccNo = $('#ddlProductName').find(':selected').val();
+        object.OpeningBalance = $('#txtOpeningBalance').val();
+        object.SupAccNo = $('#ddlSuplier').find(':selected').val();
+        object.SupDueAmount = $('#txtDueAmountToSuplier').val();
+        object.PurcesAmount = $('#txtBalancePurces').val();
+        object.SupCurrBalance = $('#txtCurrentBalance').val();
+        object.ByCashAmount = $('#txtCashAmount').val();
+        object.ByBankAmount = $('#txtBankAmount').val();
+        object.SupDueAmount = $('#txtDueAmount').val();
+          
 
         return object;
     }
@@ -263,25 +261,20 @@
             if (EmployeeInfoValidation(object)) {
 
                 $.ajax({
-                    url: '@Url.Action("CreateOrUpdate", "EmployeeInfo")',
+                    url: '@Url.Action("CreateOrUpdate", "ProductPurces")',
                     method: 'post',
                     dataType: 'json',
                     async: false,
                     data: {
-                        EmployeeName: object.EmployeeName,
-                        ContractNumber: object.ContractNumber,
-                        NationalId: object.NationalId,
-                        EmergencyNumber : object.EmergencyNumber,
-                        GenderId : object.GenderId,
-                        FatherName : object.FatherName,
-                        MaritalStatus : object.MaritalStatus,
-                        MotherName : object.MotherName,
-                        DeptId : object.DeptId,
-                        PresentAddress : object.PresentAddress,
-                        DesignationId : object.DesignationId,
-                        PermanentAddress : object.PermanentAddress,
-                        DateOfBirth: object.DateOfBirth,
-                        BloodGroup: object.BloodGroup,
+                        ProductAccNo: object.ProductAccNo,
+                        OpeningBalance: object.OpeningBalance,
+                        SupAccNo: object.SupAccNo,
+                        SupDueAmount: object.SupDueAmount,
+                        PurcesAmount: object.PurcesAmount,
+                        SupCurrBalance: object.SupCurrBalance,
+                        ByCashAmount: object.ByCashAmount,
+                        ByBankAmount: object.ByBankAmount,
+                        SupDueAmount: object.SupDueAmount,              
                         
                     },
                     success: function (data) {
@@ -302,39 +295,39 @@
 
         function EmployeeInfoValidation(formObject) {
 
-            if (!formObject.EmployeeName) {
-                $('#txtEmployeeName').focus();
-                ShowNotification('2', 'Employee Name Can not be empty.');
-                return false;
-            }
+            //if (!formObject.EmployeeName) {
+            //    $('#txtEmployeeName').focus();
+            //    ShowNotification('2', 'Employee Name Can not be empty.');
+            //    return false;
+            //}
 
-            if (!formObject.ContractNumber) {
-                $('#txtContractNumber').focus();
-                ShowNotification('2', 'Contract No Can not be empty.');
-                return false;
-            }
+            //if (!formObject.ContractNumber) {
+            //    $('#txtContractNumber').focus();
+            //    ShowNotification('2', 'Contract No Can not be empty.');
+            //    return false;
+            //}
 
-            if (!formObject.NationalId) {
-                $('#txtNationalId').focus();
-                ShowNotification('2', 'National ID Can not be empty.');
-                return false;
-            }
-            if (!formObject.DeptId) {
-                $('#ddlDesignation').focus();
-                ShowNotification('2', 'Department Can not be empty.');
-                return false;
-            }
-            if (!formObject.PresentAddress) {
-                $('#txtPresentAddress').focus();
-                ShowNotification('2', 'Present Address Can not be empty.');
-                return false;
-            }
+            //if (!formObject.NationalId) {
+            //    $('#txtNationalId').focus();
+            //    ShowNotification('2', 'National ID Can not be empty.');
+            //    return false;
+            //}
+            //if (!formObject.DeptId) {
+            //    $('#ddlDesignation').focus();
+            //    ShowNotification('2', 'Department Can not be empty.');
+            //    return false;
+            //}
+            //if (!formObject.PresentAddress) {
+            //    $('#txtPresentAddress').focus();
+            //    ShowNotification('2', 'Present Address Can not be empty.');
+            //    return false;
+            //}
 
-            if (!formObject.PermanentAddress) {
-                $('#txtPermanentAddress').focus();
-                ShowNotification('2', 'Permanent Address Can not be empty.');
-                return false;
-            }
+            //if (!formObject.PermanentAddress) {
+            //    $('#txtPermanentAddress').focus();
+            //    ShowNotification('2', 'Permanent Address Can not be empty.');
+            //    return false;
+            //}
 
 
             return true;
@@ -345,15 +338,15 @@
             $.ajax({
                 type: "GET",
                 contentType: "application/json; charset=utf-8",
-                url: "/EmployeeInfo/LoadMaritalStatus",
+                url: "/ProductPurces/LoadProductName",
                 data: {},
                 async: false,
                 dataType: "json",
                 success: function (data) {
-                    $("#ddlMaritalStatus").empty();
-                    $("#ddlMaritalStatus").append($("<option></option>").val("-1").html("--Select--"));
+                    $("#ddlProductName").empty();
+                    $("#ddlProductName").append($("<option></option>").val("-1").html("--Select--"));
                     $.each(data, function (i, item) {                       
-                        $("#ddlMaritalStatus").append($("<option></option>").val(item.Key).html(item.Value));
+                        $("#ddlProductName").append($("<option></option>").val(item.Key).html(item.Value));
                     });
                 }
             });
@@ -364,22 +357,62 @@
             $.ajax({
                 type: "GET",
                 contentType: "application/json; charset=utf-8",
-                url: "/EmployeeInfo/LoadBloodGroup",
+                url: "/ProductPurces/LoadSupplierName",
                 data: {},
                 async: false,
                 dataType: "json",
                 success: function (data) {
-                    $("#ddlBloodGroup").empty();
-                    $("#ddlBloodGroup").append($("<option></option>").val("-1").html("--Select--"));
+                    $("#ddlSuplier").empty();
+                    $("#ddlSuplier").append($("<option></option>").val("-1").html("--Select--"));
                     $.each(data, function (i, item) {                        
-                        $("#ddlBloodGroup").append($("<option></option>").val(item.Key).html(item.Value));
+                        $("#ddlSuplier").append($("<option></option>").val(item.Key).html(item.Value));
                     });
                 }
             });
             
         }
 
+       
+        //function LoadProductBalance() {
+        //    $.ajax({
+        //        type: "GET",
+        //        contentType: "application/json; charset=utf-8",
+        //        url: "/Transaction/LoadProductBalance",
+        //        data: {},
+        //        async: false,
+        //        dataType: "json",
+        //        success: function (data) {
+        //            $("#txtTotalBalnce").val(data);
 
+        //        }
+        //    });
+        //    //$("#ddlAccountNo").selectpicker('refresh');
+        //}
+        $('#ddlProductName').on('change', function () {
+        //$(document).on('change', '#ddlProductName', function () {
+            debugger;
+            alert($(this).find(':selected').val());
+            // Pure JS
+            //var selectedVal = this.value;
+            //var selectedText = this.options[this.selectedIndex].text;
+            //url:  "/CKDLAssetRegister/LoaddlFixedAssetSubCategoryData?Id=" + fixedAssetSubCategoryId,?Id = " + fixedAssetSubCategoryId
+
+            // jQuery
+            //var selectedVal = $('#ddlProductName').find(':selected').val();
+            //var selectedText = $(this).find(':selected').text();
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "/Transaction/LoadProductBalance?ProductId=" + $(this).find(':selected').val(),
+                data: {},
+                async: false,
+                dataType: "json",
+                success: function (data) {
+                    $("#txtOpeningBalance").val(data);
+
+                }
+            });
+        });
     </script>
 
 }

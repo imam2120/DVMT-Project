@@ -12,6 +12,5 @@ namespace PayRoll.Core.BLL.Interface
         IEnumerable<ProductInfo> GetProduct();
         ProductInfo GetAProduct(string productid);
         Message CreateOrUpdate(ProductInfo product, int create);
-        Message Delete(string productid);
     }
 }
