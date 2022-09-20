@@ -353,6 +353,30 @@ namespace PayRoll.Core.Utility.DBManager
                 throw ex;
             }
         }
+
+        public string GetDataSingle(string query)
+        {
+            _command = dbFactory.CreateCommand();
+            string Value = "";
+
+            try
+            {
+                _command.CommandText = query;
+                _command.Connection = _connection;
+                DbDataReader result = _command.ExecuteReader();
+                if (result.Read())
+                {
+                    Value = result[0].ToString();
+                }
+                result.Close();
+                _connection.Close();
+                return Value;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public DataTable GetDDlist(DDLSourceModel sourceModel)
         {
             DataTable dSet = new DataTable();
