@@ -20,6 +20,7 @@ namespace PayRoll.Core.DAL.Interface
         DataTable GetEmployeeBasicInfo(string EmployeeId);
         DataTable GetDepartment(DDLSourceModel sourceModel);
         DataTable GetLoadCombo(DDLSourceModel sourceModel);
+        string GetDataSingle(string strQry);
 
     }
 }

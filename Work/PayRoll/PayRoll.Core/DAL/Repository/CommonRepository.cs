@@ -95,5 +95,10 @@ namespace PayRoll.Core.DAL.Repository
             return data;
         }
 
+      public string GetDataSingle(string strQry)
+        {
+            var result = _dbContext.GetDataSingle(strQry);
+            return result;
+        }
     }
 }

@@ -22,6 +22,7 @@ namespace PayRoll.Core.BLL.Interface
         Object GetEmployeeBasicInfo(string EmployeeId);
         IEnumerable<DDLSourceModel> GetDepartment(DDLSourceModel sourceModel);
         IEnumerable<DDLSourceModel> GetLoadCombo(DDLSourceModel sourceModel);
+        string GetDataSingle(string strQry);
 
     }
 }

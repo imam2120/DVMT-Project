@@ -98,6 +98,25 @@ namespace PayRoll.Core.BLL.Interface
 
             }
         }
+        public string GetDataSingle(string strQry)
+        {
+            try
+            {
+                _dbContext.Open();
+                var result = _iCommonRepository.GetDataSingle(strQry);
+                return result;
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+            finally
+            {
+                _dbContext.Close();
+
+            }
+        }
         public IEnumerable<SelectListItem> GetUserStatuses()
         {
             try
