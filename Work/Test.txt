@@ -262,6 +262,121 @@ Join Supplier SPL ON CA.GLAccountNo =SPL.GLAccountNo
 Where SPL.Status=0 And LEFT(SPL.GLAccountNo,3)='SUP' 
 end
 
+----------------------Last Modified--------------------------21-sep-2022
+
+
+ALTER PROCEDURE [dbo].[USP_POSTDATA]( @TransDate datetime = NULL,
+									  @EntryInitial varchar (2),							 
+									  @TransNo varchar(11),
+									  @Action	int
+									)AS
+BEGIN
+	declare @GeneratedTransNo varchar(11), @lastTransNo varchar(11), @count int;
+	IF @EntryInitial = 'PP'
+	declare @PurcsAmount numeric(18,2),@CashAmount  numeric(18,2), @bankAmount numeric(18,2), @dueAmount numeric(18,2), @AccountNo varchar(11),@PrdAccountNo varchar(11);
+	BEGIN
+		
+		if exists(select * from PreProductPurces where TransNo = @TransNo and CONVERT(DATE,TransDate) = CONVERT(DATE,@TransDate))
+		BEGIN
+
+			SELECT @PurcsAmount =ISNULL(PurcesAmount,0), @CashAmount =ISNULL(ByCashAmount, 0), @bankAmount =ISNULL(ByBankAmount, 0), @AccountNo = SupAccNo,
+				   @PrdAccountNo = ProductAccNo
+			FROM PreProductPurces where CONVERT(DATE,TransDate) = CONVERT(DATE,TransDate);
+
+			select @dueAmount = @PurcsAmount - (@CashAmount + @bankAmount);
+
+			update PreProductPurces set DueAmount = @dueAmount, SupDueAmount = @dueAmount, SupCurrBalance = @PurcsAmount;
+
+			update Supplier set DueBalance = ISNULL(DueBalance,0) + @dueAmount, 
+								CurrentBalance = ISNULL(CurrentBalance,0) + @PurcsAmount  
+			Where GLAccountNo = @AccountNo;
+
+			update Product set CostPrice = ISNULL(CostPrice,0) + @PurcsAmount, RetailSalePrice = ISNULL(RetailSalePrice,0) + @PurcsAmount,
+							   WholeSalePrice = ISNULL(WholeSalePrice,0) + @PurcsAmount, Balance = ISNULL(Balance,0) + @PurcsAmount
+			wHERE GLAccountNo = @PrdAccountNo ;
+
+			--select * from Product;
+
+			INSERT INTO ProductPurces
+			SELECT * FROM PreProductPurces;
+
+			Exec USP_GetLastTransaction @EntryInitial, 2, @TransNo;
+
+		END
+		
+		DELETE FROM PreProductPurces;
+
+	END
+	IF @EntryInitial = 'PD'
+	BEGIN
+		INSERT INTO EmployeeTarget
+		SELECT * FROM PreEmployeeTarget;
+
+		select @count = count(*) from ProductPurces Where TransNo = @TransNo;
+
+		if @count > 0 
+		begin
+			Exec USP_GetLastTransaction @EntryInitial, 2, @TransNo;
+		end
+
+		DELETE FROM PreEmployeeTarget;
+	END 
+	IF @EntryInitial = 'PS'
+	BEGIN
+		INSERT INTO SaleEntry
+		SELECT * FROM PreSaleEntry;
+
+		select @count = count(*) from ProductPurces Where TransNo = @TransNo;
+
+		if @count > 0 
+		begin
+			Exec USP_GetLastTransaction @EntryInitial, 2, @TransNo;
+		end
+
+		DELETE FROM PreSaleEntry;
+	END 
+END
+
+--select  * from LastTransactionNo
+
+GO
+
+ALTER Proc USP_PreProductPurces
+(
+@TransDate	datetime = '01-01-2022',
+@TransNo	varchar(300),
+@ProductAccNo	varchar(300),
+@OpeningBalance	numeric(18,3),
+@PurcesAmount	numeric(18,3),
+@ClosingBalance	numeric(18,3),
+@ByCashAmount	numeric(18,3),
+@ByBankAmount	numeric(18,3),
+@DueAmount	numeric(18,3),
+@SupAccNo	varchar(300),
+@SupDueAmount	numeric(18,3),
+@SupCurrBalance	numeric(18,3),
+@qryOption int
+)
+As
+If (@qryOption=1)
+Begin
+Insert Into PreProductPurces(TransDate,TransNo,ProductAccNo,OpeningBalance,PurcesAmount,
+ClosingBalance,ByCashAmount,ByBankAmount,DueAmount,SupAccNo,SupDueAmount,SupCurrBalance)
+Values (getdate(),@TransNo,@ProductAccNo,@OpeningBalance,@PurcesAmount,@ClosingBalance
+,@ByCashAmount,@ByBankAmount,@DueAmount,@SupAccNo,@SupDueAmount,@SupCurrBalance)
+
+ Set @TransDate  =GETDATE();
+
+exec USP_POSTDATA @TransDate,'PP',@TransNo,0
+
+End
+
+
+GO
+
+
+
+
 
 
 

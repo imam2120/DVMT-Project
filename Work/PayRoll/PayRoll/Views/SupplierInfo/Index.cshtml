@@ -145,6 +145,11 @@
         _serverDate = null;
 
         $(document).ready(function () {
+
+            $('#txtCurrentBalance').prop('disabled', true);
+            $('#txtDueBalance').prop('disabled', true);
+
+
             $("#grid").kendoGrid().empty();
             var result = CallAjax_POST('GetSupplier/SupplierInfo', '', false, false)
             if (result.length > 0) {

@@ -23,7 +23,8 @@ namespace PayRoll.Core.DAL.Repository
 
             Dictionary<string, object> keyValues = new Dictionary<string, object>();
 
-            keyValues.Add("@TransNo", "000000001");
+            keyValues.Add("@TransDate",System.DateTime.Now);
+            keyValues.Add("@TransNo", preProductPurces.TransNo);
             keyValues.Add("@ProductAccNo", preProductPurces.ProductAccNo);
             keyValues.Add("@OpeningBalance", preProductPurces.OpeningBalance);
             keyValues.Add("@PurcesAmount", preProductPurces.PurcesAmount);

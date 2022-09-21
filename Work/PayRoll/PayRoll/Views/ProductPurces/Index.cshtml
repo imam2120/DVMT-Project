@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = ":: Product Purses Information ::";
+    ViewBag.Title = ":: Product Purchase Information ::";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var permission = ViewData["Permission"] as PayRoll.Core.Utility.DBManager.Permission;
 }
@@ -65,7 +65,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label class="control-label col-lg-3">Current Balance:</label>
+                        <label class="control-label col-lg-3">Prod. Current Balance:</label>
                         <div class="col-lg-5">
                             <input type="text" id="txtCurrentBalance" readonly="readonly" class="form-control">
                         </div>
@@ -96,6 +96,7 @@
         <div class="form-group">
             <div class="col-lg-12">
                 <div class="col-lg-6">
+                    <input type="text" id="txtLastTransNo" hidden ="hidden" class="form-control">
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
@@ -144,92 +145,37 @@
 
         $(document).ready(function () {
             LoadProduct();
-            LoadSupplier();
-           // $("#ddlProductName").change(function () {
-             
-
-            //$("#grid").kendoGrid().empty();
-            //var result = CallAjax_POST('GetEmployee/EmployeeInfo', '', false, false)
-            //if (result.length > 0) {
-            //    PopulateGridView(result);
-            //} else {
-            //    alert("Error! Please Contact..");
-            //}
-
-            //function PopulateGridView(result) {                
-            //    $("#grid").kendoGrid({
-            //        dataSource: result,
-            //        pageable: true,
-            //        filterable: true,
-            //        pageSize: 20,
-            //        pageable: true,
-            //        pageable: {
-            //            input: false,
-            //            numeric: true,
-            //            butonCount: 5,
-            //            pageSize: 20,
-            //            alwaysVisible: true,
-            //            previousNext: true,
-            //            serverPaging: true,
-            //            serverFiltering: true,
-            //        },                    
-            //        selectable: true,                    
-            //        search: {
-            //            fields: [
-            //                { name: "EmployeeId", operator: "eq" },
-            //                { name: "EmployeeName", operator: "contains" },
-            //                { name: "FatherName", operator: "contains" },
-            //                { name: "MotherName", operator: "contains" },
-            //            ]
-            //        },
-            //        columns: [
-
-            //            { field: "EmployeeId", title: "Employee Id", filterable: true, filterable: { multi: true, search: true }, width: "70px" },
-            //            { field: "GLAccountNo", title: "Account No", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
-            //            { field: "NationalId", title: "National Id", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
-            //            { field: "ContractNumber", title: "Contract Number", filterable: true, filterable: { multi: true, search: true }, width: "90px" },
-            //            { field: "EmployeeName", title: "Employee Name", filterable: true, filterable: { multi: true, search: true }, width: "120px" },
-            //            { field: "FatherName", title:"Father's Name", filterable: true, filterable: { multi: true, search: true }, width: "120px" },
-            //            { field: "MotherName", title: "Mother's Name", filterable: { multi: true, search: true }, width: "120px" },
-            //            { field: "Select ", title: "Action", filterable: false, width: "50px", template: "<button type='button' class='btn btn-success btn-sm' id='btnEdit'>Select</button>" }
-            //        ],
-
-            //    });
-            //}
+            LoadSupplier(); 
+            GetLastTransaction();
         });
 
     function FormDataAsObject() {
         var object = new Object();
+        object.TransNo = $('#txtLastTransNo').val();
         object.ProductAccNo = $('#ddlProductName').find(':selected').val();
         object.OpeningBalance = $('#txtOpeningBalance').val();
         object.SupAccNo = $('#ddlSuplier').find(':selected').val();
         object.SupDueAmount = $('#txtDueAmountToSuplier').val();
         object.PurcesAmount = $('#txtBalancePurces').val();
-        object.SupCurrBalance = $('#txtCurrentBalance').val();
+        object.ClosingBalance = $('#txtCurrentBalance').val();
         object.ByCashAmount = $('#txtCashAmount').val();
         object.ByBankAmount = $('#txtBankAmount').val();
-        object.SupDueAmount = $('#txtDueAmount').val();
-          
+        object.DueAmount = $('#txtDueAmount').val();          
 
         return object;
     }
 
     function ResetForm() {
-        $('#txtEmployeeName').val('');
-        $('#txtContractNumber').val('');
-        $('#txtNationalId').val('');
-        $('#txtEmergencyNumber').val('');
-        $('#ddlGender').val('');
-        $('#txtFatherName').val('');
-        $('#ddlMaritalStatus').val('');
-        $('#txtMotherName').val('');
-        $('#ddlDepartment').val('');
-        $('#txtPresentAddress').val('');
-        $('#ddlDesignation').val('');
-        $('#txtPermanentAddress').val('');
-        $('#txtDateOfBirth').val('');
-        $('#ddlBloodGroup').val('');
-        $('#txtDateOfBirth').val('');
+        $('#txtLastTransNo').val('');
+        $('#ddlProductName').prop('selectedIndex', 0);
+        $('#txtOpeningBalance').val('');
+        $('#ddlSuplier').prop('selectedIndex', 0);
+        $('#txtDueAmountToSuplier').val('');
+        $('#txtBalancePurces').val('');
+        $('#txtCurrentBalance').val('');
+        $('#txtCashAmount').val('');
+        $('#txtBankAmount').val('');
+        $('#txtDueAmount').val('');      
 
         EnableDisableControls("1");
     }
@@ -258,7 +204,7 @@
             var object = FormDataAsObject();
             debugger;
 
-            if (EmployeeInfoValidation(object)) {
+            if (ProductPurchaseValidation(object)) {
 
                 $.ajax({
                     url: '@Url.Action("CreateOrUpdate", "ProductPurces")',
@@ -266,15 +212,16 @@
                     dataType: 'json',
                     async: false,
                     data: {
+                        TransNo: object.TransNo,
                         ProductAccNo: object.ProductAccNo,
                         OpeningBalance: object.OpeningBalance,
                         SupAccNo: object.SupAccNo,
                         SupDueAmount: object.SupDueAmount,
                         PurcesAmount: object.PurcesAmount,
-                        SupCurrBalance: object.SupCurrBalance,
+                        ClosingBalance: object.ClosingBalance,
                         ByCashAmount: object.ByCashAmount,
                         ByBankAmount: object.ByBankAmount,
-                        SupDueAmount: object.SupDueAmount,              
+                        DueAmount: object.SupDueAmount,              
                         
                     },
                     success: function (data) {
@@ -283,6 +230,7 @@
                             ShowNotification(1, vmMsg.ReturnMessage);
                             ResetForm();
                             //LoadUserInfoGrid();
+                            GetLastTransaction();
                         } else {
                             ShowNotification(3, vmMsg.ReturnMessage);
                         }
@@ -293,7 +241,16 @@
             }
         }
 
-        function EmployeeInfoValidation(formObject) {
+        function ProductPurchaseValidation(formObject) {
+
+            var dueAmt = parseInt($('#txtDueAmount').val());
+
+            if (dueAmt < 0) {
+
+                ShowNotification('2', 'Balance can not be negative!.');
+                return false;
+            };
+                
 
             //if (!formObject.EmployeeName) {
             //    $('#txtEmployeeName').focus();
@@ -333,6 +290,21 @@
             return true;
         }
 
+        function GetLastTransaction() {
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "/ProductPurces/GetLastTransaction",
+                data: {},
+                async: false,
+                dataType: "json",
+                success: function (data) {
+                    $("#txtLastTransNo").val(data);
+                    $("#txtLastTransNo").hide();
+                }
+            });
+
+        }
        
         function LoadProduct() {
             $.ajax({
@@ -372,47 +344,74 @@
             
         }
 
-       
-        //function LoadProductBalance() {
-        //    $.ajax({
-        //        type: "GET",
-        //        contentType: "application/json; charset=utf-8",
-        //        url: "/Transaction/LoadProductBalance",
-        //        data: {},
-        //        async: false,
-        //        dataType: "json",
-        //        success: function (data) {
-        //            $("#txtTotalBalnce").val(data);
-
-        //        }
-        //    });
-        //    //$("#ddlAccountNo").selectpicker('refresh');
-        //}
-        $('#ddlProductName').on('change', function () {
-        //$(document).on('change', '#ddlProductName', function () {
+        $('#ddlProductName').on('change', function () {        
             debugger;
-            alert($(this).find(':selected').val());
-            // Pure JS
-            //var selectedVal = this.value;
-            //var selectedText = this.options[this.selectedIndex].text;
-            //url:  "/CKDLAssetRegister/LoaddlFixedAssetSubCategoryData?Id=" + fixedAssetSubCategoryId,?Id = " + fixedAssetSubCategoryId
-
-            // jQuery
-            //var selectedVal = $('#ddlProductName').find(':selected').val();
-            //var selectedText = $(this).find(':selected').text();
+            //alert($(this).find(':selected').val());            
             $.ajax({
                 type: "GET",
                 contentType: "application/json; charset=utf-8",
-                url: "/Transaction/LoadProductBalance?ProductId=" + $(this).find(':selected').val(),
+                url: "/ProductPurces/LoadProductBalance?ProductId=" + $(this).find(':selected').val(),
                 data: {},
                 async: false,
                 dataType: "json",
                 success: function (data) {
                     $("#txtOpeningBalance").val(data);
-
                 }
             });
         });
+
+        $('#ddlSuplier').on('change', function () {
+            debugger;
+            //alert($(this).find(':selected').val());
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "/ProductPurces/GetSuplierBalance?SuplierId=" + $(this).find(':selected').val(),
+                data: {},
+                async: false,
+                dataType: "json",
+                success: function (data) {
+                    $("#txtDueAmountToSuplier").val(data);
+                }
+            });
+        });
+
+        
+        $('#txtBalancePurces').on('input', function () {
+
+            $('#txtCashAmount').val('');
+            $('#txtDueAmount').val('');
+
+            var a = parseInt($('#txtBalancePurces').val());
+            var b = parseInt($('#txtDueAmountToSuplier').val());                  
+
+            $('#txtCurrentBalance').val(a + b);
+
+        });
+
+        $('#txtCashAmount').on('input', function () {
+
+            $('#txtBankAmount').val('');
+            $('#txtDueAmount').val('');
+
+            var a = parseInt($('#txtBalancePurces').val());
+            var b = parseInt($('#txtCashAmount').val());
+
+            $('#txtDueAmount').val(a - b);
+
+        });
+
+        $('#txtBankAmount').on('input', function () {
+
+            var a = parseInt($('#txtBalancePurces').val());
+            var b = parseInt($('#txtCashAmount').val());
+            var c = parseInt($('#txtBankAmount').val());
+
+            $('#txtDueAmount').val(a - (b + c));
+
+        });
+
+
     </script>
 
 }

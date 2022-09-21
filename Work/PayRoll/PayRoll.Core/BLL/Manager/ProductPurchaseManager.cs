@@ -27,11 +27,11 @@ namespace PayRoll.Core.BLL.Manager
             {
                 _dbContext.Open();
                 _iProductPurchaseRepository.CreateOrUpdate(preProductPurces, create);
-                message = Message.SetMessages.SetSuccessMessage("Employee Created Successfully");
+                message = Message.SetMessages.SetSuccessMessage("Transaction No " + preProductPurces.TransNo + " Done Successfully");
             }
             catch (Exception ex)
             {
-                message = Message.SetMessages.SetErrorMessage("Error in Creating Employee" + ex.Message);
+                message = Message.SetMessages.SetErrorMessage("Error in Creating Transaction" + ex.Message);
             }
             finally
             {

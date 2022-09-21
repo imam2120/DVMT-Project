@@ -31,7 +31,7 @@ namespace PayRoll.Controllers
         {
             IEnumerable<DDLSourceModel> ddlProductName = new List<DDLSourceModel>();
             Dictionary<string, string> dic = new Dictionary<string, string>();
-            dic.Add("@QryOption", "2");
+            dic.Add("@QryOption", "1");
             try
             {
                 ddlProductName = commonManager.GetLoadCombo(new DDLSourceModel
@@ -51,7 +51,7 @@ namespace PayRoll.Controllers
         {
             IEnumerable<DDLSourceModel> ddlProductName = new List<DDLSourceModel>();
             Dictionary<string, string> dic = new Dictionary<string, string>();
-            dic.Add("@QryOption", "1");
+            dic.Add("@QryOption", "2");
             try
             {
                 ddlProductName = commonManager.GetLoadCombo(new DDLSourceModel
@@ -82,9 +82,38 @@ namespace PayRoll.Controllers
             }
         }
 
+        public JsonResult GetSuplierBalance(string SuplierId)
+        {
+            double result = 0;
+            try
+            {
+                string strQry = "Select isnull(DueBalance,0) Balance from Supplier Where GLAccountNo='" + SuplierId + "'";
+                result = Convert.ToDouble(commonManager.GetDataSingle(strQry));
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public JsonResult GetLastTransaction()
+        {
+            string result = string.Empty;
+            try
+            {
+                string strQry = "SELECT TransType+RIGHT('00000000'+convert(varchar,LastSeqNo+1),9) FROM LastTransactionNo where TransType = 'PP' ";
+                result = commonManager.GetDataSingle(strQry);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public ActionResult CreateOrUpdate(PreProductPurces preProductPurces)
         {
-
             var data = _iProductPurchaseManager.CreateOrUpdate(preProductPurces, 1);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
