@@ -12,8 +12,8 @@ namespace PayRoll.Core.Model
         public string DesignationId { get; set; }
         public string DesignationName { get; set; }
         public string Status { get; set; }
-        public string CreatedBy { get; set; }
-        public string CreatedDate { get; set; }
+        public string CreateBy { get; set; }
+        public string CreateDate { get; set; }
         public string MakeBy { get; set; }
         public string MakeDate { get; set; }
         public static Designation ConvertToModel(DataRow row)
@@ -23,8 +23,8 @@ namespace PayRoll.Core.Model
                 DesignationId = row.Table.Columns.Contains("DesignationId") ? Convert.ToString(row["DesignationId"]) : "",
                 DesignationName = row.Table.Columns.Contains("DesignationName") ? Convert.ToString(row["DesignationName"]) : "",
                 Status = row.Table.Columns.Contains("Status") ? Convert.ToString(row["Status"]) : "",
-                CreatedBy = row.Table.Columns.Contains("CreatedBy") ? Convert.ToString(row["CreatedBy"]) : "",
-                CreatedDate = row.Table.Columns.Contains("CreatedDate") ? Convert.ToString(row["CreatedDate"]) : "",
+                CreateBy = row.Table.Columns.Contains("CreateBy") ? Convert.ToString(row["CreateBy"]) : "",
+                CreateDate = row.Table.Columns.Contains("CreateDate") ? Convert.ToString(row["CreateDate"]) : "",
                 MakeBy = row.Table.Columns.Contains("MakeBy") ? Convert.ToString(row["MakeBy"]) : "",
                 MakeDate = row.Table.Columns.Contains("MakeDate") ? Convert.ToString(row["MakeDate"]) : "",                
             };

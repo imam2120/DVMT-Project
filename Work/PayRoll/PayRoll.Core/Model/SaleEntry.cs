@@ -9,43 +9,39 @@ namespace PayRoll.Core.Model
 {
     public class SaleEntry
     {
-        public string ProductId { get; set; }
-        public string ProductName { get; set; }
-        public string GLAccountNo { get; set; }
-        public string CostPrice { get; set; }
-        public string RetailSalePrice { get; set; }
-        public string WholeSalePrice { get; set; }
-        public string Balance { get; set; }
-        public string Status { get; set; }
-        public string Retunable { get; set; }
-        public string IsSync { get; set; }
-        public string EffectiveDate { get; set; }
-        public string ExpiryDate { get; set; }
-        public string CreateBy { get; set; }
-        public string CreateDate { get; set; }
-        public string ModifyBy { get; set; }
-        public string ModifyDate { get; set; }
+        public string TransDate { get; set; }
+        public string TransNo { get; set; }
+        public string ProductCode { get; set; }
+        public string EmpAccNo { get; set; }
+        public string TargetAmount { get; set; }
+        public string SaleAmount { get; set; }
+        public string PendingAmount { get; set; }    
+        public string ByCashAmount { get; set; }
+        public string ByBankAmount { get; set; }
+        public string DueAmount { get; set; }
+        public string CusAccNo { get; set; }
+        public string CurrBalance { get; set; }
+        public string MakeBy { get; set; }
+        public string MakeDate { get; set; }
+
 
         public static SaleEntry ConvertToModel(DataRow row)
         {
             return new SaleEntry
             {
-                ProductId = row.Table.Columns.Contains("ProductId") ? Convert.ToString(row["ProductId"]) : "",
-                ProductName = row.Table.Columns.Contains("ProductName") ? Convert.ToString(row["ProductName"]) : "",
-                GLAccountNo = row.Table.Columns.Contains("GLAccountNo") ? Convert.ToString(row["GLAccountNo"]) : "",
-                CostPrice = row.Table.Columns.Contains("CostPrice") ? Convert.ToString(row["CostPrice"]) : "",
-                RetailSalePrice = row.Table.Columns.Contains("RetailSalePrice") ? Convert.ToString(row["RetailSalePrice"]) : "",
-                WholeSalePrice = row.Table.Columns.Contains("WholeSalePrice") ? Convert.ToString(row["WholeSalePrice"]) : "",
-                Balance = row.Table.Columns.Contains("Balance") ? Convert.ToString(row["Balance"]) : "",
-                Status = row.Table.Columns.Contains("Status") ? Convert.ToString(row["Status"]) : "",
-                Retunable = row.Table.Columns.Contains("Retunable") ? Convert.ToString(row["Retunable"]) : "",
-                IsSync = row.Table.Columns.Contains("IsSync") ? Convert.ToString(row["IsSync"]) : "",
-                EffectiveDate = row.Table.Columns.Contains("EffectiveDate") ? Convert.ToString(row["EffectiveDate"]) : "",
-                ExpiryDate = row.Table.Columns.Contains("ExpiryDate") ? Convert.ToString(row["ExpiryDate"]) : "",
-                CreateBy = row.Table.Columns.Contains("CreateBy") ? Convert.ToString(row["CreateBy"]) : "",
-                CreateDate = row.Table.Columns.Contains("CreateDate") ? Convert.ToString(row["CreateDate"]) : "",
-                ModifyBy = row.Table.Columns.Contains("ModifyBy") ? Convert.ToString(row["ModifyBy"]) : "",
-                ModifyDate = row.Table.Columns.Contains("ModifyDate") ? Convert.ToString(row["ModifyDate"]) : "",
+                EmpAccNo = row.Table.Columns.Contains("EmpAccNo") ? Convert.ToString(row["EmpAccNo"]) : "",
+                ProductCode = row.Table.Columns.Contains("ProductCode") ? Convert.ToString(row["ProductCode"]) : "",
+                TargetAmount = row.Table.Columns.Contains("TargetAmount") ? Convert.ToString(row["TargetAmount"]) : "",
+                SaleAmount = row.Table.Columns.Contains("SaleAmount") ? Convert.ToString(row["SaleAmount"]) : "",
+                PendingAmount = row.Table.Columns.Contains("TotSalePending") ? Convert.ToString(row["TotSalePending"]) : "",
+                ByCashAmount = row.Table.Columns.Contains("ByCashAmount") ? Convert.ToString(row["ByCashAmount"]) : "",
+                ByBankAmount = row.Table.Columns.Contains("ByBankAmount") ? Convert.ToString(row["ByBankAmount"]) : "",
+                CusAccNo = row.Table.Columns.Contains("CusAccNo") ? Convert.ToString(row["CusAccNo"]) : "",
+                DueAmount = row.Table.Columns.Contains("DueAmount") ? Convert.ToString(row["DueAmount"]) : "",
+                TransNo = row.Table.Columns.Contains("TransNo") ? Convert.ToString(row["TransNo"]) : "",
+                MakeBy = row.Table.Columns.Contains("MakeBy") ? Convert.ToString(row["MakeBy"]) : "",
+                MakeDate = row.Table.Columns.Contains("MakeDate") ? Convert.ToString(row["MakeDate"]) : "",
+                
             };
 
         }

@@ -12,10 +12,10 @@ namespace PayRoll.Core.Model
         public int DepartmentId { get; set; }
         public string DepartmentName { get; set; }
         public string Status { get; set; }
-        public string CreatedBy { get; set; }
-        public string CreatedDate { get; set; }
-        public string MakeBy { get; set; }
-        public string MakeDate { get; set; }
+        public string CreateBy { get; set; }
+        public string CreateDate { get; set; }
+        public string ModifyBy { get; set; }
+        public string ModifyDate { get; set; }
         public static Department ConvertToModel(DataRow row)
         {
             return new Department
@@ -23,10 +23,10 @@ namespace PayRoll.Core.Model
                 DepartmentId = row.Table.Columns.Contains("DepartmentId") ? Convert.ToInt32(row["DepartmentId"]) : 0,
                 DepartmentName = row.Table.Columns.Contains("DepartmentName") ? Convert.ToString(row["DepartmentName"]) : "",
                 Status = row.Table.Columns.Contains("Status") ? Convert.ToString(row["Status"]) : "",
-                CreatedBy = row.Table.Columns.Contains("CreatedBy") ? Convert.ToString(row["CreatedBy"]) : "",
-                CreatedDate = row.Table.Columns.Contains("CreatedDate") ? Convert.ToString(row["CreatedDate"]) : "",
-                MakeBy = row.Table.Columns.Contains("MakeBy") ? Convert.ToString(row["MakeBy"]) : "",
-                MakeDate = row.Table.Columns.Contains("MakeDate") ? Convert.ToString(row["MakeDate"]) : "",
+                CreateBy = row.Table.Columns.Contains("CreateBy") ? Convert.ToString(row["CreateBy"]) : "",
+                CreateDate = row.Table.Columns.Contains("CreateDate") ? Convert.ToString(row["CreateDate"]) : "",
+                ModifyBy = row.Table.Columns.Contains("ModifyBy") ? Convert.ToString(row["ModifyBy"]) : "",
+                ModifyDate = row.Table.Columns.Contains("ModifyDate") ? Convert.ToString(row["ModifyDate"]) : "",
 
             };
 
