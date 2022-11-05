@@ -1,0 +1,244 @@
+﻿@{
+    /**/
+
+    ViewBag.Title = ":: Day Open Close ::";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var permission = ViewData["Permission"] as PayRoll.Core.Utility.DBManager.Permission;
+}
+@*<link href="~/Content/kendo.common.min.css" rel="stylesheet" />
+
+    <script src="~/Scripts/kendo.all.min.js"></script>
+    <script src="~/Scripts/Common.js"></script>
+    <script src="~/Scripts/PageScript/DayOpenClose.js"></script>*@
+
+<link href="~/Content/kendo.common.min.css" rel="stylesheet" />
+<script src="~/Scripts/kendo.all.min.js"></script>
+<script src="~/Scripts/Common.js"></script>
+
+
+<div class="form-horizontal ">
+    <fieldset class="content-group">
+        <legend class="text-bold">Day Open Close</legend>
+        <div class="form-group">
+            <div class="col-lg-12">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Date To Open/Close:</label>
+                        <div class="col-lg-9">
+                            <input type="text" id="txtDateToOpenClose" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-12">
+                <div class="col-lg-6">
+                    <label class="control-label col-lg-3"> </label>
+                    @if (permission.CanSave == "1")
+                    {
+                        <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Day Open</button>
+                    }
+                </div>
+                <div class="col-lg-6">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-12">
+                <div class="col-lg-6">
+                    <label class="control-label col-lg-3"> </label>
+                    @if (permission.CanDelete == "1")
+                    {
+                        <button class="btn btn-danger" data-style="expand-left" id="btnUpdate" type="button" onclick="Close()"><i class="icon-trash"></i>&nbsp; Day Close</button>
+                    }
+                </div>
+                <div class="col-lg-6">
+                    
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="txtActionId" name="txtActionId">
+
+
+        @*----------------------------Data Save Method-------------------------------*@
+
+
+        @*<div class="form-group">
+            <label class="control-label col-lg-2"> </label>
+            <div class="col-lg-10">
+                @if (permission.CanSave == "1")
+                {
+                    <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Day Open</button>
+                }
+                @if (permission.CanDelete == "1")
+                {
+                    <button class="btn btn-danger" data-style="expand-left" id="btnUpdate" type="button" onclick="Close()"><i class="icon-trash"></i>&nbsp; Day Close</button>
+                }
+            </div>
+        </div>*@
+    </fieldset>
+
+</div>
+
+
+@section scripts
+{
+    <script type="text/javascript">
+        _serverDate = null;
+
+
+$(document).ready(function () {
+    LoadDayOpenCloseDate();
+    LoadDayStatus();
+});
+
+
+function FormDataAsObject() {
+    var object = new Object();
+    object.TransDate = $('#txtDateToOpenClose').val();
+    object.OpenCloseByUser = "Admin";
+    object.Action = $('#txtActionId').val();
+
+    return object;
+}
+
+
+function Dashboard() {
+    var url = '@Url.Action("Index", "Dashboard")';
+    window.location.href = url;
+}
+
+function Close() {
+    var object = FormDataAsObject();
+    debugger;
+
+    if (DayOpenCloseValidation(object)) {
+
+        $.ajax({
+            url: '@Url.Action("CreateOrUpdate", "DayOpenClose")',
+            method: 'post',
+            dataType: 'json',
+            async: false,
+            data: {
+
+                TransDate: object.TransDate,
+                OpenCloseByUser: object.OpenCloseByUser,
+                Action: object.Action,
+
+            },
+            success: function (data) {
+                var vmMsg = data;
+                if (vmMsg.MessageType == 1) {
+                    ShowNotification(1, vmMsg.ReturnMessage);
+                    LoadDayOpenCloseDate();
+                    LoadDayStatus();
+                    Dashboard();
+                } else {
+                    ShowNotification(3, vmMsg.ReturnMessage);
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+}
+
+function EnableDisableControls(status) {
+    if (status == "0") {
+        //$('#btnSave').prop('disabled', true);
+        //$('#btnUpdate').prop('disabled', false);
+        document.getElementById("btnSave").style.display = "none";
+        document.getElementById("btnUpdate").style.display = "block";
+    }
+    else if (status == "1") {
+        //$('#btnSave').prop('disabled', false);
+        //$('#btnUpdate').prop('disabled', true);
+        document.getElementById("btnSave").style.display = "block";
+        document.getElementById("btnUpdate").style.display = "none";
+    }
+}
+
+function LoadDayOpenCloseDate() {
+    $.ajax({
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+        url: "/DayOpenClose/GetOpenCloseDate",
+        data: {},
+        async: false,
+        dataType: "json",
+        success: function (data) {
+            $("#txtDateToOpenClose").val(data);
+        }
+    });
+}
+
+function LoadDayStatus() {
+    $.ajax({
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+        url: "/DayOpenClose/GetDayStatus",
+        data: {},
+        async: false,
+        dataType: "json",
+        success: function (data) {
+            $("#txtActionId").val(data);
+
+            var status = data;
+            EnableDisableControls(status)
+        }
+    });
+}
+
+function Save() {
+    var object = FormDataAsObject();
+    debugger;
+
+    if (DayOpenCloseValidation(object)) {
+
+        $.ajax({
+            url: '@Url.Action("CreateOrUpdate", "DayOpenClose")',
+            method: 'post',
+            dataType: 'json',
+            async: false,
+            data: {
+
+                TransDate: object.TransDate,
+                OpenCloseByUser: object.OpenCloseByUser,
+                Action: object.Action,
+
+            },
+            success: function (data) {
+                var vmMsg = data;
+                if (vmMsg.MessageType == 1) {
+                    ShowNotification(1, vmMsg.ReturnMessage);
+                    LoadDayOpenCloseDate();
+                    LoadDayStatus();
+                    Dashboard();
+                } else {
+                    ShowNotification(3, vmMsg.ReturnMessage);
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+}
+
+function DayOpenCloseValidation(formObject) {
+
+    if (!formObject.TransDate) {
+        $('#txtDateToOpenClose').focus();
+        ShowNotification('2', 'Date for Open/Close Can not be empty.');
+        return false;
+    }
+
+    return true;
+}
+
+    </script>
+
+}
+
