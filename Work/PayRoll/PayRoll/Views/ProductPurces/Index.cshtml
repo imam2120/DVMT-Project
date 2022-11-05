@@ -250,43 +250,7 @@
                 ShowNotification('2', 'Balance can not be negative!.');
                 return false;
             };
-                
-
-            //if (!formObject.EmployeeName) {
-            //    $('#txtEmployeeName').focus();
-            //    ShowNotification('2', 'Employee Name Can not be empty.');
-            //    return false;
-            //}
-
-            //if (!formObject.ContractNumber) {
-            //    $('#txtContractNumber').focus();
-            //    ShowNotification('2', 'Contract No Can not be empty.');
-            //    return false;
-            //}
-
-            //if (!formObject.NationalId) {
-            //    $('#txtNationalId').focus();
-            //    ShowNotification('2', 'National ID Can not be empty.');
-            //    return false;
-            //}
-            //if (!formObject.DeptId) {
-            //    $('#ddlDesignation').focus();
-            //    ShowNotification('2', 'Department Can not be empty.');
-            //    return false;
-            //}
-            //if (!formObject.PresentAddress) {
-            //    $('#txtPresentAddress').focus();
-            //    ShowNotification('2', 'Present Address Can not be empty.');
-            //    return false;
-            //}
-
-            //if (!formObject.PermanentAddress) {
-            //    $('#txtPermanentAddress').focus();
-            //    ShowNotification('2', 'Permanent Address Can not be empty.');
-            //    return false;
-            //}
-
-
+               
             return true;
         }
 
@@ -345,8 +309,7 @@
         }
 
         $('#ddlProductName').on('change', function () {        
-            debugger;
-            //alert($(this).find(':selected').val());            
+            debugger;                       
             $.ajax({
                 type: "GET",
                 contentType: "application/json; charset=utf-8",
@@ -361,8 +324,7 @@
         });
 
         $('#ddlSuplier').on('change', function () {
-            debugger;
-            //alert($(this).find(':selected').val());
+            debugger;            
             $.ajax({
                 type: "GET",
                 contentType: "application/json; charset=utf-8",
@@ -383,7 +345,7 @@
             $('#txtDueAmount').val('');
 
             var a = parseInt($('#txtBalancePurces').val());
-            var b = parseInt($('#txtDueAmountToSuplier').val());                  
+            var b = parseInt($('#txtOpeningBalance').val());                  
 
             $('#txtCurrentBalance').val(a + b);
 

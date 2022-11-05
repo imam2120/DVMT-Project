@@ -14,9 +14,7 @@ namespace PayRoll.Controllers
     public class ProductPurcesController : Controller
     {
         private readonly DBContext _dbContext;
-        //private readonly IProductPurchaseManager _iProductPurchaseManager;
         IProductPurchaseManager _iProductPurchaseManager = new ProductPurchaseManager();
-        // GET: ProductPurses
         ICommonManager commonManager = new CommonManager();
         public ActionResult Index()
         {
@@ -46,6 +44,7 @@ namespace PayRoll.Controllers
                 return Json(ddlProductName, JsonRequestBehavior.AllowGet);
             }
         }
+
         [HttpGet]
         public JsonResult LoadSupplierName()
         {
@@ -66,13 +65,14 @@ namespace PayRoll.Controllers
                 return Json(ddlProductName, JsonRequestBehavior.AllowGet);
             }
         }
+
         [HttpGet]
         public JsonResult LoadProductBalance(string ProductId)
         {
             double result = 0;
             try
             {
-                string strQry = "Select ISNULL(Balance,0) Balance from Product Where GLAccountNo='"+ ProductId +"'";
+                string strQry = "Select ISNULL(Balance,0) Balance,ISNULL(Balance,0) Balance1 from Product Where GLAccountNo='" + ProductId +"'";
                 result = Convert.ToDouble(commonManager.GetDataSingle(strQry));
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
@@ -82,6 +82,7 @@ namespace PayRoll.Controllers
             }
         }
 
+        [HttpGet]
         public JsonResult GetSuplierBalance(string SuplierId)
         {
             double result = 0;
@@ -97,6 +98,7 @@ namespace PayRoll.Controllers
             }
         }
 
+        [HttpGet]
         public JsonResult GetLastTransaction()
         {
             string result = string.Empty;

@@ -17,6 +17,26 @@
             <div class="col-lg-12">
                 <div class="col-lg-6">
                     <div class="form-group">
+                        <label class="control-label col-lg-3">Product Name:</label>
+                        <div class="col-lg-5">
+                            <select class="form-control" id="ddlProductName" name="ddlProductName"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Total Product Balance:</label>
+                        <div class="col-lg-5">
+                            <input type="text" id="txtProdWiseTargetAmt" readonly="readonly" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-12">
+                <div class="col-lg-6">
+                    <div class="form-group">
                         <label class="control-label col-lg-3">Employee:</label>
                         <div class="col-lg-5">
                             <select class="form-control" id="ddlEmployee" name="ddlEmployee"></select>
@@ -25,7 +45,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label class="control-label col-lg-3">Sale Target Amount:</label>
+                        <label class="control-label col-lg-3">Total Target:</label>
                         <div class="col-lg-5">
                             <input type="text" id="txtTargetAmount" readonly="readonly" class="form-control">
                         </div>
@@ -37,11 +57,52 @@
             <div class="col-lg-12">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label class="control-label col-lg-3">Sale Amount:</label>
+                        <label class="control-label col-lg-3">Total Sale:</label>
                         <div class="col-lg-5">
-                            <input type="text" id="txtSaleAmount" class="form-control">
+                            <input type="text" id="txtBalanceSale" class="form-control">
                         </div>
                     </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Target Pending:</label>
+                        <div class="col-lg-5">
+                            <input type="text" id="txtTargetPending" readonly="readonly" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-12">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">By Cash:</label>
+                        <div class="col-lg-5">
+                            <input type="text" id="txtCashAmount" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">By Bank:</label>
+                        <div class="col-lg-5">
+                            <input type="text" id="txtBankAmount" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-12">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Customer:</label>
+                        <div class="col-lg-5">
+                            <select class="form-control" id="ddlCustomer" name="ddlCustomer"></select>
+                        </div>
+                    </div>
+                    <input type="text" id="txtLastTransNo" hidden="hidden" class="form-control">
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
@@ -53,64 +114,36 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-lg-12">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="control-label col-lg-3">Cuestomer:</label>
-                        <div class="col-lg-5">
-                            <select class="form-control" id="ddlCustomer" name="ddlCustomer"></select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="control-label col-lg-3">Pay Type:</label>
-                        <div class="col-lg-5">
-                            <select class="form-control" id="ddlPayType" name="ddlPayType"></select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-lg-12">
-                <div class="col-lg-2">
-                </div>
-                <div class="col-lg-10">
-                    <div class="form-group">
-                        <div class="col-lg-10">
-                            <button class="btn btn-info" data-style="expand-left" id="btnAdd" type="button" onclick="Add()"> Add</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         @*----------------------------Data Save Method-------------------------------*@
 
-
-        <div class="form-group">
-            <label class="control-label col-lg-2"> </label>
-            <div class="col-lg-10">
-                @if (permission.CanSave == "1")
-                {
-                    <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Save</button>
-                }
-                @if (permission.CanUpdate == "1")
-                {
-                    <button class="btn bg-teal" data-style="expand-left" id="btnUpdate" type="button" onclick="Update()"><i class="fa fa-save"></i>&nbsp; Update</button>
-                }
-                @if (permission.CanDelete == "1")
-                {
-                    <button class="btn btn-danger" data-style="expand-left" id="btnDelete" type="button" onclick="Delete()"><i class="icon-trash"></i>&nbsp; Delete</button>
-                }
+        <div class="col-lg-12">
+            <div class="col-lg-6">
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label class="control-label col-lg-2"> </label>
+                    <div class="col-lg-12">
+                        @if (permission.CanSave == "1")
+                        {
+                            <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Save</button>
+                        }
+                        @if (permission.CanUpdate == "1")
+                        {
+                            <button class="btn bg-teal" data-style="expand-left" id="btnUpdate" type="button" onclick="Update()"><i class="fa fa-save"></i>&nbsp; Update</button>
+                        }
+                        @if (permission.CanDelete == "1")
+                        {
+                            <button class="btn btn-danger" data-style="expand-left" id="btnDelete" type="button" onclick="Delete()"><i class="icon-trash"></i>&nbsp; Delete</button>
+                        }
+                    </div>
+                </div>
             </div>
         </div>
+
     </fieldset>
 
     <fieldset class="content-group">
-        <legend>Employee Target Setup</legend>
         <div id="example">
             <div id="grid"></div>
         </div>
@@ -124,96 +157,45 @@
 
         $(document).ready(function () {
             LoadProduct();
-            LoadSupplier();
-
-            $("#grid").kendoGrid().empty();
-            var result = CallAjax_POST('GetEmployee/EmployeeInfo', '', false, false)
-            if (result.length > 0) {
-                PopulateGridView(result);
-            } else {
-                alert("Error! Please Contact..");
-            }
-
-            function PopulateGridView(result) {
-                $("#grid").kendoGrid({
-                    dataSource: result,
-                    pageable: true,
-                    filterable: true,
-                    pageSize: 20,
-                    pageable: true,
-                    pageable: {
-                        input: false,
-                        numeric: true,
-                        butonCount: 5,
-                        pageSize: 20,
-                        alwaysVisible: true,
-                        previousNext: true,
-                        serverPaging: true,
-                        serverFiltering: true,
-                    },
-                    selectable: true,
-                    search: {
-                        fields: [
-                            { name: "EmployeeId", operator: "eq" },
-                            { name: "EmployeeName", operator: "contains" },
-                            { name: "FatherName", operator: "contains" },
-                            { name: "MotherName", operator: "contains" },
-                        ]
-                    },
-                    columns: [
-
-                        { field: "EmployeeId", title: "Employee Id", filterable: true, filterable: { multi: true, search: true }, width: "70px" },
-                        { field: "GLAccountNo", title: "Account No", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
-                        { field: "NationalId", title: "National Id", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
-                        { field: "ContractNumber", title: "Contract Number", filterable: true, filterable: { multi: true, search: true }, width: "90px" },
-                        { field: "EmployeeName", title: "Employee Name", filterable: true, filterable: { multi: true, search: true }, width: "120px" },
-                        { field: "FatherName", title:"Father's Name", filterable: true, filterable: { multi: true, search: true }, width: "120px" },
-                        { field: "MotherName", title: "Mother's Name", filterable: { multi: true, search: true }, width: "120px" },
-                        { field: "Select ", title: "Action", filterable: false, width: "50px", template: "<button type='button' class='btn btn-success btn-sm' id='btnEdit'>Select</button>" }
-                    ],
-
-                });
-            }
+            LoadEmployee();
+            LoadCustomer();
+            GetLastTransaction();
         });
 
-    function FormDataAsObject() {
+        function FormDataAsObject() {
         var object = new Object();
-        object.EmployeeName = $('#txtEmployeeName').val();
-        object.ContractNumber = $('#txtContractNumber').val();
-        object.NationalId = $('#txtNationalId').val();
-        object.EmergencyNumber = $('#txtEmergencyNumber').val();
-        object.GenderId = $('#ddlGender').val();
-        object.FatherName = $('#txtFatherName').val();
-        object.MaritalStatus = $('#ddlMaritalStatus').val();
-        object.MotherName = $('#txtMotherName').val();
-        object.DeptId = $('#ddlDepartment').val();
-        object.PresentAddress = $('#txtPresentAddress').val();
-        object.DesignationId = $('#ddlDesignation').val();
-        object.PermanentAddress = $('#txtPermanentAddress').val();
-        object.DateOfBirth = $('#txtDateOfBirth').val();
-        object.BloodGroup = $('#ddlBloodGroup').val();
 
-        return object;
+            object.TransNo = $('#txtLastTransNo').val();
+            object.ProductCode = $('#ddlProductName').find(':selected').val();
+            object.EmpAccNo = $('#ddlEmployee').find(':selected').val();
+            object.TargetAmount = $('#txtTargetAmount').val();
+            object.SaleAmount = $('#txtBalanceSale').val();
+            object.PendingAmount = $('#txtTargetPending').val();
+            object.ByCashAmount = $('#txtCashAmount').val();
+            object.ByBankAmount = $('#txtBankAmount').val();
+            object.DueAmount = $('#txtDueAmount').val();
+            object.CusAccNo = $('#ddlCustomer').find(':selected').val();
+            object.CurrBalance = 0;
+
+            return object;
+        
     }
 
-    function ResetForm() {
-        $('#txtEmployeeName').val('');
-        $('#txtContractNumber').val('');
-        $('#txtNationalId').val('');
-        $('#txtEmergencyNumber').val('');
-        $('#ddlGender').val('');
-        $('#txtFatherName').val('');
-        $('#ddlMaritalStatus').val('');
-        $('#txtMotherName').val('');
-        $('#ddlDepartment').val('');
-        $('#txtPresentAddress').val('');
-        $('#ddlDesignation').val('');
-        $('#txtPermanentAddress').val('');
-        $('#txtDateOfBirth').val('');
-        $('#ddlBloodGroup').val('');
-        $('#txtDateOfBirth').val('');
+        function ResetForm() {
 
-        EnableDisableControls("1");
+            $('#ddlEmployee').prop('selectedIndex', 0);
+            $('#txtTargetAmount').val('');
+            $('#ddlProductName').prop('selectedIndex', 0);
+            $('#txtProdWiseTargetAmt').val('');
+            $('#txtBalanceSale').val('');
+            $('#txtTargetPending').val('');
+            $('#txtCashAmount').val('');
+            $('#txtBankAmount').val('');
+            $('#txtDueAmount').val('');
+            $('#ddlCustomer').prop('selectedIndex', 0);
+            $('#txtLastTransNo').val('');
+
+            EnableDisableControls("1");
     }
 
     function EnableDisableControls(status) {
@@ -240,29 +222,26 @@
             var object = FormDataAsObject();
             debugger;
 
-            if (EmployeeInfoValidation(object)) {
+            if (ProductPurchaseValidation(object)) {
 
                 $.ajax({
-                    url: '@Url.Action("CreateOrUpdate", "EmployeeInfo")',
+                    url: '@Url.Action("CreateOrUpdate", "SaleEntry")',
                     method: 'post',
                     dataType: 'json',
                     async: false,
                     data: {
-                        EmployeeName: object.EmployeeName,
-                        ContractNumber: object.ContractNumber,
-                        NationalId: object.NationalId,
-                        EmergencyNumber : object.EmergencyNumber,
-                        GenderId : object.GenderId,
-                        FatherName : object.FatherName,
-                        MaritalStatus : object.MaritalStatus,
-                        MotherName : object.MotherName,
-                        DeptId : object.DeptId,
-                        PresentAddress : object.PresentAddress,
-                        DesignationId : object.DesignationId,
-                        PermanentAddress : object.PermanentAddress,
-                        DateOfBirth: object.DateOfBirth,
-                        BloodGroup: object.BloodGroup,
 
+                        TransNo: object.TransNo,
+                        ProductCode: object.ProductCode,
+                        EmpAccNo: object.EmpAccNo,
+                        TargetAmount: object.TargetAmount,
+                        SaleAmount: object.SaleAmount,
+                        PendingAmount: object.PendingAmount,
+                        ByCashAmount: object.ByCashAmount,
+                        ByBankAmount: object.ByBankAmount,
+                        DueAmount: object.DueAmount,
+                        CusAccNo: object.CusAccNo,
+                        CurrBalance: object.CurrBalance,
                     },
                     success: function (data) {
                         var vmMsg = data;
@@ -270,6 +249,8 @@
                             ShowNotification(1, vmMsg.ReturnMessage);
                             ResetForm();
                             //LoadUserInfoGrid();
+                            GetLastTransaction();
+                            LoadEmployee();
                         } else {
                             ShowNotification(3, vmMsg.ReturnMessage);
                         }
@@ -280,84 +261,158 @@
             }
         }
 
-        function EmployeeInfoValidation(formObject) {
+        function ProductPurchaseValidation(formObject) {
 
-            if (!formObject.EmployeeName) {
-                $('#txtEmployeeName').focus();
-                ShowNotification('2', 'Employee Name Can not be empty.');
-                return false;
-            }
+            var dueAmt = parseInt($('#txtDueAmount').val());
 
-            if (!formObject.ContractNumber) {
-                $('#txtContractNumber').focus();
-                ShowNotification('2', 'Contract No Can not be empty.');
-                return false;
-            }
+            if (dueAmt < 0) {
 
-            if (!formObject.NationalId) {
-                $('#txtNationalId').focus();
-                ShowNotification('2', 'National ID Can not be empty.');
+                ShowNotification('2', 'Balance can not be negative!.');
                 return false;
-            }
-            if (!formObject.DeptId) {
-                $('#ddlDesignation').focus();
-                ShowNotification('2', 'Department Can not be empty.');
-                return false;
-            }
-            if (!formObject.PresentAddress) {
-                $('#txtPresentAddress').focus();
-                ShowNotification('2', 'Present Address Can not be empty.');
-                return false;
-            }
-
-            if (!formObject.PermanentAddress) {
-                $('#txtPermanentAddress').focus();
-                ShowNotification('2', 'Permanent Address Can not be empty.');
-                return false;
-            }
-
+            };
 
             return true;
         }
 
+        function GetLastTransaction() {
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "/SaleEntry/GetLastTransaction",
+                data: {},
+                async: false,
+                dataType: "json",
+                success: function (data) {
+                    $("#txtLastTransNo").val(data);
+                    $("#txtLastTransNo").hide();
+                }
+            });
+
+        }
 
         function LoadProduct() {
             $.ajax({
                 type: "GET",
                 contentType: "application/json; charset=utf-8",
-                url: "/EmployeeInfo/LoadMaritalStatus",
+                url: "/SaleEntry/LoadProductName",
                 data: {},
                 async: false,
                 dataType: "json",
                 success: function (data) {
-                    $("#ddlMaritalStatus").empty();
-                    $("#ddlMaritalStatus").append($("<option></option>").val("-1").html("--Select--"));
+                    $("#ddlProductName").empty();
+                    $("#ddlProductName").append($("<option></option>").val("-1").html("--Select--"));
                     $.each(data, function (i, item) {
-                        $("#ddlMaritalStatus").append($("<option></option>").val(item.Key).html(item.Value));
+                        $("#ddlProductName").append($("<option></option>").val(item.Key).html(item.Value));
                     });
                 }
             });
 
         }
 
-        function LoadSupplier() {
+        function LoadEmployee() {
             $.ajax({
                 type: "GET",
                 contentType: "application/json; charset=utf-8",
-                url: "/EmployeeInfo/LoadBloodGroup",
+                url: "/SaleEntry/LoadEmployeeName",
                 data: {},
                 async: false,
                 dataType: "json",
                 success: function (data) {
-                    $("#ddlBloodGroup").empty();
-                    $("#ddlBloodGroup").append($("<option></option>").val("-1").html("--Select--"));
+                    $("#ddlEmployee").empty();
+                    $("#ddlEmployee").append($("<option></option>").val("-1").html("--Select--"));
                     $.each(data, function (i, item) {
-                        $("#ddlBloodGroup").append($("<option></option>").val(item.Key).html(item.Value));
+                        $("#ddlEmployee").append($("<option></option>").val(item.Key).html(item.Value));
                     });
                 }
             });
 
         }
+
+        function LoadCustomer() {
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "/SaleEntry/LoadCustomerName",
+                data: {},
+                async: false,
+                dataType: "json",
+                success: function (data) {
+                    $("#ddlCustomer").empty();
+                    $("#ddlCustomer").append($("<option></option>").val("-1").html("--Select--"));
+                    $.each(data, function (i, item) {
+                        $("#ddlCustomer").append($("<option></option>").val(item.Key).html(item.Value));
+                    });
+                }
+            });
+
+        }
+
+        $('#ddlProductName').on('change', function () {
+            debugger;
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "/SaleEntry/LoadProductBalance?ProductId=" + $(this).find(':selected').val(),
+                data: {},
+                async: false,
+                dataType: "json",
+                success: function (data) {
+                    
+                    $("#txtProdWiseTargetAmt").val(data);
+                    
+                }
+            });
+        });
+
+        $('#ddlEmployee').on('change', function () {
+            debugger;
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "/SaleEntry/GetEmployeeTarget?TransNo=" + $(this).find(':selected').val(),
+                data: {},
+                async: false,
+                dataType: "json",
+                success: function (data) {
+                    $("#txtTargetAmount").val(data);
+                }
+            });
+        });
+
+
+        $('#txtBalanceSale').on('input', function () {
+
+            $('#txtCashAmount').val('');
+            $('#txtDueAmount').val('');
+
+            var a = parseInt($('#txtBalanceSale').val());
+            var b = parseInt($('#txtTargetAmount').val());
+
+            $('#txtTargetPending').val(b - a);
+
+        });
+
+        $('#txtCashAmount').on('input', function () {
+
+            $('#txtBankAmount').val('0');
+            $('#txtDueAmount').val('');
+
+            var a = parseInt($('#txtBalanceSale').val());
+            var b = parseInt($('#txtCashAmount').val());
+
+            $('#txtDueAmount').val(a - b);
+
+        });
+
+        $('#txtBankAmount').on('input', function () {
+
+            var a = parseInt($('#txtBalanceSale').val());
+            var b = parseInt($('#txtCashAmount').val());
+            var c = parseInt($('#txtBankAmount').val());
+
+            $('#txtDueAmount').val(a - (b + c));
+
+        });
 
 
     </script>

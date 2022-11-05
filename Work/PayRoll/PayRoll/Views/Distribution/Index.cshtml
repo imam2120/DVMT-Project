@@ -80,7 +80,7 @@
                 <div class="col-lg-10">
                     <div class="form-group">
                         <div class="col-lg-10">
-                            <button class="btn btn-info" data-style="expand-left" id="btnAdd" type="button" onclick="Add()"> Add</button>
+                            <input type="text" id="txtLastTransNo" hidden="hidden" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -93,6 +93,7 @@
         <div class="form-group">
             <label class="control-label col-lg-2"> </label>
             <div class="col-lg-10">
+                @*<button class="btn btn-info" data-style="expand-left" id="btnAdd" type="button" onclick="Add()"> Add</button>*@
                 @if (permission.CanSave == "1")
                 {
                     <button class="btn btn-info" data-style="expand-left" id="btnSave" type="button" onclick="Save()"><i class="fa fa-save"></i>&nbsp; Save</button>
@@ -123,18 +124,26 @@
         _serverDate = null;
 
         $(document).ready(function () {
+            GetLastTransaction();
             LoadProduct();
-            LoadSupplier();
+            LoadEmployee();            
+            GridDataLoad();
+
+        });
+
+        function GridDataLoad() {
 
             $("#grid").kendoGrid().empty();
-            var result = CallAjax_POST('GetEmployee/EmployeeInfo', '', false, false)
-            if (result.length > 0) {
+            var result = CallAjax_POST('GetEmployeeTarget/Distribution', '', false, false)            
+            if (result.length > 0) {                
                 PopulateGridView(result);
-            } else {
-                alert("Error! Please Contact..");
             }
+            //else {
+            //    alert("Error! Please Contact..");                
+            //}
+        }
 
-            function PopulateGridView(result) {
+        function PopulateGridView(result) {
                 $("#grid").kendoGrid({
                     dataSource: result,
                     pageable: true,
@@ -154,64 +163,66 @@
                     selectable: true,
                     search: {
                         fields: [
-                            { name: "EmployeeId", operator: "eq" },
-                            { name: "EmployeeName", operator: "contains" },
-                            { name: "FatherName", operator: "contains" },
-                            { name: "MotherName", operator: "contains" },
+                            { name: "ProductAccNo", operator: "eq" },
+                            { name: "PrdOpenBalance", operator: "contains" },
+                            { name: "ProductAccNo", operator: "contains" },
                         ]
                     },
                     columns: [
 
-                        { field: "EmployeeId", title: "Employee Id", filterable: true, filterable: { multi: true, search: true }, width: "70px" },
-                        { field: "GLAccountNo", title: "Account No", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
-                        { field: "NationalId", title: "National Id", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
-                        { field: "ContractNumber", title: "Contract Number", filterable: true, filterable: { multi: true, search: true }, width: "90px" },
-                        { field: "EmployeeName", title: "Employee Name", filterable: true, filterable: { multi: true, search: true }, width: "120px" },
-                        { field: "FatherName", title:"Father's Name", filterable: true, filterable: { multi: true, search: true }, width: "120px" },
-                        { field: "MotherName", title: "Mother's Name", filterable: { multi: true, search: true }, width: "120px" },
+                        { field: "ProductAccNo", title: "ProductAccNo", filterable: true, filterable: { multi: true, search: true }, width: "70px" },
+                        { field: "PrdOpenBalance", title: "PrdOpenBalance", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
+                        { field: "EmpAccNo", title: "Emp Acc No", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
+                        { field: "OpeningBalance", title: "Emp Open. Balance", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
+                        { field: "TargetAmount", title: "TargetAmount", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
+                        { field: "ClosingBalance", title: "ClosingBalance", filterable: true, filterable: { multi: true, search: true }, width: "80px" },
                         { field: "Select ", title: "Action", filterable: false, width: "50px", template: "<button type='button' class='btn btn-success btn-sm' id='btnEdit'>Select</button>" }
                     ],
+                    change: function (e) {
+                        onChngeUpdateValueSet();
+                    }
 
                 });
+        }
+
+
+        function onChngeUpdateValueSet() {
+            var grid = $("#grid").data("kendoGrid");
+            if (grid.select().length > 0) {
+                var selectedItem = grid.dataItem(grid.select());
+                if (selectedItem != null) {
+                    $('#ddlProductName').val(selectedItem.ProductAccNo);
+                    $('#txtOpeningBalance').val(selectedItem.PrdOpenBalance);
+                    $('#ddlEmployee').val(selectedItem.EmpAccNo);
+                    $('#txtEmpOpeningBalance').val(selectedItem.OpeningBalance);
+                    $('#txtTargetAmount').val(selectedItem.TargetAmount);
+                    $('#txtCurrentBalance').val(selectedItem.ClosingBalance);
+                }
             }
-        });
+        }
 
     function FormDataAsObject() {
         var object = new Object();
-        object.EmployeeName = $('#txtEmployeeName').val();
-        object.ContractNumber = $('#txtContractNumber').val();
-        object.NationalId = $('#txtNationalId').val();
-        object.EmergencyNumber = $('#txtEmergencyNumber').val();
-        object.GenderId = $('#ddlGender').val();
-        object.FatherName = $('#txtFatherName').val();
-        object.MaritalStatus = $('#ddlMaritalStatus').val();
-        object.MotherName = $('#txtMotherName').val();
-        object.DeptId = $('#ddlDepartment').val();
-        object.PresentAddress = $('#txtPresentAddress').val();
-        object.DesignationId = $('#ddlDesignation').val();
-        object.PermanentAddress = $('#txtPermanentAddress').val();
-        object.DateOfBirth = $('#txtDateOfBirth').val();
-        object.BloodGroup = $('#ddlBloodGroup').val();
+        object.TransDate = null;
+        object.TransNo = $('#txtLastTransNo').val();
+        object.ProductAccNo = $('#ddlProductName').val();
+        object.PrdOpenBalance = $('#txtOpeningBalance').val();
+        object.EmpAccNo = $('#ddlEmployee').val();
+        object.OpeningBalance = $('#txtEmpOpeningBalance').val();
+        object.TargetAmount = $('#txtTargetAmount').val();
+        object.ClosingBalance = $('#txtCurrentBalance').val();
 
         return object;
     }
 
     function ResetForm() {
-        $('#txtEmployeeName').val('');
-        $('#txtContractNumber').val('');
-        $('#txtNationalId').val('');
-        $('#txtEmergencyNumber').val('');
-        $('#ddlGender').val('');
-        $('#txtFatherName').val('');
-        $('#ddlMaritalStatus').val('');
-        $('#txtMotherName').val('');
-        $('#ddlDepartment').val('');
-        $('#txtPresentAddress').val('');
-        $('#ddlDesignation').val('');
-        $('#txtPermanentAddress').val('');
-        $('#txtDateOfBirth').val('');
-        $('#ddlBloodGroup').val('');
-        $('#txtDateOfBirth').val('');
+        $('#txtLastTransNo').val('');
+        $('#ddlProductName').val('');
+        $('#txtOpeningBalance').val('');
+        $('#ddlEmployee').val('');
+        $('#txtEmpOpeningBalance').val('');
+        $('#txtTargetAmount').val('');
+        $('#txtCurrentBalance').val('');
 
         EnableDisableControls("1");
     }
@@ -243,33 +254,28 @@
             if (EmployeeInfoValidation(object)) {
 
                 $.ajax({
-                    url: '@Url.Action("CreateOrUpdate", "EmployeeInfo")',
+                    url: '@Url.Action("CreateOrUpdate", "Distribution")',
                     method: 'post',
                     dataType: 'json',
                     async: false,
                     data: {
-                        EmployeeName: object.EmployeeName,
-                        ContractNumber: object.ContractNumber,
-                        NationalId: object.NationalId,
-                        EmergencyNumber : object.EmergencyNumber,
-                        GenderId : object.GenderId,
-                        FatherName : object.FatherName,
-                        MaritalStatus : object.MaritalStatus,
-                        MotherName : object.MotherName,
-                        DeptId : object.DeptId,
-                        PresentAddress : object.PresentAddress,
-                        DesignationId : object.DesignationId,
-                        PermanentAddress : object.PermanentAddress,
-                        DateOfBirth: object.DateOfBirth,
-                        BloodGroup: object.BloodGroup,
+                        TransDate: object.TransDate,
+                        TransNo: object.TransNo,
+                        ProductAccNo: object.ProductAccNo,
+                        PrdOpenBalance: object.PrdOpenBalance,
+                        EmpAccNo: object.EmpAccNo,
+                        OpeningBalance: object.OpeningBalance,
+                        TargetAmount: object.TargetAmount,
+                        ClosingBalance: object.ClosingBalance,
 
                     },
                     success: function (data) {
                         var vmMsg = data;
                         if (vmMsg.MessageType == 1) {
                             ShowNotification(1, vmMsg.ReturnMessage);
-                            ResetForm();
-                            //LoadUserInfoGrid();
+                             ResetForm();
+                            GetLastTransaction();
+
                         } else {
                             ShowNotification(3, vmMsg.ReturnMessage);
                         }
@@ -282,82 +288,124 @@
 
         function EmployeeInfoValidation(formObject) {
 
-            if (!formObject.EmployeeName) {
-                $('#txtEmployeeName').focus();
-                ShowNotification('2', 'Employee Name Can not be empty.');
+            if (!formObject.ProductAccNo) {
+                $('#ddlProductName').focus();
+                ShowNotification('2', 'Please Select any Product.');
                 return false;
             }
 
-            if (!formObject.ContractNumber) {
-                $('#txtContractNumber').focus();
-                ShowNotification('2', 'Contract No Can not be empty.');
+            if (!formObject.TargetAmount) {
+                $('#txtTargetAmount').focus();
+                ShowNotification('2', 'TargetAmount No Can not be empty.');
                 return false;
             }
 
-            if (!formObject.NationalId) {
-                $('#txtNationalId').focus();
-                ShowNotification('2', 'National ID Can not be empty.');
+            if (!formObject.EmpAccNo) {
+                $('#ddlEmployee').focus();
+                ShowNotification('2', 'Employee Can not be empty.');
                 return false;
             }
-            if (!formObject.DeptId) {
-                $('#ddlDesignation').focus();
-                ShowNotification('2', 'Department Can not be empty.');
-                return false;
-            }
-            if (!formObject.PresentAddress) {
-                $('#txtPresentAddress').focus();
-                ShowNotification('2', 'Present Address Can not be empty.');
-                return false;
-            }
-
-            if (!formObject.PermanentAddress) {
-                $('#txtPermanentAddress').focus();
-                ShowNotification('2', 'Permanent Address Can not be empty.');
-                return false;
-            }
-
 
             return true;
         }
-
 
         function LoadProduct() {
             $.ajax({
                 type: "GET",
                 contentType: "application/json; charset=utf-8",
-                url: "/EmployeeInfo/LoadMaritalStatus",
+                url: "/Distribution/LoadProductName",
                 data: {},
                 async: false,
                 dataType: "json",
                 success: function (data) {
-                    $("#ddlMaritalStatus").empty();
-                    $("#ddlMaritalStatus").append($("<option></option>").val("-1").html("--Select--"));
+                    $("#ddlProductName").empty();
+                    $("#ddlProductName").append($("<option></option>").val("-1").html("--Select--"));
                     $.each(data, function (i, item) {
-                        $("#ddlMaritalStatus").append($("<option></option>").val(item.Key).html(item.Value));
+                        $("#ddlProductName").append($("<option></option>").val(item.Key).html(item.Value));
                     });
                 }
             });
 
         }
 
-        function LoadSupplier() {
+        function LoadEmployee() {
             $.ajax({
                 type: "GET",
                 contentType: "application/json; charset=utf-8",
-                url: "/EmployeeInfo/LoadBloodGroup",
+                url: "/Distribution/LoadSupplierName",
                 data: {},
                 async: false,
                 dataType: "json",
                 success: function (data) {
-                    $("#ddlBloodGroup").empty();
-                    $("#ddlBloodGroup").append($("<option></option>").val("-1").html("--Select--"));
+                    $("#ddlEmployee").empty();
+                    $("#ddlEmployee").append($("<option></option>").val("-1").html("--Select--"));
                     $.each(data, function (i, item) {
-                        $("#ddlBloodGroup").append($("<option></option>").val(item.Key).html(item.Value));
+                        $("#ddlEmployee").append($("<option></option>").val(item.Key).html(item.Value));
                     });
                 }
             });
 
         }
+
+        function GetLastTransaction() {
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "/Distribution/GetLastTransaction",
+                data: {},
+                async: false,
+                dataType: "json",
+                success: function (data) {
+                    $("#txtLastTransNo").val(data);
+                    $("#txtLastTransNo").hide();
+                }
+            });
+
+        }
+
+        $('#ddlProductName').on('change', function () {
+            debugger;            
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "/Distribution/LoadProductBalance?ProductId=" + $(this).find(':selected').val(),
+                data: {},
+                async: false,
+                dataType: "json",
+                success: function (data) {
+                    $("#txtOpeningBalance").val(data);
+                }
+            });
+        });
+
+        $('#ddlEmployee').on('change', function () {
+            debugger;
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "/Distribution/GetEmployeeBalance?EmployeeCode=" + $(this).find(':selected').val(),
+                data: {},
+                async: false,
+                dataType: "json",
+                success: function (data) {
+                    $("#txtEmpOpeningBalance").val(data);
+                }
+            });
+        });
+
+        $('#txtTargetAmount').on('input', function () {
+
+            $('#txtCashAmount').val('');
+            $('#txtDueAmount').val('');
+
+            var a = parseInt($('#txtEmpOpeningBalance').val());
+            var b = parseInt($('#txtTargetAmount').val());
+
+            $('#txtCurrentBalance').val(a + b);
+
+        });
+
+
 
 
     </script>
